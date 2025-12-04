@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { WebGLShaderBackground } from "@/components/webgl-shader-background"
-import { Button } from "@/components/ui/button"
+import { useEffect } from "react";
+import { WebGLShaderBackground } from "@/components/webgl-shader-background";
+import { Button } from "@/components/ui/button";
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     // Log error to console in development
     if (process.env.NODE_ENV === "development") {
-      console.error("Error:", error)
+      console.error("Error:", error);
     }
-  }, [error])
+  }, [error]);
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black">
@@ -47,6 +47,5 @@ export default function Error({
         </div>
       </div>
     </div>
-  )
+  );
 }
-

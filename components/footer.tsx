@@ -1,38 +1,42 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
-import { Mail, Github, Linkedin } from "lucide-react"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Mail, Github, Linkedin } from "lucide-react";
 
-export default function Footer({ isResumeVisible }: { isResumeVisible: boolean }) {
-  const [resumePath, setResumePath] = useState('/Teddy_Malhan_Resume.pdf')
+export default function Footer({
+  isResumeVisible,
+}: {
+  isResumeVisible: boolean;
+}) {
+  const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
 
   useEffect(() => {
     async function fetchResumePath() {
       try {
-        const res = await fetch('/api/resume', {
-          cache: 'no-store',
+        const res = await fetch("/api/resume", {
+          cache: "no-store",
           headers: {
-            'Cache-Control': 'no-cache',
+            "Cache-Control": "no-cache",
           },
-        })
+        });
         if (res.ok) {
-          const data = await res.json()
+          const data = await res.json();
           // Use resume ID + timestamp as cache-buster - ensures fresh fetch every time
-          const timestamp = Date.now()
-          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`)
+          const timestamp = Date.now();
+          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`);
         }
       } catch (error) {
-        console.error('Failed to fetch resume info:', error)
+        console.error("Failed to fetch resume info:", error);
         // Fallback to timestamp-based cache-busting
-        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`)
+        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`);
       }
     }
 
     if (isResumeVisible) {
-      fetchResumePath()
+      fetchResumePath();
     }
-  }, [isResumeVisible])
+  }, [isResumeVisible]);
   return (
     <footer className="relative mx-auto w-full max-w-6xl px-6 py-10 md:py-14">
       {/* Ambient glow (match About section) */}
@@ -41,7 +45,9 @@ export default function Footer({ isResumeVisible }: { isResumeVisible: boolean }
       </div>
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div>
-          <h3 className="font-sans text-3xl md:text-4xl font-semibold tracking-tight text-foreground">Teddy Malhan</h3>
+          <h3 className="font-sans text-3xl md:text-4xl font-semibold tracking-tight text-foreground">
+            Teddy Malhan
+          </h3>
           <Link
             href="mailto:ama367@sfu.ca"
             className="mt-2 block text-base md:text-lg text-foreground/90 hover:text-foreground underline decoration-border/50 hover:decoration-primary/50 underline-offset-4"
@@ -81,45 +87,79 @@ export default function Footer({ isResumeVisible }: { isResumeVisible: boolean }
         <nav className="grid grid-cols-2 gap-6 text-sm md:grid-cols-3">
           <div className="flex flex-col gap-2">
             <p className="font-medium text-foreground">Site</p>
-            <Link href="#projects" className="text-muted-foreground hover:text-foreground">Projects</Link>
-            <Link href="#experience" className="text-muted-foreground hover:text-foreground">Experience</Link>
-            <Link href="#contact" className="text-muted-foreground hover:text-foreground">Contact</Link>
+            <Link
+              href="#projects"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Projects
+            </Link>
+            <Link
+              href="#experience"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Experience
+            </Link>
+            <Link
+              href="#contact"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Contact
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-medium text-foreground">Social</p>
-            <a href="https://github.com/teddymalhan" target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground">GitHub</a>
-            <a href="https://www.linkedin.com/in/teddymalhan/" target="_blank" rel="noreferrer noopener" className="text-muted-foreground hover:text-foreground">LinkedIn</a>
-            <a href="mailto:ama367@sfu.ca" className="text-muted-foreground hover:text-foreground">Email</a>
+            <a
+              href="https://github.com/teddymalhan"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/teddymalhan/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              LinkedIn
+            </a>
+            <a
+              href="mailto:ama367@sfu.ca"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Email
+            </a>
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-medium text-foreground">More</p>
             {isResumeVisible && (
-              <a 
-                href={resumePath} 
-                target="_blank" 
-                rel="noreferrer noopener" 
+              <a
+                href={resumePath}
+                target="_blank"
+                rel="noreferrer noopener"
                 onClick={(e) => {
                   // Force fresh fetch by adding current timestamp
-                  e.preventDefault()
-                  const freshUrl = resumePath.includes('&t=') 
-                    ? `${resumePath.split('&t=')[0]}&t=${Date.now()}`
-                    : `${resumePath}?t=${Date.now()}`
-                  window.open(freshUrl, '_blank', 'noopener,noreferrer')
+                  e.preventDefault();
+                  const freshUrl = resumePath.includes("&t=")
+                    ? `${resumePath.split("&t=")[0]}&t=${Date.now()}`
+                    : `${resumePath}?t=${Date.now()}`;
+                  window.open(freshUrl, "_blank", "noopener,noreferrer");
                 }}
                 className="text-muted-foreground hover:text-foreground"
               >
                 Resume
               </a>
             )}
-            <Link href="#about" className="text-muted-foreground hover:text-foreground">About</Link>
-            <Link href="/admin/dashboard" className="text-muted-foreground hover:text-foreground flex items-center gap-2">
-              Admin Dashboard
+            <Link
+              href="#about"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              About
             </Link>
           </div>
         </nav>
       </div>
     </footer>
-  )
+  );
 }
-
-

@@ -14,21 +14,21 @@ export default clerkMiddleware(async (auth, req) => {
     const addSecurityHeaders = (response: NextResponse) => {
       // Content Security Policy
       // Allows: self, Clerk (including custom domains), Vercel Analytics/Live, Google Fonts, Vercel Blob, and necessary inline scripts
-      const csp = [
-        "default-src 'self'",
-        "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vitals.vercel-insights.com https://vercel.live blob:",
-        "worker-src 'self' blob:",
-        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-        "font-src 'self' https://fonts.gstatic.com data:",
-        "img-src 'self' data: https: blob:",
-        "connect-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vitals.vercel-insights.com https://vercel.live https://*.vercel-storage.com",
-        "frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vercel.live https://*.vercel-storage.com",
-        "object-src 'none'",
-        "base-uri 'self'",
-        "form-action 'self'",
-        "frame-ancestors 'none'",
-        "upgrade-insecure-requests",
-      ].join('; ')
+       const csp = [
+         "default-src 'self'",
+         "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vitals.vercel-insights.com https://vercel.live https://va.vercel-scripts.com blob:",
+         "worker-src 'self' blob:",
+         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+         "font-src 'self' https://fonts.gstatic.com data:",
+         "img-src 'self' data: https: blob:",
+         "connect-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vitals.vercel-insights.com https://vercel.live https://*.vercel-storage.com https://clerk-telemetry.com",
+         "frame-src 'self' https://*.clerk.com https://*.clerk.accounts.dev https://clerk.malhan.ca https://vercel.live https://*.vercel-storage.com",
+         "object-src 'none'",
+         "base-uri 'self'",
+         "form-action 'self'",
+         "frame-ancestors 'none'",
+         "upgrade-insecure-requests",
+       ].join('; ')
 
       response.headers.set('Content-Security-Policy', csp)
       response.headers.set('X-Content-Type-Options', 'nosniff')
