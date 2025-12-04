@@ -1,381 +1,440 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useMemo } from 'react'
-import { Upload, Trash2, Check, FileText, Download, Loader2, Eye, Edit2, FileStack, HardDrive, Clock, CheckCircle2, Search, Filter, ArrowUpDown, Pencil, EyeOff, Eye as EyeIcon, ExternalLink, Link2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { useState, useEffect, useMemo } from "react";
+import {
+  Upload,
+  Trash2,
+  Check,
+  FileText,
+  Download,
+  Loader2,
+  Eye,
+  Edit2,
+  FileStack,
+  HardDrive,
+  Clock,
+  CheckCircle2,
+  Search,
+  Filter,
+  ArrowUpDown,
+  Pencil,
+  EyeOff,
+  Eye as EyeIcon,
+  ExternalLink,
+  Link2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog'
-import { toast } from 'sonner'
-import { handleApiResponse } from '@/lib/api-client'
-import type { ResumeResponse, VisibilityResponse } from '@/types/api'
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import { handleApiResponse } from "@/lib/api-client";
+import type { ResumeResponse, VisibilityResponse } from "@/types/api";
 
 interface ResumeVersion extends ResumeResponse {}
 
 export function ResumeManager() {
-  const [resumes, setResumes] = useState<ResumeVersion[]>([])
-  const [uploading, setUploading] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [previewResume, setPreviewResume] = useState<ResumeVersion | null>(null)
-  const [editingNotes, setEditingNotes] = useState<ResumeVersion | null>(null)
-  const [notesText, setNotesText] = useState('')
-  const [renamingResume, setRenamingResume] = useState<ResumeVersion | null>(null)
-  const [newFilename, setNewFilename] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all')
-  const [sortBy, setSortBy] = useState<'date-desc' | 'date-asc' | 'name-asc' | 'name-desc' | 'size-desc' | 'size-asc'>('date-desc')
-  const [isResumeVisible, setIsResumeVisible] = useState(true)
-  const [togglingVisibility, setTogglingVisibility] = useState(false)
-  const [autoSetActive, setAutoSetActive] = useState(false)
-  const [selectedResumes, setSelectedResumes] = useState<Set<number>>(new Set())
+  const [resumes, setResumes] = useState<ResumeVersion[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [previewResume, setPreviewResume] = useState<ResumeVersion | null>(
+    null,
+  );
+  const [editingNotes, setEditingNotes] = useState<ResumeVersion | null>(null);
+  const [notesText, setNotesText] = useState("");
+  const [renamingResume, setRenamingResume] = useState<ResumeVersion | null>(
+    null,
+  );
+  const [newFilename, setNewFilename] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "inactive"
+  >("all");
+  const [sortBy, setSortBy] = useState<
+    | "date-desc"
+    | "date-asc"
+    | "name-asc"
+    | "name-desc"
+    | "size-desc"
+    | "size-asc"
+  >("date-desc");
+  const [isResumeVisible, setIsResumeVisible] = useState(true);
+  const [togglingVisibility, setTogglingVisibility] = useState(false);
+  const [cooldown, setCooldown] = useState(false);
+  const [autoSetActive, setAutoSetActive] = useState(false);
+  const [selectedResumes, setSelectedResumes] = useState<Set<number>>(
+    new Set(),
+  );
 
   useEffect(() => {
-    fetchResumes()
-    fetchVisibility()
-  }, [])
+    fetchResumes();
+    fetchVisibility();
+  }, []);
 
   async function fetchVisibility() {
     try {
-      const res = await fetch('/api/resume/visibility')
-      const data = await handleApiResponse<VisibilityResponse>(res)
-      setIsResumeVisible(data.isVisible)
+      const res = await fetch("/api/resume/visibility");
+      const data = await handleApiResponse<VisibilityResponse>(res);
+      setIsResumeVisible(data.isVisible);
     } catch (error) {
-      console.error('Failed to fetch visibility:', error)
+      console.error("Failed to fetch visibility:", error);
       // Keep default state (visible) on error
     }
   }
 
   async function toggleVisibility() {
-    try {
-      setTogglingVisibility(true)
-      const newVisibility = !isResumeVisible
-      const res = await fetch('/api/resume/visibility', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isVisible: newVisibility }),
-      })
+    if (cooldown) return;
 
-      const data = await handleApiResponse<VisibilityResponse>(res)
+    try {
+      setCooldown(true);
+      setTogglingVisibility(true);
+      const newVisibility = !isResumeVisible;
+      const res = await fetch("/api/resume/visibility", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isVisible: newVisibility }),
+      });
+
+      const data = await handleApiResponse<VisibilityResponse>(res);
 
       // Use the value returned from the API (which is verified from the database)
-      setIsResumeVisible(data.isVisible)
+      setIsResumeVisible(data.isVisible);
       toast.success(
-        data.isVisible 
-          ? 'Resume is now visible on the website' 
-          : 'Resume is now hidden from the website'
-      )
+        data.isVisible
+          ? "Resume is now visible on the website"
+          : "Resume is now hidden from the website",
+      );
     } catch (error: any) {
-      toast.error(error.message || 'Failed to toggle visibility')
+      toast.error(error.message || "Failed to toggle visibility");
     } finally {
-      setTogglingVisibility(false)
+      setTogglingVisibility(false);
+      setTimeout(() => setCooldown(false), 2000);
     }
   }
 
   async function fetchResumes() {
     try {
-      setLoading(true)
-      const res = await fetch('/api/resume/versions')
-      const data = await handleApiResponse<ResumeResponse[]>(res)
-      console.log('Fetched resumes:', data)
-      setResumes(data)
+      setLoading(true);
+      const res = await fetch("/api/resume/versions");
+      const data = await handleApiResponse<ResumeResponse[]>(res);
+      console.log("Fetched resumes:", data);
+      setResumes(data);
     } catch (error: any) {
-      console.error('Failed to fetch resumes:', error)
-      toast.error(error.message || 'Failed to load resumes')
+      console.error("Failed to fetch resumes:", error);
+      toast.error(error.message || "Failed to load resumes");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-    if (file.type !== 'application/pdf') {
-      toast.error('Please upload a PDF file')
-      return
+    if (file.type !== "application/pdf") {
+      toast.error("Please upload a PDF file");
+      return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-      toast.error('File size must be less than 10MB')
-      return
+      toast.error("File size must be less than 10MB");
+      return;
     }
 
-    setUploading(true)
-    const formData = new FormData()
-    formData.append('file', file)
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
 
     try {
-      const res = await fetch('/api/resume', {
-        method: 'POST',
+      const res = await fetch("/api/resume", {
+        method: "POST",
         body: formData,
-      })
+      });
 
-      const data = await handleApiResponse<{ id: number; filename: string; blob_url: string; uploadedAt: string }>(res)
+      const data = await handleApiResponse<{
+        id: number;
+        filename: string;
+        blob_url: string;
+        uploadedAt: string;
+      }>(res);
 
-      toast.success('Resume uploaded successfully')
-      fetchResumes()
-      
+      toast.success("Resume uploaded successfully");
+      fetchResumes();
+
       // Auto-set as active if option is enabled
       if (autoSetActive && data.id) {
-        await setActive(data.id)
+        await setActive(data.id);
       }
-      
+
       // Reset file input
-      event.target.value = ''
+      event.target.value = "";
     } catch (error: any) {
-      toast.error(error.message || 'Failed to upload resume')
+      toast.error(error.message || "Failed to upload resume");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
   }
 
   async function setActive(resumeId: number) {
     try {
-      const res = await fetch('/api/resume/active', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/resume/active", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ resumeId }),
-      })
+      });
 
-      await handleApiResponse(res)
+      await handleApiResponse(res);
 
-      toast.success('Active resume updated')
-      fetchResumes()
+      toast.success("Active resume updated");
+      fetchResumes();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update active resume')
+      toast.error(error.message || "Failed to update active resume");
     }
   }
 
   async function deleteResume(resumeId: number, filename: string) {
     if (
       !confirm(
-        `Are you sure you want to delete "${filename}"? This action cannot be undone.`
+        `Are you sure you want to delete "${filename}"? This action cannot be undone.`,
       )
     )
-      return
+      return;
 
     try {
       const res = await fetch(`/api/resume/${resumeId}`, {
-        method: 'DELETE',
-      })
+        method: "DELETE",
+      });
 
-      await handleApiResponse(res)
+      await handleApiResponse(res);
 
-      toast.success('Resume deleted')
-      fetchResumes()
+      toast.success("Resume deleted");
+      fetchResumes();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete resume')
+      toast.error(error.message || "Failed to delete resume");
     }
   }
 
   async function copyResumeLink(resume: ResumeVersion) {
-    const resumeUrl = `${window.location.origin}/Teddy_Malhan_Resume.pdf`
+    const resumeUrl = `${window.location.origin}/Teddy_Malhan_Resume.pdf`;
     try {
-      await navigator.clipboard.writeText(resumeUrl)
-      toast.success('Resume link copied to clipboard!')
+      await navigator.clipboard.writeText(resumeUrl);
+      toast.success("Resume link copied to clipboard!");
     } catch (error) {
       // Fallback for browsers that don't support clipboard API
-      const textArea = document.createElement('textarea')
-      textArea.value = resumeUrl
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand('copy')
-      document.body.removeChild(textArea)
-      toast.success('Resume link copied to clipboard!')
+      const textArea = document.createElement("textarea");
+      textArea.value = resumeUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      toast.success("Resume link copied to clipboard!");
     }
   }
 
   function toggleResumeSelection(resumeId: number) {
-    const newSelected = new Set(selectedResumes)
+    const newSelected = new Set(selectedResumes);
     if (newSelected.has(resumeId)) {
-      newSelected.delete(resumeId)
+      newSelected.delete(resumeId);
     } else {
-      newSelected.add(resumeId)
+      newSelected.add(resumeId);
     }
-    setSelectedResumes(newSelected)
+    setSelectedResumes(newSelected);
   }
 
   async function bulkDelete() {
     if (selectedResumes.size === 0) {
-      toast.error('No resumes selected')
-      return
+      toast.error("No resumes selected");
+      return;
     }
 
     // Check if any selected resumes are active
-    const selectedActiveResumes = resumes.filter(r => 
-      selectedResumes.has(r.id) && r.isActive
-    )
-    
+    const selectedActiveResumes = resumes.filter(
+      (r) => selectedResumes.has(r.id) && r.isActive,
+    );
+
     if (selectedActiveResumes.length > 0) {
-      toast.error('Cannot delete active resume(s). Set another resume as active first.')
-      return
+      toast.error(
+        "Cannot delete active resume(s). Set another resume as active first.",
+      );
+      return;
     }
 
-    const count = selectedResumes.size
-    if (!confirm(`Are you sure you want to delete ${count} resume${count > 1 ? 's' : ''}? This action cannot be undone.`)) {
-      return
+    const count = selectedResumes.size;
+    if (
+      !confirm(
+        `Are you sure you want to delete ${count} resume${count > 1 ? "s" : ""}? This action cannot be undone.`,
+      )
+    ) {
+      return;
     }
 
     try {
-      const deletePromises = Array.from(selectedResumes).map(id => 
-        fetch(`/api/resume/${id}`, { method: 'DELETE' })
-      )
-      
-      const results = await Promise.allSettled(deletePromises)
-      const failed = results.filter(r => r.status === 'rejected').length
-      
+      const deletePromises = Array.from(selectedResumes).map((id) =>
+        fetch(`/api/resume/${id}`, { method: "DELETE" }),
+      );
+
+      const results = await Promise.allSettled(deletePromises);
+      const failed = results.filter((r) => r.status === "rejected").length;
+
       if (failed === 0) {
-        toast.success(`Successfully deleted ${count} resume${count > 1 ? 's' : ''}`)
+        toast.success(
+          `Successfully deleted ${count} resume${count > 1 ? "s" : ""}`,
+        );
       } else {
-        toast.warning(`Deleted ${count - failed} of ${count} resumes`)
+        toast.warning(`Deleted ${count - failed} of ${count} resumes`);
       }
-      
-      setSelectedResumes(new Set())
-      fetchResumes()
+
+      setSelectedResumes(new Set());
+      fetchResumes();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete resumes')
+      toast.error(error.message || "Failed to delete resumes");
     }
   }
 
   function toggleSelectAll() {
     if (selectedResumes.size === filteredAndSortedResumes.length) {
-      setSelectedResumes(new Set())
+      setSelectedResumes(new Set());
     } else {
-      setSelectedResumes(new Set(filteredAndSortedResumes.map(r => r.id)))
+      setSelectedResumes(new Set(filteredAndSortedResumes.map((r) => r.id)));
     }
   }
 
   function formatFileSize(bytes?: number | null) {
-    if (!bytes) return 'Unknown size'
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+    if (!bytes) return "Unknown size";
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   }
 
   function openEditNotes(resume: ResumeVersion) {
-    setEditingNotes(resume)
-    setNotesText(resume.notes || '')
+    setEditingNotes(resume);
+    setNotesText(resume.notes || "");
   }
 
   async function saveNotes() {
-    if (!editingNotes) return
+    if (!editingNotes) return;
 
     try {
       const res = await fetch(`/api/resume/${editingNotes.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ notes: notesText.trim() || null }),
-      })
+      });
 
-      await handleApiResponse(res)
+      await handleApiResponse(res);
 
-      toast.success('Notes updated')
-      setEditingNotes(null)
-      setNotesText('')
-      fetchResumes()
+      toast.success("Notes updated");
+      setEditingNotes(null);
+      setNotesText("");
+      fetchResumes();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update notes')
+      toast.error(error.message || "Failed to update notes");
     }
   }
 
   function openRename(resume: ResumeVersion) {
-    setRenamingResume(resume)
-    setNewFilename(resume.filename)
+    setRenamingResume(resume);
+    setNewFilename(resume.filename);
   }
 
   async function saveRename() {
-    if (!renamingResume) return
+    if (!renamingResume) return;
 
-    const trimmedFilename = newFilename.trim()
+    const trimmedFilename = newFilename.trim();
     if (!trimmedFilename) {
-      toast.error('Filename cannot be empty')
-      return
+      toast.error("Filename cannot be empty");
+      return;
     }
 
     if (trimmedFilename === renamingResume.filename) {
-      setRenamingResume(null)
-      setNewFilename('')
-      return
+      setRenamingResume(null);
+      setNewFilename("");
+      return;
     }
 
     try {
       const res = await fetch(`/api/resume/${renamingResume.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ filename: trimmedFilename }),
-      })
+      });
 
-      await handleApiResponse(res)
+      await handleApiResponse(res);
 
-      toast.success('Resume renamed')
-      setRenamingResume(null)
-      setNewFilename('')
-      fetchResumes()
+      toast.success("Resume renamed");
+      setRenamingResume(null);
+      setNewFilename("");
+      fetchResumes();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to rename resume')
+      toast.error(error.message || "Failed to rename resume");
     }
   }
 
   // Filter and sort resumes
   const filteredAndSortedResumes = useMemo(() => {
-    let filtered = resumes
+    let filtered = resumes;
 
     // Search filter
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
+      const query = searchQuery.toLowerCase();
       filtered = filtered.filter(
         (r) =>
           r.filename.toLowerCase().includes(query) ||
-          (r.notes && r.notes.toLowerCase().includes(query))
-      )
+          (r.notes && r.notes.toLowerCase().includes(query)),
+      );
     }
 
     // Status filter
-    if (filterStatus === 'active') {
-      filtered = filtered.filter((r) => r.isActive)
-    } else if (filterStatus === 'inactive') {
-      filtered = filtered.filter((r) => !r.isActive)
+    if (filterStatus === "active") {
+      filtered = filtered.filter((r) => r.isActive);
+    } else if (filterStatus === "inactive") {
+      filtered = filtered.filter((r) => !r.isActive);
     }
 
     // Sort
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
-        case 'date-desc':
-          return new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
-        case 'date-asc':
-          return new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime()
-        case 'name-asc':
-          return a.filename.localeCompare(b.filename)
-        case 'name-desc':
-          return b.filename.localeCompare(a.filename)
-        case 'size-desc':
-          return (b.fileSize || 0) - (a.fileSize || 0)
-        case 'size-asc':
-          return (a.fileSize || 0) - (b.fileSize || 0)
+        case "date-desc":
+          return (
+            new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+          );
+        case "date-asc":
+          return (
+            new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime()
+          );
+        case "name-asc":
+          return a.filename.localeCompare(b.filename);
+        case "name-desc":
+          return b.filename.localeCompare(a.filename);
+        case "size-desc":
+          return (b.fileSize || 0) - (a.fileSize || 0);
+        case "size-asc":
+          return (a.fileSize || 0) - (b.fileSize || 0);
         default:
-          return 0
+          return 0;
       }
-    })
+    });
 
-    return sorted
-  }, [resumes, searchQuery, filterStatus, sortBy])
+    return sorted;
+  }, [resumes, searchQuery, filterStatus, sortBy]);
 
   // Calculate statistics
-  const totalResumes = resumes.length
-  const activeResume = resumes.find((r) => r.isActive)
-  const totalStorage = resumes.reduce((sum, r) => sum + (r.fileSize || 0), 0)
-  const lastUpload = resumes.length > 0 
-    ? resumes.reduce((latest, r) => {
-        const rDate = new Date(r.uploadedAt)
-        const latestDate = new Date(latest.uploadedAt)
-        return rDate > latestDate ? r : latest
-      })
-    : null
+  const totalResumes = resumes.length;
+  const activeResume = resumes.find((r) => r.isActive);
+  const totalStorage = resumes.reduce((sum, r) => sum + (r.fileSize || 0), 0);
+  const lastUpload =
+    resumes.length > 0
+      ? resumes.reduce((latest, r) => {
+          const rDate = new Date(r.uploadedAt);
+          const latestDate = new Date(latest.uploadedAt);
+          return rDate > latestDate ? r : latest;
+        })
+      : null;
 
   return (
     <div className="space-y-6">
@@ -384,7 +443,9 @@ export function ResumeManager() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Resumes</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Total Resumes
+              </p>
               <p className="text-3xl font-bold mt-2">{totalResumes}</p>
             </div>
             <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
@@ -396,16 +457,23 @@ export function ResumeManager() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">Active Resume</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Active Resume
+              </p>
               {activeResume ? (
                 <>
-                  <p className="text-sm font-semibold mt-2 truncate">{activeResume.filename}</p>
+                  <p className="text-sm font-semibold mt-2 truncate">
+                    {activeResume.filename}
+                  </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {new Date(activeResume.uploadedAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
+                    {new Date(activeResume.uploadedAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      },
+                    )}
                   </p>
                 </>
               ) : (
@@ -421,8 +489,12 @@ export function ResumeManager() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-muted-foreground">Total Storage</p>
-              <p className="text-3xl font-bold mt-2">{formatFileSize(totalStorage)}</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Total Storage
+              </p>
+              <p className="text-3xl font-bold mt-2">
+                {formatFileSize(totalStorage)}
+              </p>
             </div>
             <div className="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center">
               <HardDrive className="h-6 w-6 text-purple-500" />
@@ -433,20 +505,28 @@ export function ResumeManager() {
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">Last Upload</p>
+              <p className="text-sm font-medium text-muted-foreground">
+                Last Upload
+              </p>
               {lastUpload ? (
                 <>
                   <p className="text-sm font-semibold mt-2">
-                    {new Date(lastUpload.uploadedAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })}
+                    {new Date(lastUpload.uploadedAt).toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                        day: "numeric",
+                      },
+                    )}
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {new Date(lastUpload.uploadedAt).toLocaleTimeString('en-US', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
+                    {new Date(lastUpload.uploadedAt).toLocaleTimeString(
+                      "en-US",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      },
+                    )}
                   </p>
                 </>
               ) : (
@@ -465,21 +545,21 @@ export function ResumeManager() {
           <div>
             <h2 className="text-2xl font-semibold mb-2">Resume Visibility</h2>
             <p className="text-sm text-muted-foreground">
-              {isResumeVisible 
-                ? 'Resume is currently visible on the website. Visitors can view and download it.'
-                : 'Resume is currently hidden. No one can access it on the website.'}
+              {isResumeVisible
+                ? "Resume is currently visible on the website. Visitors can view and download it."
+                : "Resume is currently hidden. No one can access it on the website."}
             </p>
           </div>
           <Button
             onClick={toggleVisibility}
-            disabled={togglingVisibility}
+            disabled={togglingVisibility || cooldown}
             variant={isResumeVisible ? "destructive" : "default"}
             className="shrink-0"
           >
             {togglingVisibility ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {isResumeVisible ? 'Hiding...' : 'Showing...'}
+                {isResumeVisible ? "Hiding..." : "Showing..."}
               </>
             ) : (
               <>
@@ -562,7 +642,7 @@ export function ResumeManager() {
               </Button>
             )}
           </div>
-          
+
           {/* Search, Filter, and Sort Controls */}
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Search */}
@@ -582,7 +662,11 @@ export function ResumeManager() {
               <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as 'all' | 'active' | 'inactive')}
+                onChange={(e) =>
+                  setFilterStatus(
+                    e.target.value as "all" | "active" | "inactive",
+                  )
+                }
                 className="pl-9 pr-8 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
               >
                 <option value="all">All Resumes</option>
@@ -629,7 +713,10 @@ export function ResumeManager() {
               <div className="flex items-center gap-2 pb-2 border-b">
                 <input
                   type="checkbox"
-                  checked={selectedResumes.size === filteredAndSortedResumes.length && filteredAndSortedResumes.length > 0}
+                  checked={
+                    selectedResumes.size === filteredAndSortedResumes.length &&
+                    filteredAndSortedResumes.length > 0
+                  }
                   onChange={toggleSelectAll}
                   className="w-4 h-4 rounded border-input cursor-pointer"
                 />
@@ -665,13 +752,16 @@ export function ResumeManager() {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-muted-foreground">
                       <span>
-                        {new Date(resume.uploadedAt).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                        {new Date(resume.uploadedAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          },
+                        )}
                       </span>
                       <span>•</span>
                       <span>{formatFileSize(resume.fileSize)}</span>
@@ -702,7 +792,7 @@ export function ResumeManager() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => window.open('/', '_blank')}
+                        onClick={() => window.open("/", "_blank")}
                         title="View on website"
                       >
                         <ExternalLink className="w-4 h-4" />
@@ -761,7 +851,10 @@ export function ResumeManager() {
       </Card>
 
       {/* Preview Dialog */}
-      <Dialog open={!!previewResume} onOpenChange={(open) => !open && setPreviewResume(null)}>
+      <Dialog
+        open={!!previewResume}
+        onOpenChange={(open) => !open && setPreviewResume(null)}
+      >
         <DialogContent className="!max-w-none !w-screen !h-screen !top-0 !left-0 !translate-x-0 !translate-y-0 !m-0 !rounded-none !p-0 flex flex-col">
           <DialogHeader className="px-6 pt-6 pb-4 border-b shrink-0">
             <DialogTitle>{previewResume?.filename}</DialogTitle>
@@ -779,7 +872,10 @@ export function ResumeManager() {
       </Dialog>
 
       {/* Edit Notes Dialog */}
-      <Dialog open={!!editingNotes} onOpenChange={(open) => !open && setEditingNotes(null)}>
+      <Dialog
+        open={!!editingNotes}
+        onOpenChange={(open) => !open && setEditingNotes(null)}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Edit Notes - {editingNotes?.filename}</DialogTitle>
@@ -797,40 +893,46 @@ export function ResumeManager() {
             <Button
               variant="outline"
               onClick={() => {
-                setEditingNotes(null)
-                setNotesText('')
+                setEditingNotes(null);
+                setNotesText("");
               }}
             >
               Cancel
             </Button>
-            <Button onClick={saveNotes}>
-              Save Notes
-            </Button>
+            <Button onClick={saveNotes}>Save Notes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
       {/* Rename Dialog */}
-      <Dialog open={!!renamingResume} onOpenChange={(open) => !open && setRenamingResume(null)}>
+      <Dialog
+        open={!!renamingResume}
+        onOpenChange={(open) => !open && setRenamingResume(null)}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Rename Resume</DialogTitle>
           </DialogHeader>
           <div className="py-4">
-            <label htmlFor="rename-input" className="text-sm font-medium mb-2 block">Filename</label>
+            <label
+              htmlFor="rename-input"
+              className="text-sm font-medium mb-2 block"
+            >
+              Filename
+            </label>
             <input
               id="rename-input"
               type="text"
               value={newFilename}
               onChange={(e) => setNewFilename(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  saveRename()
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  saveRename();
                 }
-                if (e.key === 'Escape') {
-                  setRenamingResume(null)
-                  setNewFilename('')
+                if (e.key === "Escape") {
+                  setRenamingResume(null);
+                  setNewFilename("");
                 }
               }}
               placeholder="Enter new filename..."
@@ -845,20 +947,16 @@ export function ResumeManager() {
             <Button
               variant="outline"
               onClick={() => {
-                setRenamingResume(null)
-                setNewFilename('')
+                setRenamingResume(null);
+                setNewFilename("");
               }}
             >
               Cancel
             </Button>
-            <Button onClick={saveRename}>
-              Save
-            </Button>
+            <Button onClick={saveRename}>Save</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-
-

@@ -1,71 +1,71 @@
-import { NextRequest } from 'next/server'
-import { isAuthorizedAdmin } from '@/lib/auth'
-import { settingsService } from '@/lib/services/settings-service'
-import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
-import { revalidatePath } from 'next/cache'
-import { resumeVisibilitySchema } from '@/lib/validations/resume'
-import type { VisibilityResponse } from '@/types/api'
+import { NextRequest } from "next/server";
+import { isAuthorizedAdmin } from "@/lib/auth";
+import { settingsService } from "@/lib/services/settings-service";
+import {
+  createErrorResponse,
+  createSuccessResponse,
+  logError,
+} from "@/lib/api-response";
+import { revalidatePath } from "next/cache";
+import { resumeVisibilitySchema } from "@/lib/validations/resume";
+import type { VisibilityResponse } from "@/types/api";
 
-// GET - Get current visibility setting
 export async function GET() {
   try {
-    const isVisible = await settingsService.getResumeVisibility()
-    return createSuccessResponse<VisibilityResponse>({ isVisible })
+    const isVisible = await settingsService.getResumeVisibility();
+    return createSuccessResponse<VisibilityResponse>({ isVisible });
   } catch (error: unknown) {
-    logError('GET /api/resume/visibility', error)
-    
-    // If table doesn't exist, return visible with warning
-    const errorMessage = error instanceof Error ? error.message : String(error)
+    logError("GET /api/resume/visibility", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     if (
-      errorMessage.includes('does not exist') ||
-      errorMessage.includes('relation') ||
-      (error as { code?: string }).code === '42P01'
+      errorMessage.includes("does not exist") ||
+      errorMessage.includes("relation") ||
+      (error as { code?: string }).code === "42P01"
     ) {
       return createSuccessResponse<VisibilityResponse>({
         isVisible: true,
-        warning: 'Settings table does not exist. Please run the database migration.',
-      })
+        warning:
+          "Settings table does not exist. Please run the database migration.",
+      });
     }
-    
-    // Default to visible on error
-    return createSuccessResponse<VisibilityResponse>({ isVisible: true })
+    return createSuccessResponse<VisibilityResponse>({ isVisible: true });
   }
 }
 
-// PUT - Toggle resume visibility (admin only)
 export async function PUT(request: NextRequest) {
-  const isAdmin = await isAuthorizedAdmin()
+  const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
-    return createErrorResponse('Unauthorized', 403, 'UNAUTHORIZED')
+    return createErrorResponse("Unauthorized", 403, "UNAUTHORIZED");
   }
 
   try {
-    const body = await request.json()
-    const validationResult = resumeVisibilitySchema.safeParse(body)
+    const body = await request.json();
+    const validationResult = resumeVisibilitySchema.safeParse(body);
 
     if (!validationResult.success) {
       return createErrorResponse(
-        validationResult.error.errors[0]?.message || 'Invalid request',
+        validationResult.error.errors[0]?.message || "Invalid request",
         400,
-        'VALIDATION_ERROR'
-      )
+        "VALIDATION_ERROR",
+      );
     }
 
-    const { isVisible } = validationResult.data
-    await settingsService.setResumeVisibility(isVisible)
+    const { isVisible } = validationResult.data;
+    await settingsService.setResumeVisibility(isVisible);
 
-    // Verify the update by querying it back
-    const verifiedValue = await settingsService.getResumeVisibility()
+    const verifiedValue = await settingsService.getResumeVisibility();
 
-    // Revalidate the home page cache so it shows the updated visibility
-    revalidatePath('/')
+    revalidatePath("/");
 
     return createSuccessResponse<VisibilityResponse>({
       isVisible: verifiedValue,
-    })
+    });
   } catch (error) {
-    logError('PUT /api/resume/visibility', error)
-    return createErrorResponse('Failed to update resume visibility', 500, 'UPDATE_ERROR')
+    logError("PUT /api/resume/visibility", error);
+    return createErrorResponse(
+      "Failed to update resume visibility",
+      500,
+      "UPDATE_ERROR",
+    );
   }
 }
-
