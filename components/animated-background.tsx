@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import { cn } from "@/lib/utils"
+import { useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 
 interface BlobProps extends React.HTMLAttributes<HTMLDivElement> {
   firstBlobColor: string;
@@ -10,44 +10,46 @@ interface BlobProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 interface AnimatedBackgroundProps {
-  isActive?: boolean
+  isActive?: boolean;
 }
 
-export function AnimatedBackground({ isActive = true }: AnimatedBackgroundProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const animationFrameRef = useRef<number | null>(null)
-  const isActiveRef = useRef(isActive)
+export function AnimatedBackground({
+  isActive = true,
+}: AnimatedBackgroundProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationFrameRef = useRef<number | null>(null);
+  const isActiveRef = useRef(isActive);
 
   // Update ref when isActive changes
   useEffect(() => {
-    isActiveRef.current = isActive
-  }, [isActive])
+    isActiveRef.current = isActive;
+  }, [isActive]);
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
-    resizeCanvas()
-    window.addEventListener("resize", resizeCanvas)
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
     // Particle system
     const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
-      color: string
-    }> = []
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      opacity: number;
+      color: string;
+    }> = [];
 
     // Create particles
     for (let i = 0; i < 50; i++) {
@@ -59,18 +61,18 @@ export function AnimatedBackground({ isActive = true }: AnimatedBackgroundProps)
         size: Math.random() * 2 + 1,
         opacity: Math.random() * 0.5 + 0.1,
         color: Math.random() > 0.5 ? "#3B82F6" : "#6366F1",
-      })
+      });
     }
 
     // Grid lines
     const gridLines: Array<{
-      x1: number
-      y1: number
-      x2: number
-      y2: number
-      opacity: number
-      fadeDirection: number
-    }> = []
+      x1: number;
+      y1: number;
+      x2: number;
+      y2: number;
+      opacity: number;
+      fadeDirection: number;
+    }> = [];
 
     // Create grid lines
     for (let i = 0; i < 20; i++) {
@@ -81,115 +83,119 @@ export function AnimatedBackground({ isActive = true }: AnimatedBackgroundProps)
         y2: Math.random() * canvas.height,
         opacity: Math.random() * 0.1 + 0.02,
         fadeDirection: Math.random() > 0.5 ? 1 : -1,
-      })
+      });
     }
 
     const animate = () => {
       // Only animate if active
       if (!isActiveRef.current) {
-        animationFrameRef.current = requestAnimationFrame(animate)
-        return
+        animationFrameRef.current = requestAnimationFrame(animate);
+        return;
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw grid lines
       gridLines.forEach((line) => {
-        ctx.strokeStyle = `rgba(59, 130, 246, ${line.opacity})`
-        ctx.lineWidth = 0.5
-        ctx.beginPath()
-        ctx.moveTo(line.x1, line.y1)
-        ctx.lineTo(line.x2, line.y2)
-        ctx.stroke()
+        ctx.strokeStyle = `rgba(59, 130, 246, ${line.opacity})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(line.x1, line.y1);
+        ctx.lineTo(line.x2, line.y2);
+        ctx.stroke();
 
         // Animate opacity
-        line.opacity += line.fadeDirection * 0.001
+        line.opacity += line.fadeDirection * 0.001;
         if (line.opacity <= 0.01 || line.opacity >= 0.08) {
-          line.fadeDirection *= -1
+          line.fadeDirection *= -1;
         }
-      })
+      });
 
       // Draw and update particles
       particles.forEach((particle) => {
-        ctx.fillStyle = `rgba(${particle.color === "#3B82F6" ? "59, 130, 246" : "99, 102, 241"}, ${particle.opacity})`
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fill()
+        ctx.fillStyle = `rgba(${particle.color === "#3B82F6" ? "59, 130, 246" : "99, 102, 241"}, ${particle.opacity})`;
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
 
         // Update position
-        particle.x += particle.vx
-        particle.y += particle.vy
+        particle.x += particle.vx;
+        particle.y += particle.vy;
 
         // Wrap around edges
-        if (particle.x < 0) particle.x = canvas.width
-        if (particle.x > canvas.width) particle.x = 0
-        if (particle.y < 0) particle.y = canvas.height
-        if (particle.y > canvas.height) particle.y = 0
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
 
         // Animate opacity
-        particle.opacity += (Math.random() - 0.5) * 0.01
-        particle.opacity = Math.max(0.05, Math.min(0.4, particle.opacity))
-      })
+        particle.opacity += (Math.random() - 0.5) * 0.01;
+        particle.opacity = Math.max(0.05, Math.min(0.4, particle.opacity));
+      });
 
       // Draw connections between nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x
-          const dy = particles[i].y - particles[j].y
-          const distance = Math.sqrt(dx * dx + dy * dy)
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
 
           if (distance < 100) {
-            const opacity = ((100 - distance) / 100) * 0.1
-            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`
-            ctx.lineWidth = 0.5
-            ctx.beginPath()
-            ctx.moveTo(particles[i].x, particles[i].y)
-            ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.stroke()
+            const opacity = ((100 - distance) / 100) * 0.1;
+            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
           }
         }
       }
 
-      animationFrameRef.current = requestAnimationFrame(animate)
-    }
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
 
-    animate()
+    animate();
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas)
+      window.removeEventListener("resize", resizeCanvas);
       if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+        cancelAnimationFrame(animationFrameRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0">
-      <canvas ref={canvasRef} className="absolute inset-0" style={{ background: "transparent" }} />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0"
+        style={{ background: "transparent" }}
+      />
       {/* Blurry blob animations */}
       <div className="absolute top-1/4 left-1/4">
-        <BlurryBlob 
-          firstBlobColor="bg-cyan-400" 
+        <BlurryBlob
+          firstBlobColor="bg-cyan-400"
           secondBlobColor="bg-blue-500"
           isActive={isActive}
         />
       </div>
       <div className="absolute bottom-1/3 right-1/4">
-        <BlurryBlob 
-          firstBlobColor="bg-purple-400" 
+        <BlurryBlob
+          firstBlobColor="bg-purple-400"
           secondBlobColor="bg-pink-500"
           isActive={isActive}
         />
       </div>
       <div className="absolute top-1/2 right-1/3">
-        <BlurryBlob 
-          firstBlobColor="bg-indigo-400" 
+        <BlurryBlob
+          firstBlobColor="bg-indigo-400"
           secondBlobColor="bg-violet-500"
           isActive={isActive}
         />
       </div>
     </div>
-  )
+  );
 }
 
 export function BlurryBlob({
@@ -207,7 +213,7 @@ export function BlurryBlob({
             className,
             firstBlobColor,
           )}
-          style={{ animationPlayState: isActive ? 'running' : 'paused' }}
+          style={{ animationPlayState: isActive ? "running" : "paused" }}
         ></div>
         <div
           className={cn(
@@ -215,7 +221,7 @@ export function BlurryBlob({
             className,
             secondBlobColor,
           )}
-          style={{ animationPlayState: isActive ? 'running' : 'paused' }}
+          style={{ animationPlayState: isActive ? "running" : "paused" }}
         ></div>
       </div>
     </div>

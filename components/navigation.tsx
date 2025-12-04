@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Menu,
@@ -31,6 +31,7 @@ import {
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useNavigationStore } from "@/stores";
 
 const navItems = [
   { name: "🏠 home", href: "#home", emoji: "" },
@@ -40,19 +41,28 @@ const navItems = [
 ];
 
 export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
-  const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
-  const [activeSection, setActiveSection] = useState("");
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [canvasDimensions, setCanvasDimensions] = useState({
-    width: 800,
-    height: 600,
-  });
-  const [commandOpen, setCommandOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isMorphed, setIsMorphed] = useState(false);
-  const [isNavContentVisible, setIsNavContentVisible] = useState(true);
+  // Get state from Zustand store using selective subscriptions
+  const resumePath = useNavigationStore((state) => state.resumePath);
+  const activeSection = useNavigationStore((state) => state.activeSection);
+  const isMobileMenuOpen = useNavigationStore((state) => state.isMobileMenuOpen);
+  const canvasDimensions = useNavigationStore((state) => state.canvasDimensions);
+  const commandOpen = useNavigationStore((state) => state.commandOpen);
+  const isVisible = useNavigationStore((state) => state.isVisible);
+  const scrollProgress = useNavigationStore((state) => state.scrollProgress);
+  const isMorphed = useNavigationStore((state) => state.isMorphed);
+  const isNavContentVisible = useNavigationStore(
+    (state) => state.isNavContentVisible,
+  );
+
+  // Get actions from store
+  const {
+    handleScroll: handleScrollAction,
+    setIsMobileMenuOpen,
+    setCommandOpen,
+    updateCanvasDimensions,
+    fetchResumePath,
+  } = useNavigationStore();
+
   const conductorRef = useRef<any>(null);
   const prefersReducedMotion = useReducedMotion();
   const { isSignedIn } = useAuth();
@@ -61,102 +71,19 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-
-      // Navigation always visible on both mobile and desktop
-      setIsVisible(true);
-
-      setLastScrollY(scrollPosition);
-
-      // Calculate scroll progress with smooth easing and edge case handling
-      const heroHeight = windowHeight;
-      const morphStart = 0;
-      const morphEnd = heroHeight * 0.25; // 25% threshold
-
-      // Binary state: either fully up (0) or fully down (1) - no partial states
-      let rawProgress = (scrollPosition - morphStart) / morphEnd;
-      let wasMorphed = rawProgress >= 0.5;
-
-      // Only update if state has changed
-      if (wasMorphed === isMorphed) {
-        // State unchanged, skip update
-      } else if (prefersReducedMotion) {
-        // State has changed, handle update with reduced motion
-        // Skip fade animation for reduced motion
-        setIsMorphed(wasMorphed);
-        const progress = wasMorphed ? 1 : 0;
-        setScrollProgress(progress);
-        setIsNavContentVisible(true);
-      } else {
-        // State has changed, handle update with full animation
-        // Fade out all navigation content first
-        setIsNavContentVisible(false);
-        // Wait for fade out to complete, then update position
-        setTimeout(() => {
-          setIsMorphed(wasMorphed);
-          const progress = wasMorphed ? 1 : 0;
-          setScrollProgress(progress);
-          // Wait for morph transition to complete, then fade back in
-          setTimeout(() => {
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                setIsNavContentVisible(true);
-              });
-            });
-          }, 200); // Wait for morph transition (0.2s) to complete
-        }, 100); // Fade out duration
-      }
-
-      // If near top, mark home as active
-      if (scrollPosition < windowHeight / 2) {
-        setActiveSection("home");
-        return;
-      }
-
-      // Check which section we're currently in
-      let currentSection = "";
-      for (const item of navItems) {
-        const sectionId = item.href.slice(1);
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const elementTop = rect.top + scrollPosition;
-          const elementHeight = rect.height;
-          const navOffset = 100; // Offset for navigation bar
-
-          // Check if the section is currently in the viewport
-          if (
-            scrollPosition + navOffset >= elementTop &&
-            scrollPosition + navOffset < elementTop + elementHeight
-          ) {
-            currentSection = sectionId;
-          }
-        }
-      }
-
-      if (currentSection) {
-        setActiveSection(currentSection);
-      }
+      handleScrollAction(!!prefersReducedMotion, navItems);
     };
 
     globalThis.window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll); // Re-check on resize
+    window.addEventListener("resize", handleScroll);
     handleScroll(); // Check initial position
     return () => {
       globalThis.window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
     };
-  }, [lastScrollY, isMorphed, prefersReducedMotion]);
+  }, [handleScrollAction, prefersReducedMotion]);
 
   useEffect(() => {
-    const updateCanvasDimensions = () => {
-      setCanvasDimensions({
-        width: globalThis.window.innerWidth,
-        height: globalThis.window.innerHeight,
-      });
-    };
-
     // Set initial dimensions
     updateCanvasDimensions();
 
@@ -174,7 +101,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
         updateCanvasDimensions,
       );
     };
-  }, []);
+  }, [updateCanvasDimensions]);
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -190,31 +117,8 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
 
   // Fetch resume path with cache-busting
   useEffect(() => {
-    async function fetchResumePath() {
-      try {
-        const res = await fetch("/api/resume", {
-          cache: "no-store",
-          headers: {
-            "Cache-Control": "no-cache",
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Use resume ID + timestamp as cache-buster - ensures fresh fetch every time
-          const timestamp = Date.now();
-          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`);
-        }
-      } catch (error) {
-        console.error("Failed to fetch resume info:", error);
-        // Fallback to timestamp-based cache-busting
-        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`);
-      }
-    }
-
-    if (isResumeVisible) {
-      fetchResumePath();
-    }
-  }, [isResumeVisible]);
+    fetchResumePath(isResumeVisible);
+  }, [isResumeVisible, fetchResumePath]);
 
   // Cubic bezier easing function for smooth scrolling
   // Evaluates cubic-bezier(0.5, 1, 0.89, 1) at progress t (0 to 1)
@@ -265,7 +169,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     const element = document.getElementById(sectionId);
     if (element) {
       // Show navigation temporarily for smooth UX
-      setIsVisible(true);
+      useNavigationStore.getState().setIsVisible(true);
 
       // Add offset for desktop to account for fixed navigation bar
       const isMobile = globalThis.window.innerWidth < 768; // md breakpoint
@@ -313,6 +217,10 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const triggerConfetti = () => {
     if (conductorRef.current) {
       conductorRef.current.run({ speed: 3, duration: 1000 });
@@ -327,7 +235,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setCommandOpen((open) => !open);
+        setCommandOpen(!commandOpen);
       }
       if (e.key === "Escape") {
         setIsMobileMenuOpen(false);
@@ -336,7 +244,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     };
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
-  }, []);
+  }, [commandOpen, setCommandOpen, setIsMobileMenuOpen]);
 
   const runCommand = (command: () => void) => {
     setCommandOpen(false);
@@ -610,7 +518,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
             <div className="flex items-center gap-2">
               <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
               <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                onClick={toggleMobileMenu}
                 className="p-2 rounded-full text-foreground hover:text-primary hover:bg-accent/20 transition-all duration-200"
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
@@ -633,7 +541,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
             transition={{ duration: 0.2 }}
             className="md:hidden fixed inset-0 z-40 bg-gradient-to-br from-background/95 via-background/90 to-card/95 backdrop-blur-xl"
             style={{ paddingTop: "100px" }}
-            onClick={() => setIsMobileMenuOpen(false)}
+            onClick={toggleMobileMenu}
           >
             <div
               id="mobile-menu"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Upload,
   Trash2,
@@ -32,276 +32,76 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { handleApiResponse } from "@/lib/api-client";
-import type { ResumeResponse, VisibilityResponse } from "@/types/api";
+import { useResumeManagerStore } from "@/stores";
 
-interface ResumeVersion extends ResumeResponse {}
+interface ResumeVersion {
+  id: number;
+  filename: string;
+  uploadedAt: string;
+  isActive: boolean;
+  notes?: string;
+  size?: number;
+  fileSize?: number;
+  path: string;
+}
 
 export function ResumeManager() {
-  const [resumes, setResumes] = useState<ResumeVersion[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [previewResume, setPreviewResume] = useState<ResumeVersion | null>(
-    null,
-  );
-  const [editingNotes, setEditingNotes] = useState<ResumeVersion | null>(null);
-  const [notesText, setNotesText] = useState("");
-  const [renamingResume, setRenamingResume] = useState<ResumeVersion | null>(
-    null,
-  );
-  const [newFilename, setNewFilename] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<
-    "all" | "active" | "inactive"
-  >("all");
-  const [sortBy, setSortBy] = useState<
-    | "date-desc"
-    | "date-asc"
-    | "name-asc"
-    | "name-desc"
-    | "size-desc"
-    | "size-asc"
-  >("date-desc");
-  const [isResumeVisible, setIsResumeVisible] = useState(true);
-  const [togglingVisibility, setTogglingVisibility] = useState(false);
-  const [cooldown, setCooldown] = useState(false);
-  const [autoSetActive, setAutoSetActive] = useState(false);
-  const [selectedResumes, setSelectedResumes] = useState<Set<number>>(
-    new Set(),
-  );
+  // Get state from Zustand store using selective subscriptions
+  const resumes = useResumeManagerStore((state) => state.resumes);
+  const loading = useResumeManagerStore((state) => state.loading);
+  const uploading = useResumeManagerStore((state) => state.uploading);
+  const previewResume = useResumeManagerStore((state) => state.previewResume);
+  const editingNotes = useResumeManagerStore((state) => state.editingNotes);
+  const notesText = useResumeManagerStore((state) => state.notesText);
+  const renamingResume = useResumeManagerStore((state) => state.renamingResume);
+  const newFilename = useResumeManagerStore((state) => state.newFilename);
+  const searchQuery = useResumeManagerStore((state) => state.searchQuery);
+  const filterStatus = useResumeManagerStore((state) => state.filterStatus);
+  const sortBy = useResumeManagerStore((state) => state.sortBy);
+  const isResumeVisible = useResumeManagerStore((state) => state.isResumeVisible);
+  const togglingVisibility = useResumeManagerStore((state) => state.togglingVisibility);
+  const cooldown = useResumeManagerStore((state) => state.cooldown);
+  const autoSetActive = useResumeManagerStore((state) => state.autoSetActive);
+  const selectedResumes = useResumeManagerStore((state) => state.selectedResumes);
+
+  // Get actions from store
+  const {
+    fetchResumes,
+    fetchVisibility,
+    handleUpload: handleUploadAction,
+    setActive,
+    deleteResume,
+    toggleVisibility,
+    copyResumeLink,
+    toggleResumeSelection,
+    bulkDelete,
+    openEditNotes,
+    closeEditNotes,
+    saveNotes,
+    setNotesText,
+    openRename,
+    closeRename,
+    saveRename,
+    setNewFilename,
+    setPreviewResume,
+    setSearchQuery,
+    setFilterStatus,
+    setSortBy,
+    setAutoSetActive,
+    toggleSelectAll,
+  } = useResumeManagerStore();
 
   useEffect(() => {
     fetchResumes();
     fetchVisibility();
-  }, []);
-
-  async function fetchVisibility() {
-    try {
-      const res = await fetch("/api/resume/visibility");
-      const data = await handleApiResponse<VisibilityResponse>(res);
-      setIsResumeVisible(data.isVisible);
-    } catch (error) {
-      console.error("Failed to fetch visibility:", error);
-      // Keep default state (visible) on error
-    }
-  }
-
-  async function toggleVisibility() {
-    if (cooldown) return;
-
-    try {
-      setCooldown(true);
-      setTogglingVisibility(true);
-      const newVisibility = !isResumeVisible;
-      const res = await fetch("/api/resume/visibility", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ isVisible: newVisibility }),
-      });
-
-      const data = await handleApiResponse<VisibilityResponse>(res);
-
-      // Use the value returned from the API (which is verified from the database)
-      setIsResumeVisible(data.isVisible);
-      toast.success(
-        data.isVisible
-          ? "Resume is now visible on the website"
-          : "Resume is now hidden from the website",
-      );
-    } catch (error: any) {
-      toast.error(error.message || "Failed to toggle visibility");
-    } finally {
-      setTogglingVisibility(false);
-      setTimeout(() => setCooldown(false), 2000);
-    }
-  }
-
-  async function fetchResumes() {
-    try {
-      setLoading(true);
-      const res = await fetch("/api/resume/versions");
-      const data = await handleApiResponse<ResumeResponse[]>(res);
-      console.log("Fetched resumes:", data);
-      setResumes(data);
-    } catch (error: any) {
-      console.error("Failed to fetch resumes:", error);
-      toast.error(error.message || "Failed to load resumes");
-    } finally {
-      setLoading(false);
-    }
-  }
+  }, [fetchResumes, fetchVisibility]);
 
   async function handleUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    if (file.type !== "application/pdf") {
-      toast.error("Please upload a PDF file");
-      return;
-    }
-
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("File size must be less than 10MB");
-      return;
-    }
-
-    setUploading(true);
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/resume", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await handleApiResponse<{
-        id: number;
-        filename: string;
-        blob_url: string;
-        uploadedAt: string;
-      }>(res);
-
-      toast.success("Resume uploaded successfully");
-      fetchResumes();
-
-      // Auto-set as active if option is enabled
-      if (autoSetActive && data.id) {
-        await setActive(data.id);
-      }
-
-      // Reset file input
-      event.target.value = "";
-    } catch (error: any) {
-      toast.error(error.message || "Failed to upload resume");
-    } finally {
-      setUploading(false);
-    }
-  }
-
-  async function setActive(resumeId: number) {
-    try {
-      const res = await fetch("/api/resume/active", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resumeId }),
-      });
-
-      await handleApiResponse(res);
-
-      toast.success("Active resume updated");
-      fetchResumes();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update active resume");
-    }
-  }
-
-  async function deleteResume(resumeId: number, filename: string) {
-    if (
-      !confirm(
-        `Are you sure you want to delete "${filename}"? This action cannot be undone.`,
-      )
-    )
-      return;
-
-    try {
-      const res = await fetch(`/api/resume/${resumeId}`, {
-        method: "DELETE",
-      });
-
-      await handleApiResponse(res);
-
-      toast.success("Resume deleted");
-      fetchResumes();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete resume");
-    }
-  }
-
-  async function copyResumeLink(resume: ResumeVersion) {
-    const resumeUrl = `${window.location.origin}/Teddy_Malhan_Resume.pdf`;
-    try {
-      await navigator.clipboard.writeText(resumeUrl);
-      toast.success("Resume link copied to clipboard!");
-    } catch (error) {
-      // Fallback for browsers that don't support clipboard API
-      const textArea = document.createElement("textarea");
-      textArea.value = resumeUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      toast.success("Resume link copied to clipboard!");
-    }
-  }
-
-  function toggleResumeSelection(resumeId: number) {
-    const newSelected = new Set(selectedResumes);
-    if (newSelected.has(resumeId)) {
-      newSelected.delete(resumeId);
-    } else {
-      newSelected.add(resumeId);
-    }
-    setSelectedResumes(newSelected);
-  }
-
-  async function bulkDelete() {
-    if (selectedResumes.size === 0) {
-      toast.error("No resumes selected");
-      return;
-    }
-
-    // Check if any selected resumes are active
-    const selectedActiveResumes = resumes.filter(
-      (r) => selectedResumes.has(r.id) && r.isActive,
-    );
-
-    if (selectedActiveResumes.length > 0) {
-      toast.error(
-        "Cannot delete active resume(s). Set another resume as active first.",
-      );
-      return;
-    }
-
-    const count = selectedResumes.size;
-    if (
-      !confirm(
-        `Are you sure you want to delete ${count} resume${count > 1 ? "s" : ""}? This action cannot be undone.`,
-      )
-    ) {
-      return;
-    }
-
-    try {
-      const deletePromises = Array.from(selectedResumes).map((id) =>
-        fetch(`/api/resume/${id}`, { method: "DELETE" }),
-      );
-
-      const results = await Promise.allSettled(deletePromises);
-      const failed = results.filter((r) => r.status === "rejected").length;
-
-      if (failed === 0) {
-        toast.success(
-          `Successfully deleted ${count} resume${count > 1 ? "s" : ""}`,
-        );
-      } else {
-        toast.warning(`Deleted ${count - failed} of ${count} resumes`);
-      }
-
-      setSelectedResumes(new Set());
-      fetchResumes();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to delete resumes");
-    }
-  }
-
-  function toggleSelectAll() {
-    if (selectedResumes.size === filteredAndSortedResumes.length) {
-      setSelectedResumes(new Set());
-    } else {
-      setSelectedResumes(new Set(filteredAndSortedResumes.map((r) => r.id)));
-    }
+    await handleUploadAction(file);
+    // Reset file input
+    event.target.value = "";
   }
 
   function formatFileSize(bytes?: number | null) {
@@ -309,70 +109,6 @@ export function ResumeManager() {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  }
-
-  function openEditNotes(resume: ResumeVersion) {
-    setEditingNotes(resume);
-    setNotesText(resume.notes || "");
-  }
-
-  async function saveNotes() {
-    if (!editingNotes) return;
-
-    try {
-      const res = await fetch(`/api/resume/${editingNotes.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes: notesText.trim() || null }),
-      });
-
-      await handleApiResponse(res);
-
-      toast.success("Notes updated");
-      setEditingNotes(null);
-      setNotesText("");
-      fetchResumes();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to update notes");
-    }
-  }
-
-  function openRename(resume: ResumeVersion) {
-    setRenamingResume(resume);
-    setNewFilename(resume.filename);
-  }
-
-  async function saveRename() {
-    if (!renamingResume) return;
-
-    const trimmedFilename = newFilename.trim();
-    if (!trimmedFilename) {
-      toast.error("Filename cannot be empty");
-      return;
-    }
-
-    if (trimmedFilename === renamingResume.filename) {
-      setRenamingResume(null);
-      setNewFilename("");
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/resume/${renamingResume.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename: trimmedFilename }),
-      });
-
-      await handleApiResponse(res);
-
-      toast.success("Resume renamed");
-      setRenamingResume(null);
-      setNewFilename("");
-      fetchResumes();
-    } catch (error: any) {
-      toast.error(error.message || "Failed to rename resume");
-    }
   }
 
   // Filter and sort resumes
@@ -422,6 +158,11 @@ export function ResumeManager() {
 
     return sorted;
   }, [resumes, searchQuery, filterStatus, sortBy]);
+
+  // Helper function for toggleSelectAll
+  const handleToggleSelectAll = () => {
+    toggleSelectAll(filteredAndSortedResumes.map((r) => r.id));
+  };
 
   // Calculate statistics
   const totalResumes = resumes.length;
@@ -656,7 +397,7 @@ export function ResumeManager() {
                     selectedResumes.size === filteredAndSortedResumes.length &&
                     filteredAndSortedResumes.length > 0
                   }
-                  onChange={toggleSelectAll}
+                  onChange={handleToggleSelectAll}
                   className="w-4 h-4 rounded border-input cursor-pointer"
                 />
                 <span className="text-sm text-muted-foreground">
@@ -855,7 +596,7 @@ export function ResumeManager() {
 
       <Dialog
         open={!!editingNotes}
-        onOpenChange={(open) => !open && setEditingNotes(null)}
+        onOpenChange={(open) => !open && closeEditNotes()}
       >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -871,13 +612,7 @@ export function ResumeManager() {
             />
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setEditingNotes(null);
-                setNotesText("");
-              }}
-            >
+            <Button variant="outline" onClick={closeEditNotes}>
               Cancel
             </Button>
             <Button onClick={saveNotes}>Save Notes</Button>
@@ -888,7 +623,7 @@ export function ResumeManager() {
       {/* Rename Dialog */}
       <Dialog
         open={!!renamingResume}
-        onOpenChange={(open) => !open && setRenamingResume(null)}
+        onOpenChange={(open) => !open && closeRename()}
       >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -912,8 +647,7 @@ export function ResumeManager() {
                   saveRename();
                 }
                 if (e.key === "Escape") {
-                  setRenamingResume(null);
-                  setNewFilename("");
+                  closeRename();
                 }
               }}
               placeholder="Enter new filename..."
@@ -925,13 +659,7 @@ export function ResumeManager() {
             </p>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setRenamingResume(null);
-                setNewFilename("");
-              }}
-            >
+            <Button variant="outline" onClick={closeRename}>
               Cancel
             </Button>
             <Button onClick={saveRename}>Save</Button>

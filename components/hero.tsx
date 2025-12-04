@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { TextHighlighter } from "@/components/fancy/text/text-highlighter"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons'
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+import { useEffect, useState } from "react";
+import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
-  const [resumePath, setResumePath] = useState('/Teddy_Malhan_Resume.pdf')
+  const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
 
   useEffect(() => {
     async function fetchResumePath() {
       try {
-        const res = await fetch('/api/resume', {
-          cache: 'no-store',
+        const res = await fetch("/api/resume", {
+          cache: "no-store",
           headers: {
-            'Cache-Control': 'no-cache',
+            "Cache-Control": "no-cache",
           },
-        })
+        });
         if (res.ok) {
-          const data = await res.json()
+          const data = await res.json();
           // Use resume ID + timestamp as cache-buster - ensures fresh fetch every time
-          const timestamp = Date.now()
-          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`)
+          const timestamp = Date.now();
+          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`);
         }
       } catch (error) {
-        console.error('Failed to fetch resume info:', error)
+        console.error("Failed to fetch resume info:", error);
         // Fallback to timestamp-based cache-busting
-        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`)
+        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`);
       }
     }
 
     if (isResumeVisible) {
-      fetchResumePath()
+      fetchResumePath();
     }
-  }, [isResumeVisible])
+  }, [isResumeVisible]);
   return (
     <>
       <style jsx>{`
@@ -81,19 +81,26 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
           }
         }
       `}</style>
-      <section id="home" className="min-h-screen flex items-center justify-center relative">
+      <section
+        id="home"
+        className="min-h-screen flex items-center justify-center relative"
+      >
         <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
-        <div className="mb-8">
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 text-balance">
-            <span className="relative inline-block pb-2">
-              hi! i&apos;m teddy! <span 
-                style={{
-                  display: 'inline-block',
-                  animation: 'rotateHand 1s linear(0, 0.315 10.5%, 0.502 18.4%, 0.567 22.2%, 0.613 25.9%, 0.64 29.6%, 0.65 33.3%, 0.628 39.2%, 0.563 45.6%, 0.202 67.6%, 0.082 77.1%, 0.041 82.1%, 0.016 87.2%, 0.003 92.7%, 0) forwards',
-                  transformOrigin: '70% 70%'
-                }}
-              >👋</span>
-              {/* <svg 
+          <div className="mb-8">
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 text-balance">
+              <span className="relative inline-block pb-2">
+                hi! i&apos;m teddy!{" "}
+                <span
+                  style={{
+                    display: "inline-block",
+                    animation:
+                      "rotateHand 1s linear(0, 0.315 10.5%, 0.502 18.4%, 0.567 22.2%, 0.613 25.9%, 0.64 29.6%, 0.65 33.3%, 0.628 39.2%, 0.563 45.6%, 0.202 67.6%, 0.082 77.1%, 0.041 82.1%, 0.016 87.2%, 0.003 92.7%, 0) forwards",
+                    transformOrigin: "70% 70%",
+                  }}
+                >
+                  👋
+                </span>
+                {/* <svg 
                 className="absolute bottom-0 left-0 w-full h-8 overflow-visible" 
                 viewBox="0 0 438.6328125 70.77084350585938"
                 preserveAspectRatio="none"
@@ -126,81 +133,103 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 </defs>
               </svg> */}
               </span>
-            
-            
             </h1>
 
-          <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
-            cs major @{" "}
-            <span className="inline-flex items-center gap-1">
-              <img 
-                src="https://praxis.encommun.io/media/notes/note_12478/sfu.jpg" 
-                alt="SFU logo" 
-                className="w-5 h-5 rounded-full"
-              />
-              <TextHighlighter highlightColor="rgb(212, 40, 55)" className="text-white px-2 py-1 rounded font-bold">simon fraser university</TextHighlighter>
-            </span>
-            , graduating <TextHighlighter highlightColor="rgb(16, 185, 129)" className="text-white px-2 py-1 rounded font-bold">2027</TextHighlighter>
-          </h2>
+            <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
+              cs major @{" "}
+              <span className="inline-flex items-center gap-1">
+                <img
+                  src="https://praxis.encommun.io/media/notes/note_12478/sfu.jpg"
+                  alt="SFU logo"
+                  className="w-5 h-5 rounded-full"
+                />
+                <TextHighlighter
+                  highlightColor="rgb(212, 40, 55)"
+                  className="text-white px-2 py-1 rounded font-bold"
+                >
+                  simon fraser university
+                </TextHighlighter>
+              </span>
+              , graduating{" "}
+              <TextHighlighter
+                highlightColor="rgb(16, 185, 129)"
+                className="text-white px-2 py-1 rounded font-bold"
+              >
+                2027
+              </TextHighlighter>
+            </h2>
 
-          <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
-            prev. swe intern at{" "}
-            <span className="inline-flex items-center gap-1">
-              <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5EbAYJ4fnvZp8PBJa0gDeO7uEvmlAJjurig&s" 
-                alt="EA logo" 
-                className="w-5 h-5 rounded-full"
-              />
-              <TextHighlighter highlightColor="rgb(37, 99, 235)" className="text-white px-2 py-1 rounded font-bold">electronic arts</TextHighlighter>
-            </span>{" "}
-            &{" "}
-            <span className="inline-flex items-center gap-1">
-              <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzji6wOPSF5w3pA8ATOaizQN2w-wFIs8FhKA&s" 
-                alt="Dialpad logo" 
-                className="w-5 h-5 rounded"
-              />
-              <TextHighlighter highlightColor="rgb(147, 51, 234)" className="text-white px-2 py-1 rounded font-bold">dialpad</TextHighlighter>
-            </span>
-          </h2>
-
-        </div>
-
-        {isResumeVisible && (
-          <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
-            <InteractiveHoverButton 
-              onClick={() => {
-                // Force fresh fetch by adding current timestamp
-                const freshUrl = resumePath.includes('&t=') 
-                  ? `${resumePath.split('&t=')[0]}&t=${Date.now()}`
-                  : `${resumePath}?t=${Date.now()}`
-                window.open(freshUrl, "_blank", "noopener,noreferrer")
-              }}
-              className="bg-teal-600 hover:bg-amber-500 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-amber-400 [&>div:last-child]:bg-amber-500"
-            >
-              view resume!
-            </InteractiveHoverButton>
+            <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
+              prev. swe intern at{" "}
+              <span className="inline-flex items-center gap-1">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5EbAYJ4fnvZp8PBJa0gDeO7uEvmlAJjurig&s"
+                  alt="EA logo"
+                  className="w-5 h-5 rounded-full"
+                />
+                <TextHighlighter
+                  highlightColor="rgb(37, 99, 235)"
+                  className="text-white px-2 py-1 rounded font-bold"
+                >
+                  electronic arts
+                </TextHighlighter>
+              </span>{" "}
+              &{" "}
+              <span className="inline-flex items-center gap-1">
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzji6wOPSF5w3pA8ATOaizQN2w-wFIs8FhKA&s"
+                  alt="Dialpad logo"
+                  className="w-5 h-5 rounded"
+                />
+                <TextHighlighter
+                  highlightColor="rgb(147, 51, 234)"
+                  className="text-white px-2 py-1 rounded font-bold"
+                >
+                  dialpad
+                </TextHighlighter>
+              </span>
+            </h2>
           </div>
-        )}
 
-        <div className="flex items-center justify-center space-x-4">
-          <button
-            onClick={() => window.open("https://linkedin.com/in/teddymalhan", "_blank")}
-            className="fill rounded-md p-2"
-            aria-label="LinkedIn"
-          >
-            <FontAwesomeIcon icon={faLinkedin} className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => window.open("https://github.com/teddymalhan", "_blank")}
-            className="fill rounded-md p-2"
-            aria-label="GitHub"
-          >
-            <FontAwesomeIcon icon={faGithub} className="w-5 h-5" />
-          </button>
+          {isResumeVisible && (
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+              <InteractiveHoverButton
+                onClick={() => {
+                  // Force fresh fetch by adding current timestamp
+                  const freshUrl = resumePath.includes("&t=")
+                    ? `${resumePath.split("&t=")[0]}&t=${Date.now()}`
+                    : `${resumePath}?t=${Date.now()}`;
+                  window.open(freshUrl, "_blank", "noopener,noreferrer");
+                }}
+                className="bg-teal-600 hover:bg-amber-500 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-amber-400 [&>div:last-child]:bg-amber-500"
+              >
+                view resume!
+              </InteractiveHoverButton>
+            </div>
+          )}
+
+          <div className="flex items-center justify-center space-x-4">
+            <button
+              onClick={() =>
+                window.open("https://linkedin.com/in/teddymalhan", "_blank")
+              }
+              className="fill rounded-md p-2"
+              aria-label="LinkedIn"
+            >
+              <FontAwesomeIcon icon={faLinkedin} className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() =>
+                window.open("https://github.com/teddymalhan", "_blank")
+              }
+              className="fill rounded-md p-2"
+              aria-label="GitHub"
+            >
+              <FontAwesomeIcon icon={faGithub} className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </>
-  )
+  );
 }

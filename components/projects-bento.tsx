@@ -1,19 +1,20 @@
-"use client"
+"use client";
 
-import { Github, ExternalLink, Trophy } from "lucide-react"
-import Image from "next/image"
+import { Github, ExternalLink, Trophy } from "lucide-react";
+import Image from "next/image";
 
-import { cn } from "@/lib/utils"
-import { BentoCard, BentoGrid } from "@/components/ui/bento-grid"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const projects = [
   {
     name: "Digital Scorecards",
     title: "Digital Scorecards",
     period: "Internship",
-    description: "Built enterprise-grade digital scorecards for Dialpad's contact center, bringing accountability and performance visibility to customer service teams.",
+    description:
+      "Built enterprise-grade digital scorecards for Dialpad's contact center, bringing accountability and performance visibility to customer service teams.",
     href: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/?utm_source=chatgpt.com#:~:text=Digital%20dispositions%20and-,digital%20scorecards,-bring%20accountability%20and",
     cta: "Read More",
     className: "col-span-3 lg:col-span-2",
@@ -39,7 +40,8 @@ const projects = [
     name: "WasteWise",
     title: "WasteWise",
     period: "Oct 2024",
-    description: "Architected a FAISS & NLP based waste sorting system powered by RAG, OpenAI Embeddings, parsing 20k+ mappings of food items to bins.",
+    description:
+      "Architected a FAISS & NLP based waste sorting system powered by RAG, OpenAI Embeddings, parsing 20k+ mappings of food items to bins.",
     href: "https://devpost.com/software/wastewise-agcrsi",
     cta: "Learn More",
     className: "col-span-3 lg:col-span-1",
@@ -64,11 +66,19 @@ const projects = [
     name: "Kaeru",
     title: "Kaeru",
     period: "2024",
-    description: "An innovative AI-powered platform that revolutionizes how users interact with technology through advanced machine learning and intuitive design.",
+    description:
+      "An innovative AI-powered platform that revolutionizes how users interact with technology through advanced machine learning and intuitive design.",
     className: "col-span-3 lg:col-span-3",
     href: "https://github.com/teddymalhan/kaeru",
     cta: "Learn More",
-    technologies: ["React", "TypeScript", "Python", "TensorFlow", "Node.js", "MongoDB"],
+    technologies: [
+      "React",
+      "TypeScript",
+      "Python",
+      "TensorFlow",
+      "Node.js",
+      "MongoDB",
+    ],
     github: "https://github.com/teddymalhan/kaeru",
     demo: "https://github.com/teddymalhan/kaeru",
     featured: true,
@@ -90,7 +100,8 @@ const projects = [
     name: "GradGains",
     title: "GradGains",
     period: "2024",
-    description: "🏆 Google DSC Hackathon Winner - Best Project. A financial social media platform designed to help students manage their finances.",
+    description:
+      "🏆 Google DSC Hackathon Winner - Best Project. A financial social media platform designed to help students manage their finances.",
     className: "col-span-3 lg:col-span-1",
     href: "https://github.com/teddymalhan/grad-gains",
     cta: "View Project",
@@ -117,7 +128,8 @@ const projects = [
     name: "CommitWise",
     title: "CommitWise",
     period: "2024",
-    description: "A smart Git commit assistant that analyzes code changes and generates meaningful, conventional commit messages using AI.",
+    description:
+      "A smart Git commit assistant that analyzes code changes and generates meaningful, conventional commit messages using AI.",
     className: "col-span-3 lg:col-span-2",
     href: "https://commitwise.malhan.ca",
     cta: "Demo",
@@ -138,7 +150,7 @@ const projects = [
       </div>
     ),
   },
-]
+];
 
 export function ProjectsBento() {
   return (
@@ -151,61 +163,61 @@ export function ProjectsBento() {
         </div>
 
         <BentoGrid>
-           {projects.map((project, idx) => {
-             const { technologies, github, demo, award, ...cardProps } = project;
-             return (
-               <BentoCard key={idx} {...cardProps}>
-                 <div className="absolute bottom-4 right-4 flex space-x-2 z-10">
-                   <Button 
-                     className="bg-gradient-to-r from-gray-800 to-black text-white hover:from-gray-700 hover:to-gray-900 transform hover:scale-110 transition-all duration-300 shadow-lg" 
-                     size="sm" 
-                     onClick={(e) => {
-                       e.preventDefault()
-                       window.open(github, "_blank")
-                     }}
-                   >
-                     <Github className="w-4 h-4" />
-                   </Button>
-                   <Button 
-                     className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transform hover:scale-110 transition-all duration-300 shadow-lg" 
-                     size="sm" 
-                     onClick={(e) => {
-                       e.preventDefault()
-                       window.open(demo, "_blank")
-                     }}
-                   >
-                     <ExternalLink className="w-4 h-4" />
-                   </Button>
-                 </div>
-                 {award && (
-                   <Badge className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white font-bold shadow-lg animate-pulse border-0 z-10">
-                     <Trophy className="w-3 h-3 mr-1" />
-                     {award}
-                   </Badge>
-                 )}
+          {projects.map((project, idx) => {
+            const { technologies, github, demo, award, ...cardProps } = project;
+            return (
+              <BentoCard key={idx} {...cardProps}>
+                <div className="absolute bottom-4 right-4 flex space-x-2 z-10">
+                  <Button
+                    className="bg-gradient-to-r from-gray-800 to-black text-white hover:from-gray-700 hover:to-gray-900 transform hover:scale-110 transition-all duration-300 shadow-lg"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(github, "_blank");
+                    }}
+                  >
+                    <Github className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transform hover:scale-110 transition-all duration-300 shadow-lg"
+                    size="sm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open(demo, "_blank");
+                    }}
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                  </Button>
+                </div>
+                {award && (
+                  <Badge className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white font-bold shadow-lg animate-pulse border-0 z-10">
+                    <Trophy className="w-3 h-3 mr-1" />
+                    {award}
+                  </Badge>
+                )}
 
-                 <div className="absolute bottom-20 left-4 right-4 z-10">
-                   <div className="flex flex-wrap gap-2">
-                     {technologies.slice(0, 4).map((tech, techIdx) => (
-                       <span
-                         key={techIdx}
-                         className="rounded-full bg-white/90 dark:bg-gray-800/90 px-3 py-1 text-xs font-semibold backdrop-blur-sm border border-gray-200 dark:border-gray-700"
-                       >
-                         {tech}
-                       </span>
-                     ))}
-                     {technologies.length > 4 && (
-                       <span className="rounded-full bg-white/90 dark:bg-gray-800/90 px-3 py-1 text-xs font-semibold backdrop-blur-sm border border-gray-200 dark:border-gray-700">
-                         +{technologies.length - 4} more
-                       </span>
-                     )}
-                   </div>
-                 </div>
-               </BentoCard>
-             );
-           })}
-         </BentoGrid>
+                <div className="absolute bottom-20 left-4 right-4 z-10">
+                  <div className="flex flex-wrap gap-2">
+                    {technologies.slice(0, 4).map((tech, techIdx) => (
+                      <span
+                        key={techIdx}
+                        className="rounded-full bg-white/90 dark:bg-gray-800/90 px-3 py-1 text-xs font-semibold backdrop-blur-sm border border-gray-200 dark:border-gray-700"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {technologies.length > 4 && (
+                      <span className="rounded-full bg-white/90 dark:bg-gray-800/90 px-3 py-1 text-xs font-semibold backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+                        +{technologies.length - 4} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </BentoCard>
+            );
+          })}
+        </BentoGrid>
       </div>
     </section>
-  )
+  );
 }

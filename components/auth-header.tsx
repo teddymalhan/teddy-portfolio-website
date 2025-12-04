@@ -1,28 +1,23 @@
-"use client"
+"use client";
 
-import {
-  SignInButton,
-  SignUpButton,
-  UserButton,
-  useAuth,
-} from "@clerk/nextjs"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Shield } from "lucide-react"
+import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Shield } from "lucide-react";
 
 export function AuthHeader() {
-  const { isSignedIn } = useAuth()
-  const router = useRouter()
-  
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+
   const handleAdminClick = () => {
     if (isSignedIn) {
-      router.push('/admin/dashboard')
+      router.push("/admin/dashboard");
     } else {
       // Redirect to sign in page with dashboard as redirect after auth
-      router.push('/sign-in?redirect_url=/admin/dashboard')
+      router.push("/sign-in?redirect_url=/admin/dashboard");
     }
-  }
-  
+  };
+
   return (
     <header className="flex items-center gap-2">
       {!isSignedIn ? (
@@ -45,7 +40,5 @@ export function AuthHeader() {
         </div>
       )}
     </header>
-  )
+  );
 }
-
-
