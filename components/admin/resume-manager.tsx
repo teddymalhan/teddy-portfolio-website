@@ -95,7 +95,7 @@ export function ResumeManager() {
       setTogglingVisibility(true);
       const newVisibility = !isResumeVisible;
       const res = await fetch("/api/resume/visibility", {
-        method: "PUT",
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isVisible: newVisibility }),
       });
@@ -625,7 +625,6 @@ export function ResumeManager() {
         </div>
       </Card>
 
-      {/* Resume List */}
       <Card className="p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
@@ -643,7 +642,6 @@ export function ResumeManager() {
             )}
           </div>
 
-          {/* Search, Filter, and Sort Controls */}
           <div className="flex flex-col sm:flex-row gap-3">
             {/* Search */}
             <div className="relative flex-1 sm:min-w-[200px]">
@@ -850,7 +848,6 @@ export function ResumeManager() {
         )}
       </Card>
 
-      {/* Preview Dialog */}
       <Dialog
         open={!!previewResume}
         onOpenChange={(open) => !open && setPreviewResume(null)}
@@ -871,7 +868,6 @@ export function ResumeManager() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Notes Dialog */}
       <Dialog
         open={!!editingNotes}
         onOpenChange={(open) => !open && setEditingNotes(null)}

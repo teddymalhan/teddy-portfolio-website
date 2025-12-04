@@ -32,7 +32,7 @@ export async function GET() {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
     return createErrorResponse("Unauthorized", 403, "UNAUTHORIZED");
@@ -61,7 +61,7 @@ export async function PUT(request: NextRequest) {
       isVisible: verifiedValue,
     });
   } catch (error) {
-    logError("PUT /api/resume/visibility", error);
+    logError("POST /api/resume/visibility", error);
     return createErrorResponse(
       "Failed to update resume visibility",
       500,
