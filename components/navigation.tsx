@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Menu,
@@ -68,6 +68,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   const { isSignedIn } = useAuth();
   const { signOut } = useClerk();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +85,9 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   }, [handleScrollAction, prefersReducedMotion]);
 
   useEffect(() => {
+    // Mark as mounted to prevent hydration mismatch
+    setIsMounted(true);
+    
     // Set initial dimensions
     updateCanvasDimensions();
 
@@ -693,18 +697,20 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       </CommandDialog>
 
       {/* Confetti Component */}
-      <Fireworks
-        onInit={handleConfettiInit}
-        width={canvasDimensions.width}
-        height={canvasDimensions.height}
-        style={{
-          position: "fixed",
-          pointerEvents: "none",
-          top: 0,
-          left: 0,
-          zIndex: 9999,
-        }}
-      />
+      {isMounted && (
+        <Fireworks
+          onInit={handleConfettiInit}
+          width={canvasDimensions.width}
+          height={canvasDimensions.height}
+          style={{
+            position: "fixed",
+            pointerEvents: "none",
+            top: 0,
+            left: 0,
+            zIndex: 9999,
+          }}
+        />
+      )}
     </>
   );
 }
