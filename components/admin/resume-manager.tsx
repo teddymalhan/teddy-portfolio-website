@@ -439,21 +439,7 @@ export function ResumeManager() {
   return (
     <div className="space-y-6">
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Total Resumes
-              </p>
-              <p className="text-3xl font-bold mt-2">{totalResumes}</p>
-            </div>
-            <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-              <FileStack className="h-6 w-6 text-blue-500" />
-            </div>
-          </div>
-        </Card>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <Card className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0">
@@ -539,7 +525,7 @@ export function ResumeManager() {
           </div>
         </Card>
       </div>
-      {/* Resume Visibility Toggle */}
+
       <Card className="p-6">
         <div className="flex items-center justify-between">
           <div>
@@ -577,51 +563,6 @@ export function ResumeManager() {
               </>
             )}
           </Button>
-        </div>
-      </Card>
-
-      {/* Upload Section */}
-      <Card className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">Upload New Resume</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          Upload a new PDF resume. Maximum file size: 10MB
-        </p>
-        <div className="flex flex-col gap-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={handleUpload}
-              disabled={uploading}
-              className="hidden"
-            />
-            <Button disabled={uploading} asChild>
-              <span>
-                {uploading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Choose PDF File
-                  </>
-                )}
-              </span>
-            </Button>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={autoSetActive}
-              onChange={(e) => setAutoSetActive(e.target.checked)}
-              className="w-4 h-4 rounded border-input"
-            />
-            <span className="text-sm text-muted-foreground">
-              Automatically set as active resume after upload
-            </span>
-          </label>
         </div>
       </Card>
 
@@ -846,6 +787,50 @@ export function ResumeManager() {
             ))}
           </div>
         )}
+      </Card>
+      {/* Upload Section */}
+      <Card className="p-6">
+        <h2 className="text-2xl font-semibold mb-4">Upload New Resume</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Upload a new PDF resume. Maximum file size: 10MB
+        </p>
+        <div className="flex flex-col gap-4">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleUpload}
+              disabled={uploading}
+              className="hidden"
+            />
+            <Button disabled={uploading} asChild>
+              <span>
+                {uploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Choose PDF File
+                  </>
+                )}
+              </span>
+            </Button>
+          </label>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={autoSetActive}
+              onChange={(e) => setAutoSetActive(e.target.checked)}
+              className="w-4 h-4 rounded border-input"
+            />
+            <span className="text-sm text-muted-foreground">
+              Automatically set as active resume after upload
+            </span>
+          </label>
+        </div>
       </Card>
 
       <Dialog
