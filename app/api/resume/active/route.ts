@@ -16,7 +16,7 @@ export async function PUT(request: NextRequest) {
 
     if (!validationResult.success) {
       return createErrorResponse(
-        validationResult.error.errors[0]?.message || 'Invalid request',
+        validationResult.error.issues[0]?.message || 'Invalid request',
         400,
         'VALIDATION_ERROR'
       )

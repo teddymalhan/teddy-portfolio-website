@@ -1,18 +1,18 @@
 # Portfolio Website
 
-A modern, responsive personal portfolio website built with Next.js 14, React, and Tailwind CSS. Features stunning animations, interactive UI components, and a beautiful design system powered by Radix UI and Framer Motion.
+A modern, responsive personal portfolio website built with Next.js 16, React 19, and Tailwind CSS. Features stunning animations, interactive UI components, and a beautiful design system powered by Radix UI and Framer Motion.
 
-![Portfolio Preview](https://img.shields.io/badge/Next.js-14.2.16-black?style=flat-square&logo=next.js)
-![React](https://img.shields.io/badge/React-18-blue?style=flat-square&logo=react)
-![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.9-38bdf8?style=flat-square&logo=tailwind-css)
+![Portfolio Preview](https://img.shields.io/badge/Next.js-16.0.7-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1.17-38bdf8?style=flat-square&logo=tailwind-css)
 
 ## ✨ Features
 
 - 🎨 **Modern Design** - Clean, professional interface with smooth animations
 - 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile devices
 - 🌗 **Dark/Light Mode** - Theme switching with `next-themes`
-- ⚡ **High Performance** - Built on Next.js 14 with App Router
+- ⚡ **High Performance** - Built on Next.js 16 with App Router and Turbopack
 - 🎭 **Rich Animations** - Powered by Framer Motion and GSAP
 - 🎯 **Type-Safe** - Full TypeScript support
 - 📝 **Form Validation** - Contact forms with `react-hook-form` and Zod
@@ -24,7 +24,7 @@ A modern, responsive personal portfolio website built with Next.js 14, React, an
 
 ### Core
 
-- **Framework:** [Next.js 14](https://nextjs.org/) - React framework with App Router
+- **Framework:** [Next.js 16](https://nextjs.org/) - React framework with App Router and Turbopack
 - **Language:** [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
 - **Styling:** [Tailwind CSS 4](https://tailwindcss.com/) - Utility-first CSS framework
 

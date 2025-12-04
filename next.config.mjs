@@ -12,8 +12,20 @@ const nextConfig = {
   //   ignoreBuildErrors: true,
   // },
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+      },
+    ],
   },
+  // Turbopack config (Next.js 16 uses Turbopack by default)
+  turbopack: {},
+  // Keep webpack config for explicit webpack builds
   webpack: (config) => {
     // Fix webpack cache warning for large strings
     config.cache = {
