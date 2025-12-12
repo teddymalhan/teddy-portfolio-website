@@ -61,7 +61,7 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.555.0",
     "motion": "^12.23.25",
-    "next": "^16.0.7",
+    "next": "^16.0.9",
     "next-themes": "latest",
     "react": "^19.2.1",
     "react-canvas-confetti": "^2.0.7",
