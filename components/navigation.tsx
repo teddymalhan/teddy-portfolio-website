@@ -549,8 +549,8 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       >
         <motion.div
           className={cn(
-            "flex items-center justify-between px-4 py-3 rounded-2xl backdrop-blur-xl transition-colors duration-300",
-            isMobileMenuOpen ? "bg-card/95 shadow-lg shadow-primary/5" : "bg-card/90 shadow-md shadow-primary/5",
+            "flex items-center justify-between px-4 py-3 transition-colors duration-300",
+            isMobileMenuOpen ? "bg-card/95 shadow-lg shadow-primary/5 rounded-t-2xl rounded-b-none" : "bg-card/90 shadow-md shadow-primary/5 rounded-2xl",
           )}
           layout
           transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
@@ -612,7 +612,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+              className="md:hidden fixed inset-0 bg-background/80 z-40"
               onClick={toggleMobileMenu}
             />
 
@@ -622,7 +622,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-              className="md:hidden fixed top-24 left-4 right-4 z-40 bg-card/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-primary/5 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
+              className="md:hidden fixed top-[76px] left-4 right-4 z-40 bg-card/95 rounded-b-2xl rounded-t-none shadow-xl shadow-primary/5 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
             >
               <div className="space-y-0">
                 {navItems.map((item, index) => (
