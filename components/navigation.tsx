@@ -88,11 +88,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   const canvasDimensions = useNavigationStore((state) => state.canvasDimensions);
   const commandOpen = useNavigationStore((state) => state.commandOpen);
   const isVisible = useNavigationStore((state) => state.isVisible);
-  const scrollProgress = useNavigationStore((state) => state.scrollProgress);
-  const isMorphed = useNavigationStore((state) => state.isMorphed);
-  const isNavContentVisible = useNavigationStore(
-    (state) => state.isNavContentVisible,
-  );
 
   // Get actions from store
   const {
@@ -328,107 +323,24 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               }
         }
         style={{
-          top: prefersReducedMotion ? "1rem" : `${scrollProgress}rem`,
-          paddingLeft: prefersReducedMotion
-            ? "1.5rem"
-            : `${scrollProgress * 1.5}rem`,
-          paddingRight: prefersReducedMotion
-            ? "1.5rem"
-            : `${scrollProgress * 1.5}rem`,
-          transition: prefersReducedMotion
-            ? undefined
-            : "top 0.2s cubic-bezier(0.5, 1, 0.89, 1), padding-left 0.2s cubic-bezier(0.5, 1, 0.89, 1), padding-right 0.2s cubic-bezier(0.5, 1, 0.89, 1)",
+          top: "1rem",
+          paddingLeft: "1.5rem",
+          paddingRight: "1.5rem",
         }}
       >
         <div
-          className={`bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border/50 dark:border-border/90 px-6 py-3 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10`}
-          style={(() => {
-            const shouldUseMorphedStyle = prefersReducedMotion || isMorphed;
-
-            let borderRadius: string;
-            if (shouldUseMorphedStyle) {
-              borderRadius = "9999px";
-            } else {
-              borderRadius = "0px";
-            }
-
-            let maxWidth: string;
-            if (shouldUseMorphedStyle) {
-              maxWidth = "1152px";
-            } else {
-              maxWidth = "100%";
-            }
-
-            let marginLeft: string;
-            if (shouldUseMorphedStyle) {
-              marginLeft = "auto";
-            } else {
-              marginLeft = "0";
-            }
-
-            let marginRight: string;
-            if (shouldUseMorphedStyle) {
-              marginRight = "auto";
-            } else {
-              marginRight = "0";
-            }
-
-            return {
-              borderRadius,
-              maxWidth,
-              marginLeft,
-              marginRight,
-              minHeight: "60px",
-              transition: prefersReducedMotion
-                ? undefined
-                : "border-radius 0.2s cubic-bezier(0.5, 1, 0.89, 1), max-width 0.2s cubic-bezier(0.5, 1, 0.89, 1), margin-left 0.2s cubic-bezier(0.5, 1, 0.89, 1), margin-right 0.2s cubic-bezier(0.5, 1, 0.89, 1)",
-            };
-          })()}
+          className={`bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border/50 dark:border-border/90 px-6 py-3 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 rounded-full max-w-[1152px] mx-auto`}
+          style={{
+            minHeight: "60px",
+          }}
         >
-          <div
-            className="flex items-center justify-between"
-            style={{
-              transition: prefersReducedMotion
-                ? undefined
-                : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1)",
-            }}
-          >
+          <div className="flex items-center justify-between">
             {/* Left side - Logo and Navigation */}
-            <motion.div
-              initial={false}
-              animate={
-                prefersReducedMotion
-                  ? {}
-                  : {
-                      opacity: isNavContentVisible ? 1 : 0,
-                      visibility: isNavContentVisible ? "visible" : "hidden",
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? undefined
-                  : {
-                      duration: 0.1,
-                      ease: [0.5, 1, 0.89, 1],
-                    }
-              }
-              className="flex items-center gap-6"
-              style={{
-                transition: prefersReducedMotion
-                  ? undefined
-                  : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1)",
-                pointerEvents: isNavContentVisible ? "auto" : "none",
-              }}
-            >
+            <div className="flex items-center gap-6">
               <button
                 onClick={triggerConfetti}
                 className="text-2xl hover:scale-110 transition-transform duration-200 cursor-pointer"
                 aria-label="Trigger confetti"
-                style={{
-                  transition: prefersReducedMotion
-                    ? undefined
-                    : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1), transform 0.2s ease",
-                }}
               >
                 🧸
               </button>
@@ -437,11 +349,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
                 className="flex space-x-1"
                 role="menubar"
                 aria-label="Sections"
-                style={{
-                  transition: prefersReducedMotion
-                    ? undefined
-                    : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1)",
-                }}
               >
                 {navItems.map((item) => (
                   <motion.button
@@ -458,45 +365,15 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
                     aria-label={`Go to ${item.name}`}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    style={{
-                      transition: prefersReducedMotion
-                        ? undefined
-                        : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1), transform 0.2s ease, colors 0.2s ease",
-                    }}
                   >
                     {item.name}
                   </motion.button>
                 ))}
               </div>
-            </motion.div>
+            </div>
 
             {/* Right side - Search Bar, Auth, and Theme Toggle */}
-            <motion.div
-              initial={false}
-              animate={
-                prefersReducedMotion
-                  ? {}
-                  : {
-                      opacity: isNavContentVisible ? 1 : 0,
-                      visibility: isNavContentVisible ? "visible" : "hidden",
-                    }
-              }
-              transition={
-                prefersReducedMotion
-                  ? undefined
-                  : {
-                      duration: 0.1,
-                      ease: [0.5, 1, 0.89, 1],
-                    }
-              }
-              className="flex items-center gap-3"
-              style={{
-                transition: prefersReducedMotion
-                  ? undefined
-                  : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1)",
-                pointerEvents: isNavContentVisible ? "auto" : "none",
-              }}
-            >
+            <div className="flex items-center gap-3">
               <button
                 onClick={() => setCommandOpen(true)}
                 className="flex items-center gap-3 px-4 py-2 text-sm bg-background border border-border rounded-lg hover:bg-accent hover:text-accent-foreground text-muted-foreground"
@@ -512,16 +389,8 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
                 </div>
               </button>
 
-              <div
-                style={{
-                  transition: prefersReducedMotion
-                    ? undefined
-                    : "all 0.4s cubic-bezier(0.5, 1, 0.89, 1)",
-                }}
-              >
-                <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
-              </div>
-            </motion.div>
+              <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
+            </div>
           </div>
         </div>
       </motion.nav>

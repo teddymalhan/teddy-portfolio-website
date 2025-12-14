@@ -60,8 +60,8 @@ export const useNavigationStore = createStore<NavigationState>(
     activeSection: '',
     isVisible: true,
     lastScrollY: 0,
-    scrollProgress: 0,
-    isMorphed: false,
+    scrollProgress: 1, // Always keep at 1 for morphed state
+    isMorphed: true, // Always morphed (centered navbar)
     isNavContentVisible: true,
     isMobileMenuOpen: false,
     commandOpen: false,
@@ -112,48 +112,9 @@ export const useNavigationStore = createStore<NavigationState>(
 
       const scrollPosition = window.scrollY
       const windowHeight = window.innerHeight
-      const { isMorphed } = get()
 
       // Navigation always visible
       set({ isVisible: true, lastScrollY: scrollPosition })
-
-      // Calculate scroll progress
-      const heroHeight = windowHeight
-      const morphStart = 0
-      const morphEnd = heroHeight * 0.25
-
-      let rawProgress = (scrollPosition - morphStart) / morphEnd
-      let wasMorphed = rawProgress >= 0.5
-
-      // Only update if state has changed
-      if (wasMorphed === isMorphed) {
-        // State unchanged, skip update
-      } else if (prefersReducedMotion) {
-        // State has changed, handle update with reduced motion
-        set({
-          isMorphed: wasMorphed,
-          scrollProgress: wasMorphed ? 1 : 0,
-          isNavContentVisible: true,
-        })
-      } else {
-        // State has changed, handle update with full animation
-        set({ isNavContentVisible: false })
-        // Wait for fade out to complete, then update position
-        setTimeout(() => {
-          set({
-            isMorphed: wasMorphed,
-            scrollProgress: wasMorphed ? 1 : 0,
-          })
-          // Wait for morph transition to complete, then fade back in
-          setTimeout(() => {
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                set({ isNavContentVisible: true })
-              })
-            })
-          }, 200) // Wait for morph transition (0.2s) to complete
-        }, 100) // Fade out duration
-      }
 
       // If near top, mark home as active
       if (scrollPosition < windowHeight / 2) {
