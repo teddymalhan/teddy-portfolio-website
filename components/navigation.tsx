@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
-  Menu,
   X,
   Search,
   Home,
@@ -14,7 +13,6 @@ import {
   Github,
   Linkedin,
   LogIn,
-  UserPlus,
   Shield,
   LogOut,
 } from "lucide-react";
@@ -32,6 +30,7 @@ import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useNavigationStore } from "@/stores";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "🏠 home", href: "#home", emoji: "" },
@@ -39,6 +38,47 @@ const navItems = [
   { name: "🛠️ projects", href: "#projects", emoji: "" },
   { name: "👤 about me", href: "#about", emoji: "" },
 ];
+
+function MobileNavAccordionItem({
+  item,
+  index,
+  scrollToSection,
+  prefersReducedMotion,
+}: {
+  item: { name: string; href: string; emoji: string };
+  index: number;
+  scrollToSection: (href: string) => void;
+  prefersReducedMotion: boolean;
+}) {
+  return (
+    <motion.div
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+      transition={
+        prefersReducedMotion
+          ? undefined
+          : {
+              duration: 0.4,
+              delay: index * 0.08,
+              ease: [0.32, 0.72, 0, 1],
+            }
+      }
+      className="border-b border-border/50 last:border-b-0"
+    >
+      <button
+        onClick={() => {
+          scrollToSection(item.href);
+        }}
+        className="w-full py-4 flex items-center group hover:bg-secondary/50 rounded-lg transition-colors duration-200"
+      >
+        <span className="text-sm font-semibold tracking-wide text-foreground flex items-center gap-2">
+          {item.emoji && <span>{item.emoji}</span>}
+          <span>{item.name.replace(/^[^\s]+\s/, "")}</span>
+        </span>
+      </button>
+    </motion.div>
+  );
+}
 
 export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   // Get state from Zustand store using selective subscriptions
@@ -487,10 +527,8 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       </motion.nav>
 
       {/* Mobile Navigation */}
-      <motion.nav
-        role="nav"
-        aria-label="Mobile"
-        className="md:hidden fixed top-4 left-0 right-0 z-50 px-6"
+      <motion.header
+        className="md:hidden fixed top-4 left-4 right-4 z-50"
         initial={prefersReducedMotion ? false : { y: 0, opacity: 1 }}
         animate={
           prefersReducedMotion
@@ -509,70 +547,96 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               }
         }
       >
-        <div className="max-w-6xl mx-auto bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl rounded-full border border-border/50 dark:border-border/90 px-6 py-3 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={triggerConfetti}
-              className="text-2xl hover:scale-110 transition-transform duration-200 cursor-pointer"
-              aria-label="Trigger confetti"
-            >
-              🧸
-            </button>
+        <motion.div
+          className={cn(
+            "flex items-center justify-between px-4 py-3 rounded-2xl backdrop-blur-xl transition-colors duration-300",
+            isMobileMenuOpen ? "bg-card/95 shadow-lg shadow-primary/5" : "bg-card/90 shadow-md shadow-primary/5",
+          )}
+          layout
+          transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+        >
+          <button
+            onClick={triggerConfetti}
+            className="text-2xl hover:scale-110 transition-transform duration-200 cursor-pointer"
+            aria-label="Trigger confetti"
+          >
+            🧸
+          </button>
 
-            <div className="flex items-center gap-2">
-              <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
-              <button
-                onClick={toggleMobileMenu}
-                className="p-2 rounded-full text-foreground hover:text-primary hover:bg-accent/20 transition-all duration-200"
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
+            <button
+              onClick={toggleMobileMenu}
+              className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary/50 transition-colors duration-200"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            >
+              <div className="w-5 h-5 flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  {isMobileMenuOpen ? (
+                    <motion.div
+                      key="close"
+                      initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                      exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+                    >
+                      <X className="w-5 h-5 text-foreground" strokeWidth={2} />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="hamburger"
+                      initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                      exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+                      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+                      className="flex flex-col gap-1"
+                    >
+                      <span className="w-5 h-0.5 bg-foreground rounded-full" />
+                      <span className="w-5 h-0.5 bg-foreground rounded-full" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </button>
           </div>
-        </div>
-      </motion.nav>
+        </motion.div>
+      </motion.header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-0 z-40 bg-gradient-to-br from-background/95 via-background/90 to-card/95 backdrop-blur-xl"
-            style={{ paddingTop: "100px" }}
-            onClick={toggleMobileMenu}
-          >
-            <div
-              id="mobile-menu"
-              className="flex flex-col items-center justify-center h-full space-y-6 px-8"
-              onClick={(e) => e.stopPropagation()}
-              onKeyDown={(e) => {
-                e.stopPropagation();
-              }}
-              role="none"
-              tabIndex={-1}
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+              onClick={toggleMobileMenu}
+            />
+
+            {/* Menu Content */}
+            <motion.nav
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              className="md:hidden fixed top-24 left-4 right-4 z-40 bg-card/95 backdrop-blur-xl rounded-2xl shadow-xl shadow-primary/5 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
             >
-              {navItems.map((item, index) => (
-                <motion.button
-                  key={item.name}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 + 0.1 }}
-                  onClick={() => scrollToSection(item.href)}
-                  className="flex items-center gap-4 text-xl font-medium text-foreground hover:text-primary transition-colors py-4 px-6 rounded-2xl hover:bg-accent/10 w-full max-w-xs justify-center"
-                  aria-label={`Go to ${item.name}`}
-                >
-                  <span className="text-2xl">{item.emoji}</span>
-                  <span>{item.name}</span>
-                </motion.button>
-              ))}
-            </div>
-          </motion.div>
+              <div className="space-y-0">
+                {navItems.map((item, index) => (
+                  <MobileNavAccordionItem
+                    key={item.name}
+                    item={item}
+                    index={index}
+                    scrollToSection={scrollToSection}
+                    prefersReducedMotion={!!prefersReducedMotion}
+                  />
+                ))}
+              </div>
+            </motion.nav>
+          </>
         )}
       </AnimatePresence>
 
