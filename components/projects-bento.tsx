@@ -152,8 +152,9 @@ export function ProjectsBento() {
 
         <BentoGrid>
           {projects.map((project) => {
-            const { technologies, github, demo, award, ...cardProps } = project;
+            const { technologies, github, demo, ...cardProps } = project;
             const tags = (technologies ?? []).slice(0, 3);
+            const award = 'award' in project && typeof project.award === 'string' ? project.award : undefined;
             return (
               <BentoCard
                 key={project.name}
