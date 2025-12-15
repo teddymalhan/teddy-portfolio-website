@@ -152,34 +152,39 @@
   }
 }
 
-/* Added custom scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
+/* Completely hide scrollbar for all browsers */
+html {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-::-webkit-scrollbar-track {
-  background: oklch(0.94 0.01 240);
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
 }
 
-::-webkit-scrollbar-thumb {
-  background: oklch(0.85 0.02 240);
-  border-radius: 4px;
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.45 0.25 240);
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
 }
 
-.dark ::-webkit-scrollbar-track {
-  background: oklch(0.15 0.015 240);
+/* Hide scrollbar for all elements */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background: oklch(0.25 0.015 240);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: oklch(0.65 0.2 240);
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
 }
 
 /* Utility classes for text selection */
