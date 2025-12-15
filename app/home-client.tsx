@@ -37,7 +37,7 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         })
       },
       {
-        threshold: [0, 0.2, 0.5, 1.0], // Multiple thresholds for smoother transitions
+        threshold: [0, 0.2, 0.5, 1], // Multiple thresholds for smoother transitions
         rootMargin: "0px", // No margin
       }
     )
@@ -52,7 +52,7 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
   }, [])
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-linear-to-b from-background via-muted to-background relative overflow-hidden">
       <AnimatedBackground isActive={isHeroVisible} />
       <FloatingElements isActive={isHeroVisible} />
       <TechMascots />
@@ -61,14 +61,14 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         <Navigation isResumeVisible={isResumeVisible} />
         <main>
           <Hero isResumeVisible={isResumeVisible} />
-          <div className="relative bg-background">
-            <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
+          <div className="relative">
+            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <Experience />
-            <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
+            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <ProjectsBento />
-            <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
+            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <About />
-            <Separator className="bg-gradient-to-r from-transparent via-border to-transparent" />
+            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <Footer isResumeVisible={isResumeVisible} />
           </div>
         </main>

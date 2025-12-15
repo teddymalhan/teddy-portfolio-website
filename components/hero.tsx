@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
@@ -8,6 +8,15 @@ import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
   const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
+  const fadeStyles = useMemo(
+    () => (delay: number) => ({
+      opacity: 0,
+      animation: "fadeInSlide 0.7s ease forwards",
+      animationDelay: `${delay}s`,
+      animationFillMode: "forwards" as const,
+    }),
+    [],
+  );
 
   useEffect(() => {
     async function fetchResumePath() {
@@ -41,11 +50,11 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
         @keyframes fadeInSlide {
           from {
             opacity: 0;
-            transform: translateY(10px) translateX(-10px);
+            transform: translateY(18px);
           }
           to {
             opacity: 1;
-            transform: translateY(0) translateX(0);
+            transform: translateY(0);
           }
         }
 
@@ -88,14 +97,16 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
         <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
           <div className="mb-8">
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 text-balance">
-              <span className="relative inline-block pb-2">
-                hi! i&apos;m teddy!{" "}
+              <span className="relative inline-flex flex-wrap items-center justify-center gap-2 pb-2">
+                <span style={fadeStyles(0)}>hi!</span>
+                <span style={fadeStyles(0.3)}>i&apos;m teddy!</span>
                 <span
                   style={{
                     display: "inline-block",
                     animation:
-                      "rotateHand 1s linear(0, 0.315 10.5%, 0.502 18.4%, 0.567 22.2%, 0.613 25.9%, 0.64 29.6%, 0.65 33.3%, 0.628 39.2%, 0.563 45.6%, 0.202 67.6%, 0.082 77.1%, 0.041 82.1%, 0.016 87.2%, 0.003 92.7%, 0) forwards",
+                      "fadeInSlide 0.7s ease 0.45s forwards, rotateHand 1s linear(0, 0.315 10.5%, 0.502 18.4%, 0.567 22.2%, 0.613 25.9%, 0.64 29.6%, 0.65 33.3%, 0.628 39.2%, 0.563 45.6%, 0.202 67.6%, 0.082 77.1%, 0.041 82.1%, 0.016 87.2%, 0.003 92.7%, 0) 0.45s forwards",
                     transformOrigin: "70% 70%",
+                    opacity: 0,
                   }}
                 >
                   👋
@@ -135,7 +146,10 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
               </span>
             </h1>
 
-            <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
+            <h2
+              className="text-xl md:text-2xl mb-6 font-medium text-foreground"
+              style={fadeStyles(0.7)}
+            >
               cs major @{" "}
               <span className="inline-flex items-center gap-1">
                 <img
@@ -159,7 +173,10 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
               </TextHighlighter>
             </h2>
 
-            <h2 className="text-xl md:text-2xl mb-6 font-medium text-foreground">
+            <h2
+              className="text-xl md:text-2xl mb-6 font-medium text-foreground"
+              style={fadeStyles(1)}
+            >
               prev. swe intern at{" "}
               <span className="inline-flex items-center gap-1">
                 <img
@@ -192,7 +209,10 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
           </div>
 
           {isResumeVisible && (
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-8">
+            <div
+              className="flex flex-wrap items-center justify-center gap-4 mb-8"
+              style={fadeStyles(0.9)}
+            >
               <InteractiveHoverButton
                 onClick={() => {
                   // Force fresh fetch by adding current timestamp
@@ -208,7 +228,10 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             </div>
           )}
 
-          <div className="flex items-center justify-center space-x-4">
+          <div
+            className="flex items-center justify-center space-x-4"
+            style={fadeStyles(1.1)}
+          >
             <button
               onClick={() =>
                 window.open("https://linkedin.com/in/teddymalhan", "_blank")
