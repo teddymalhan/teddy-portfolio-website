@@ -61,7 +61,7 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         <Navigation isResumeVisible={isResumeVisible} />
         <main>
           <Hero isResumeVisible={isResumeVisible} />
-          <div className="relative">
+          <div className="relative bg-background">
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <Experience />
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
