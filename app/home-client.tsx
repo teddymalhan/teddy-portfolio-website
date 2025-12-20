@@ -12,7 +12,6 @@ import { useEffect, useState, useRef, lazy, Suspense } from "react"
 // Lazy load heavy animation components
 const AnimatedBackground = lazy(() => import("@/components/animated-background").then(mod => ({ default: mod.AnimatedBackground })))
 const FloatingElements = lazy(() => import("@/components/floating-elements").then(mod => ({ default: mod.FloatingElements })))
-const TechMascots = lazy(() => import("@/components/tech-mascots").then(mod => ({ default: mod.TechMascots })))
 
 interface HomeClientProps {
   isResumeVisible: boolean
@@ -58,7 +57,6 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
       <Suspense fallback={null}>
         <AnimatedBackground isActive={isHeroVisible} />
         <FloatingElements isActive={isHeroVisible} />
-        <TechMascots />
       </Suspense>
 
       <div className="relative z-10">
