@@ -92,27 +92,6 @@ export function AnimatedBackground({
       });
     }
 
-    // Grid lines
-    const gridLines: Array<{
-      x1: number;
-      y1: number;
-      x2: number;
-      y2: number;
-      opacity: number;
-      fadeDirection: number;
-    }> = [];
-
-    // Create grid lines
-    for (let i = 0; i < 20; i++) {
-      gridLines.push({
-        x1: Math.random() * canvas.width,
-        y1: Math.random() * canvas.height,
-        x2: Math.random() * canvas.width,
-        y2: Math.random() * canvas.height,
-        opacity: Math.random() * 0.1 + 0.02,
-        fadeDirection: Math.random() > 0.5 ? 1 : -1,
-      });
-    }
 
     const animate = () => {
       // Only animate if active, visible, and tab is not hidden
@@ -124,22 +103,6 @@ export function AnimatedBackground({
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw grid lines
-      gridLines.forEach((line) => {
-        ctx.strokeStyle = `rgba(59, 130, 246, ${line.opacity})`;
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(line.x1, line.y1);
-        ctx.lineTo(line.x2, line.y2);
-        ctx.stroke();
-
-        // Animate opacity
-        line.opacity += line.fadeDirection * 0.001;
-        if (line.opacity <= 0.01 || line.opacity >= 0.08) {
-          line.fadeDirection *= -1;
-        }
-      });
 
       // Draw and update particles
       particles.forEach((particle) => {
