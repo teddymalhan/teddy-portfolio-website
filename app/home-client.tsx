@@ -5,12 +5,14 @@ import { Hero } from "@/components/hero"
 import { About } from "@/components/about"
 import { Experience } from "@/components/experience"
 import { ProjectsBento } from "@/components/projects-bento"
-import { AnimatedBackground } from "@/components/animated-background"
-import { FloatingElements } from "@/components/floating-elements"
-import { TechMascots } from "@/components/tech-mascots"
 import Footer from "@/components/footer"
 import { Separator } from "@/components/ui/separator"
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, lazy, Suspense } from "react"
+
+// Lazy load heavy animation components
+const AnimatedBackground = lazy(() => import("@/components/animated-background").then(mod => ({ default: mod.AnimatedBackground })))
+const FloatingElements = lazy(() => import("@/components/floating-elements").then(mod => ({ default: mod.FloatingElements })))
+const TechMascots = lazy(() => import("@/components/tech-mascots").then(mod => ({ default: mod.TechMascots })))
 
 interface HomeClientProps {
   isResumeVisible: boolean
@@ -53,9 +55,11 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-background via-muted to-background relative overflow-hidden">
-      <AnimatedBackground isActive={isHeroVisible} />
-      <FloatingElements isActive={isHeroVisible} />
-      <TechMascots />
+      <Suspense fallback={null}>
+        <AnimatedBackground isActive={isHeroVisible} />
+        <FloatingElements isActive={isHeroVisible} />
+        <TechMascots />
+      </Suspense>
 
       <div className="relative z-10">
         <Navigation isResumeVisible={isResumeVisible} />

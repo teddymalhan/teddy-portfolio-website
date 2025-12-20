@@ -5,9 +5,8 @@ import { resumeService } from '@/lib/services/resume-service'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
 import { validateFile } from '@/lib/validations/resume'
 
-// Force dynamic rendering to prevent caching
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Use ISR with revalidation every 5 minutes
+export const revalidate = 300
 
 // GET - Get current active resume
 export async function GET() {
@@ -26,9 +25,8 @@ export async function GET() {
     }
 
     const response = createSuccessResponse(resume)
-    response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate')
-    response.headers.set('Pragma', 'no-cache')
-    response.headers.set('Expires', '0')
+    // Stale-while-revalidate: serve cached for 5 min, revalidate in background
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
     return response
   } catch (error) {
     logError('GET /api/resume', error)

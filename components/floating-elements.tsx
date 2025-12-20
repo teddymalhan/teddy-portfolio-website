@@ -24,6 +24,7 @@ export function FloatingElements({ isActive = true }: FloatingElementsProps) {
   const setIsActive = useFloatingElementsStore((state) => state.setIsActive);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isPausedRef = useRef(false);
 
   // Initialize elements on mount
   useEffect(() => {
@@ -35,29 +36,71 @@ export function FloatingElements({ isActive = true }: FloatingElementsProps) {
     setIsActive(isActive);
   }, [isActive, setIsActive]);
 
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = globalThis.window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionChange = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        setIsActive(false);
+      } else {
+        setIsActive(isActive);
+      }
+    };
+    
+    if (mediaQuery.matches) {
+      setIsActive(false);
+    }
+    
+    mediaQuery.addEventListener("change", handleMotionChange);
+    return () => mediaQuery.removeEventListener("change", handleMotionChange);
+  }, [isActive, setIsActive]);
+
+  // Shared animate function
+  const createAnimateFunction = () => {
+    return () => {
+      const currentIsActive = useFloatingElementsStore.getState().isActive;
+      if (!currentIsActive || isPausedRef.current) {
+        return;
+      }
+      animateFloatingElements(updateAllElements, currentIsActive);
+    };
+  };
+
+  // Page Visibility API to pause when tab is inactive
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      isPausedRef.current = document.hidden;
+      if (document.hidden && intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      } else if (!document.hidden && storeIsActive && !intervalRef.current) {
+        intervalRef.current = setInterval(createAnimateFunction(), 25);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [storeIsActive, updateAllElements]);
+
   // Animation loop
   useEffect(() => {
-    if (!storeIsActive) {
+    if (!storeIsActive || isPausedRef.current) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
       return;
     }
 
-    const animate = () => {
-      // Get current state from store
-      const currentIsActive = useFloatingElementsStore.getState().isActive;
-      if (!currentIsActive) {
-        return;
-      }
-
-      animateFloatingElements(updateAllElements, currentIsActive);
-    };
+    const animate = createAnimateFunction();
 
     // Clear existing interval if any
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
 
-    // Start animation interval
-    intervalRef.current = setInterval(animate, 25);
+    // Start animation interval (40ms = ~25fps for less intensive animation)
+    intervalRef.current = setInterval(animate, 40);
 
     return () => {
       if (intervalRef.current) {

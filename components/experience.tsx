@@ -161,7 +161,7 @@ export function Experience() {
                                     ? "object-cover"
                                     : "object-contain"
                           }
-                          unoptimized
+                          sizes="64px"
                         />
                       </div>
                     </div>

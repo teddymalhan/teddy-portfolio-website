@@ -32,6 +32,9 @@ export function AnimatedBackground({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    let isPaused = false;
+    let isVisible = true;
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -39,6 +42,31 @@ export function AnimatedBackground({
 
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
+
+    // Intersection Observer to pause when off-screen
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+          if (!isVisible && animationFrameRef.current) {
+            cancelAnimationFrame(animationFrameRef.current);
+            animationFrameRef.current = null;
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
+    // Page Visibility API to pause when tab is inactive
+    const handleVisibilityChange = () => {
+      isPaused = document.hidden;
+      if (isPaused && animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Particle system
     const particles: Array<{
@@ -87,9 +115,11 @@ export function AnimatedBackground({
     }
 
     const animate = () => {
-      // Only animate if active
-      if (!isActiveRef.current) {
-        animationFrameRef.current = requestAnimationFrame(animate);
+      // Only animate if active, visible, and tab is not hidden
+      if (!isActiveRef.current || !isVisible || isPaused) {
+        if (isActiveRef.current && isVisible && !isPaused) {
+          animationFrameRef.current = requestAnimationFrame(animate);
+        }
         return;
       }
 
@@ -159,6 +189,8 @@ export function AnimatedBackground({
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

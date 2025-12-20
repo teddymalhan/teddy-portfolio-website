@@ -1,8 +1,8 @@
 import { getResumeVisibility } from '@/lib/resume-visibility'
 import { HomeClient } from './home-client'
 
-// Force dynamic rendering to always fetch fresh visibility state
-export const dynamic = 'force-dynamic'
+// Use ISR with revalidation every 5 minutes
+export const revalidate = 300
 
 export default async function Home() {
   // Fetch resume visibility server-side before rendering

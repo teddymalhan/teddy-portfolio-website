@@ -4,13 +4,14 @@ const __filename = fileURLToPath(import.meta.url);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Note: These should be enabled after fixing any existing errors
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
+  // Enable ESLint and TypeScript checks (fix errors instead of ignoring)
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // Image optimization configuration
   images: {
     remotePatterns: [
       {
@@ -21,8 +22,26 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'praxis.encommun.io',
+      },
+      {
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.licdn.com',
+      },
     ],
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    minimumCacheTTL: 60,
   },
+  // Compression
+  compress: true,
   // Turbopack config (Next.js 16 uses Turbopack by default)
   turbopack: {},
   // Keep webpack config for explicit webpack builds
@@ -35,6 +54,10 @@ const nextConfig = {
       },
     };
     return config;
+  },
+  // Experimental optimizations
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
 }
 

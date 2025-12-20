@@ -22,12 +22,14 @@ export function About() {
           >
             <div className="size-full overflow-hidden rounded-full bg-background ring-1 ring-border">
               <Image
-                src="/ted-aboutme.jpeg"
+                src="/ted-aboutme.jpg"
                 alt="Portrait of Ted"
                 width={176}
                 height={176}
-                className="size-full object-cover"
+                className="size-full object-cover object-[center_top]"
+                style={{ objectPosition: '50% 30%' }}
                 priority
+                sizes="(max-width: 768px) 144px, 176px"
               />
             </div>
           </div>

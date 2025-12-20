@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
@@ -12,10 +13,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
     async function fetchResumePath() {
       try {
         const res = await fetch("/api/resume", {
-          cache: "no-store",
-          headers: {
-            "Cache-Control": "no-cache",
-          },
+          next: { revalidate: 300 }, // Revalidate every 5 minutes
         });
         if (res.ok) {
           const data = await res.json();
@@ -91,10 +89,13 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
           >
             cs major @{" "}
             <span className="inline-flex items-center gap-1">
-              <img
+              <Image
                 src="https://praxis.encommun.io/media/notes/note_12478/sfu.jpg"
                 alt="SFU logo"
+                width={20}
+                height={20}
                 className="w-5 h-5 rounded-full"
+                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(212, 40, 55)"
@@ -121,10 +122,13 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
           >
             prev. swe intern at{" "}
             <span className="inline-flex items-center gap-1">
-              <img
+              <Image
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5EbAYJ4fnvZp8PBJa0gDeO7uEvmlAJjurig&s"
                 alt="EA logo"
+                width={20}
+                height={20}
                 className="w-5 h-5 rounded-full"
+                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(37, 99, 235)"
@@ -135,10 +139,13 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             </span>{" "}
             &{" "}
             <span className="inline-flex items-center gap-1">
-              <img
+              <Image
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzji6wOPSF5w3pA8ATOaizQN2w-wFIs8FhKA&s"
                 alt="Dialpad logo"
+                width={20}
+                height={20}
                 className="w-5 h-5 rounded"
+                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(147, 51, 234)"

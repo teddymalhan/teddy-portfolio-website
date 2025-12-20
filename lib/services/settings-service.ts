@@ -1,8 +1,10 @@
 import { sql } from '@/lib/db'
+import { unstable_cache } from 'next/cache'
 import type { SettingsRow } from '@/types/database'
 
-export const settingsService = {
-  async getResumeVisibility(): Promise<boolean> {
+// Cached version of getResumeVisibility - cache for 5 minutes
+const getCachedResumeVisibility = unstable_cache(
+  async (): Promise<boolean> => {
     try {
       const result = await sql`
         SELECT value FROM settings 
@@ -23,6 +25,16 @@ export const settingsService = {
       }
       throw error
     }
+  },
+  ['resume-visibility'],
+  {
+    revalidate: 300, // 5 minutes
+  }
+)
+
+export const settingsService = {
+  async getResumeVisibility(): Promise<boolean> {
+    return getCachedResumeVisibility()
   },
 
   async setResumeVisibility(isVisible: boolean): Promise<void> {

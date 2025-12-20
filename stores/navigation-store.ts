@@ -78,10 +78,7 @@ export const useNavigationStore = createStore<NavigationState>(
 
       try {
         const res = await fetch('/api/resume', {
-          cache: 'no-store',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
+          next: { revalidate: 300 }, // Revalidate every 5 minutes
         })
         if (res.ok) {
           const data = await res.json()

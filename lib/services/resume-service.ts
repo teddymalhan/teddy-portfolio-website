@@ -1,4 +1,5 @@
 import { sql } from '@/lib/db'
+import { unstable_cache } from 'next/cache'
 import type { ResumeRow } from '@/types/database'
 import type { ResumeResponse } from '@/types/api'
 
@@ -16,8 +17,9 @@ function mapResumeRowToResponse(row: ResumeRow): ResumeResponse {
   }
 }
 
-export const resumeService = {
-  async getActiveResume(): Promise<ResumeResponse | null> {
+// Cached version of getActiveResume - cache for 5 minutes
+const getCachedActiveResume = unstable_cache(
+  async (): Promise<ResumeResponse | null> => {
     const result = await sql`
       SELECT * FROM resumes 
       WHERE is_active = TRUE 
@@ -30,6 +32,16 @@ export const resumeService = {
     }
 
     return mapResumeRowToResponse(result[0])
+  },
+  ['active-resume'],
+  {
+    revalidate: 300, // 5 minutes
+  }
+)
+
+export const resumeService = {
+  async getActiveResume(): Promise<ResumeResponse | null> {
+    return getCachedActiveResume()
   },
 
   async getAllResumes(): Promise<ResumeResponse[]> {

@@ -11,17 +11,87 @@ import "./globals.css"
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  preload: false,
+  preload: true,
+  adjustFontFallback: true,
   variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
-  title: "Teddy Malhan",
+  title: {
+    default: "Teddy Malhan",
+    template: "%s | Teddy Malhan",
+  },
   description:
     "Software Engineer with experience at EA and Dialpad. Computer Science student at Simon Fraser University.",
-  generator: "v0.app",
+  keywords: [
+    "Teddy Malhan",
+    "Software Engineer",
+    "Full Stack Developer",
+    "Computer Science",
+    "Simon Fraser University",
+    "EA",
+    "Electronic Arts",
+    "Dialpad",
+    "Portfolio",
+  ],
+  authors: [{ name: "Teddy Malhan" }],
+  creator: "Teddy Malhan",
+  generator: "Next.js",
+  applicationName: "Teddy Malhan Portfolio",
+  referrer: "origin-when-cross-origin",
+  colorScheme: "dark light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://malhan.ca"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "/",
+    siteName: "Teddy Malhan Portfolio",
+    title: "Teddy Malhan - Software Engineer",
+    description:
+      "Software Engineer with experience at EA and Dialpad. Computer Science student at Simon Fraser University.",
+    images: [
+      {
+        url: "/ted-aboutme.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Teddy Malhan",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Teddy Malhan - Software Engineer",
+    description:
+      "Software Engineer with experience at EA and Dialpad. Computer Science student at Simon Fraser University.",
+    images: ["/ted-aboutme.jpg"],
+    creator: "@teddymalhan",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧸</text></svg>",
+    apple: "data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧸</text></svg>",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
   },
 }
 
@@ -30,8 +100,45 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://malhan.ca"
+  
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Teddy Malhan",
+    jobTitle: "Software Engineer",
+    description:
+      "Software Engineer with experience at EA and Dialpad. Computer Science student at Simon Fraser University.",
+    url: siteUrl,
+    image: `${siteUrl}/ted-aboutme.jpg`,
+    sameAs: [
+      "https://github.com/teddymalhan",
+      "https://linkedin.com/in/teddymalhan",
+    ],
+    alumniOf: {
+      "@type": "EducationalOrganization",
+      name: "Simon Fraser University",
+    },
+    worksFor: [
+      {
+        "@type": "Organization",
+        name: "Electronic Arts",
+      },
+      {
+        "@type": "Organization",
+        name: "Dialpad",
+      },
+    ],
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className={`${inter.variable} font-sans`}>
         <ClerkProviderWrapper>
           <ThemeProvider

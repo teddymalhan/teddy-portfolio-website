@@ -222,8 +222,18 @@ void main() {
       }
     }
 
+    // Page Visibility API to pause when tab is inactive
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pause()
+      } else if (!mediaQuery.matches) {
+        unpause()
+      }
+    }
+
     handleMotionChange(mediaQuery as unknown as MediaQueryListEvent)
     mediaQuery.addEventListener("change", handleMotionChange)
+    document.addEventListener("visibilitychange", handleVisibilityChange)
 
     // Initialize
     init()
@@ -238,6 +248,7 @@ void main() {
     return () => {
       window.removeEventListener("resize", resize)
       document.removeEventListener("mousedown", handleMouseDown)
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
       mediaQuery.removeEventListener("change", handleMotionChange)
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)

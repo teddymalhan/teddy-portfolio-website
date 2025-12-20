@@ -3,9 +3,8 @@ import { resumeService } from '@/lib/services/resume-service'
 import { settingsService } from '@/lib/services/settings-service'
 import { logError } from '@/lib/api-response'
 
-// Force dynamic rendering to prevent caching
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// Use ISR with revalidation every 5 minutes
+export const revalidate = 300
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,9 +44,8 @@ export async function GET(request: NextRequest) {
             headers: {
               'Content-Type': 'application/pdf',
               'Content-Disposition': 'inline; filename="Teddy_Malhan_Resume.pdf"',
-              'Cache-Control': 'no-cache, no-store, must-revalidate',
-              'Pragma': 'no-cache',
-              'Expires': '0',
+              // Cache PDF for 5 minutes, allow stale for 10 minutes
+              'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
             },
           })
         } else {
