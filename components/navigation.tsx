@@ -433,7 +433,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
           </button>
 
           <div className="flex items-center gap-2">
-            <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
+            <AnimatedThemeToggler className="w-9 h-9 rounded-full border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors duration-200" />
             <button
               onClick={toggleMobileMenu}
               className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary/50 transition-colors duration-200"
