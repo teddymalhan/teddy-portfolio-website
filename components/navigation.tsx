@@ -376,7 +376,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setCommandOpen(true)}
-                className="flex items-center gap-3 px-4 py-2 text-sm bg-background border border-border rounded-lg hover:bg-accent hover:text-accent-foreground text-muted-foreground"
+                className="flex items-center gap-3 px-4 py-2 text-sm font-medium bg-background border border-border rounded-full hover:bg-accent hover:text-accent-foreground text-muted-foreground transition-colors duration-200"
                 style={{
                   minWidth: "240px",
                 }}
@@ -389,7 +389,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
                 </div>
               </button>
 
-              <AnimatedThemeToggler className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center" />
+              <AnimatedThemeToggler className="w-9 h-9 rounded-full border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors duration-200" />
             </div>
           </div>
         </div>
