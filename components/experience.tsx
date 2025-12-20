@@ -65,7 +65,7 @@ const experiences: ExperienceItem[] = [
 export function Experience() {
   return (
     <div id="experience" className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-10 pb-20">
+      <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-20 pb-20">
         {/* Header */}
         <h1 className="text-5xl font-bold tracking-tight text-left text-foreground mb-8">
           Experience

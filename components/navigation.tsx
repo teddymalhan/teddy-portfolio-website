@@ -63,15 +63,15 @@ function MobileNavAccordionItem({
               ease: [0.32, 0.72, 0, 1],
             }
       }
-      className="border-b border-border/50 last:border-b-0"
+      className="last:border-b-0"
     >
       <button
         onClick={() => {
           scrollToSection(item.href);
         }}
-        className="w-full py-4 flex items-center group hover:bg-secondary/50 rounded-lg transition-colors duration-200"
+        className="w-full py-3 px-4 flex items-center group hover:bg-primary/10 hover:text-primary rounded-full transition-colors duration-200"
       >
-        <span className="text-sm font-semibold tracking-wide text-foreground flex items-center gap-2">
+        <span className="text-sm font-medium tracking-wide text-foreground flex items-center gap-2">
           {item.emoji && <span>{item.emoji}</span>}
           <span>{item.name.replace(/^[^\s]+\s/, "")}</span>
         </span>
@@ -418,8 +418,8 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       >
         <motion.div
           className={cn(
-            "flex items-center justify-between px-4 py-3 transition-colors duration-300",
-            isMobileMenuOpen ? "bg-card/95 shadow-lg shadow-primary/5 rounded-t-2xl rounded-b-none" : "bg-card/90 shadow-md shadow-primary/5 rounded-2xl",
+            "flex items-center justify-between px-4 py-3 transition-colors duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
+            isMobileMenuOpen ? "rounded-t-2xl rounded-b-none" : "rounded-2xl",
           )}
           layout
           transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
@@ -481,7 +481,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden fixed inset-0 bg-background/80 z-40"
+              className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
               onClick={toggleMobileMenu}
             />
 
@@ -491,9 +491,9 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-              className="md:hidden fixed top-[76px] left-4 right-4 z-40 bg-card/95 rounded-b-2xl rounded-t-none shadow-xl shadow-primary/5 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
+              className="md:hidden fixed top-[76px] left-4 right-4 z-40 bg-gradient-to-r from-card/95 via-card/90 to-card/95 dark:from-card/98 dark:via-card/95 dark:to-card/98 backdrop-blur-xl border border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
             >
-              <div className="space-y-0">
+              <div className="space-y-2">
                 {navItems.map((item, index) => (
                   <MobileNavAccordionItem
                     key={item.name}
