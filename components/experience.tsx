@@ -65,9 +65,9 @@ const experiences: ExperienceItem[] = [
 export function Experience() {
   return (
     <div id="experience" className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-6 lg:px-10 py-20">
+      <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-10 pb-20">
         {/* Header */}
-        <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-left text-foreground mb-8">
+        <h1 className="text-5xl font-bold tracking-tight text-left text-foreground mb-8">
           Experience
         </h1>
 
@@ -83,7 +83,7 @@ export function Experience() {
                 <div className="text-foreground/90 font-medium text-[15px] tracking-tight">
                   {experience.period}
                 </div>
-                <div className="text-muted-foreground/80 text-[14px]">
+                <div className="text-foreground/80 text-[14px]">
                   {experience.location}
                 </div>
               </div>
