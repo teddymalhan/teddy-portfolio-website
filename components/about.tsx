@@ -45,7 +45,7 @@ export function About() {
             <p className="text-foreground">
               I&apos;m a Computer Science student and software engineer focused
               on backend and system engineering, with an emphasis on developer tooling, 
-              infrastructure-adjacent services, and data-driven applications
+              infrastructure-adjacent services, and data-driven applications.
             </p>
             <p>
               I care about shipping fast without sacrificing polish. From 
