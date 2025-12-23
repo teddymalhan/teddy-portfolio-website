@@ -48,7 +48,12 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
   }, [theme, setTheme]);
 
   return (
-    <button ref={buttonRef} onClick={toggleTheme} className={cn(className)}>
+    <button
+      ref={buttonRef}
+      onClick={toggleTheme}
+      className={cn(className)}
+      aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+    >
       {isDark ? (
         <Sun className="h-4 w-4 text-foreground" />
       ) : (

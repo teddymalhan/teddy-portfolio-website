@@ -90,12 +90,11 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             cs major @{" "}
             <span className="inline-flex items-center gap-1">
               <Image
-                src="https://praxis.encommun.io/media/notes/note_12478/sfu.jpg"
+                src="/sfu-logo.jpg"
                 alt="SFU logo"
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
-                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(212, 40, 55)"
@@ -123,12 +122,11 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             prev. swe intern at{" "}
             <span className="inline-flex items-center gap-1">
               <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5EbAYJ4fnvZp8PBJa0gDeO7uEvmlAJjurig&s"
+                src="/ea-logo.jpg"
                 alt="EA logo"
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
-                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(37, 99, 235)"
@@ -140,12 +138,11 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             &{" "}
             <span className="inline-flex items-center gap-1">
               <Image
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzji6wOPSF5w3pA8ATOaizQN2w-wFIs8FhKA&s"
+                src="/dialpad-logo.jpg"
                 alt="Dialpad logo"
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded"
-                unoptimized
               />
               <TextHighlighter
                 highlightColor="rgb(147, 51, 234)"
@@ -172,7 +169,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                     : `${resumePath}?t=${Date.now()}`;
                   window.open(freshUrl, "_blank", "noopener,noreferrer");
                 }}
-                className="bg-teal-600 hover:bg-amber-500 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-amber-400 [&>div:last-child]:bg-amber-500"
+                className="bg-teal-700 hover:bg-amber-600 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-white [&>div>div]:opacity-90 [&>div:last-child]:bg-amber-600 [&>div:last-child]:text-white"
               >
                 view resume!
               </InteractiveHoverButton>

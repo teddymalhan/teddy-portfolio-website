@@ -302,8 +302,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     <>
       {/* Desktop Navigation */}
       <motion.nav
-        role="nav"
-        aria-label="Primary"
+        aria-label="Primary navigation"
         className="hidden md:block fixed left-0 right-0 z-50"
         initial={prefersReducedMotion ? false : { opacity: 1 }}
         animate={
@@ -345,11 +344,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
                 🧸
               </button>
 
-              <div
-                className="flex space-x-1"
-                role="menubar"
-                aria-label="Sections"
-              >
+              <div className="flex space-x-1" aria-label="Sections">
                 {navItems.map((item) => (
                   <motion.button
                     key={item.name}
@@ -491,6 +486,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              aria-label="Mobile navigation"
               className="md:hidden fixed top-[76px] left-4 right-4 z-40 bg-gradient-to-r from-card/95 via-card/90 to-card/95 dark:from-card/98 dark:via-card/95 dark:to-card/98 backdrop-blur-xl border border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
             >
               <div className="space-y-2">
