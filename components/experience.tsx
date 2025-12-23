@@ -36,15 +36,15 @@ const experiences: ExperienceItem[] = [
   {
     company: "SFU Blueprint",
     role: "Software Developer",
-    period: "Sept 2024 - April 2025",
+    period: "Nov 2025 - Present",
     location: "Vancouver, BC",
     logo: "https://media.licdn.com/dms/image/v2/D560BAQGUjTCDhAjcFA/company-logo_200_200/company-logo_200_200/0/1690849546053/sfu_blueprint_logo?e=2147483647&v=beta&t=JFlsmyor7g50Tsl22WLuHPB8UODRlSMUKJ91Ek3vOxU",
     logoStyle: "padded",
-    tags: ["💻 Reel Youth"],
+    tags: ["💻 Blueprint Website"],
   },
   {
     company: "Develop for Good",
-    role: "Software Developer",
+    role: "Engineering Manager",
     period: "Sept 2024 - Feb 2025",
     location: "Remote",
     logo: "https://media.licdn.com/dms/image/v2/C560BAQHKP2Tu00J6Cw/company-logo_200_200/company-logo_200_200/0/1678590187185/develop_for_good_logo?e=2147483647&v=beta&t=acs0ifffs2qrncn6j1ldjNP5QeNalM6WGXf69IpGVUg",
