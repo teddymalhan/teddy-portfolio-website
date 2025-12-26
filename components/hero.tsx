@@ -1,36 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
-  const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
-
-  useEffect(() => {
-    async function fetchResumePath() {
-      try {
-        const res = await fetch("/api/resume", {
-          next: { revalidate: 300 }, // Revalidate every 5 minutes
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Use resume ID + timestamp as cache-buster - ensures fresh fetch every time
-          const timestamp = Date.now();
-          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`);
-        }
-      } catch (error) {
-        console.error("Failed to fetch resume info:", error);
-        // Fallback to timestamp-based cache-busting
-        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`);
-      }
-    }
-
-    if (isResumeVisible) {
-      fetchResumePath();
-    }
-  }, [isResumeVisible]);
+  // Resume path is handled by Navigation component, no need to fetch here
+  // This reduces initial client-side JavaScript execution
 
   return (
     <section
@@ -66,6 +42,8 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
+                priority
+                loading="eager"
               />
               <TextHighlighter
                 highlightColor="rgb(212, 40, 55)"
@@ -95,6 +73,8 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
+                priority
+                loading="eager"
               />
               <TextHighlighter
                 highlightColor="rgb(37, 99, 235)"
@@ -112,6 +92,8 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded"
+                priority
+                loading="eager"
               />
               <TextHighlighter
                 highlightColor="rgb(147, 51, 234)"
@@ -128,11 +110,9 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             {isResumeVisible && (
               <InteractiveHoverButton
                 onClick={() => {
-                  // Force fresh fetch by adding current timestamp
-                  const freshUrl = resumePath.includes("&t=")
-                    ? `${resumePath.split("&t=")[0]}&t=${Date.now()}`
-                    : `${resumePath}?t=${Date.now()}`;
-                  window.open(freshUrl, "_blank", "noopener,noreferrer");
+                  // Use navigation store's resume path or fallback
+                  const timestamp = Date.now();
+                  window.open(`/Teddy_Malhan_Resume.pdf?t=${timestamp}`, "_blank", "noopener,noreferrer");
                 }}
                 className="bg-teal-700 hover:bg-amber-600 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-white [&>div>div]:opacity-90 [&>div:last-child]:bg-amber-600 [&>div:last-child]:text-white"
               >

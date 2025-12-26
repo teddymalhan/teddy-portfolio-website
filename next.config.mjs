@@ -57,7 +57,7 @@ const nextConfig = {
   },
   // Experimental optimizations
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
   },
   // Compiler options to target modern browsers and reduce legacy JavaScript
   compiler: {

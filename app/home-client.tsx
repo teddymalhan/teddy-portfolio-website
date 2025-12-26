@@ -2,15 +2,17 @@
 
 import { Navigation } from "@/components/navigation"
 import { Hero } from "@/components/hero"
-import { About } from "@/components/about"
-import { Experience } from "@/components/experience"
-import { ProjectsBento } from "@/components/projects-bento"
-import Footer from "@/components/footer"
 import { Separator } from "@/components/ui/separator"
 import { useEffect, useState, useRef, lazy, Suspense } from "react"
 
 // Lazy load heavy animation components
 const AnimatedBackground = lazy(() => import("@/components/animated-background").then(mod => ({ default: mod.AnimatedBackground })))
+
+// Lazy load non-critical sections for better initial load performance
+const Experience = lazy(() => import("@/components/experience").then(mod => ({ default: mod.Experience })))
+const ProjectsBento = lazy(() => import("@/components/projects-bento").then(mod => ({ default: mod.ProjectsBento })))
+const About = lazy(() => import("@/components/about").then(mod => ({ default: mod.About })))
+const Footer = lazy(() => import("@/components/footer").then(mod => ({ default: mod.default })))
 
 interface HomeClientProps {
   isResumeVisible: boolean
@@ -63,13 +65,21 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
           <Hero isResumeVisible={isResumeVisible} />
           <div className="relative bg-background">
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <Experience />
+            <Suspense fallback={<div className="min-h-screen" />}>
+              <Experience />
+            </Suspense>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <ProjectsBento />
+            <Suspense fallback={<div className="min-h-screen" />}>
+              <ProjectsBento />
+            </Suspense>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <About />
+            <Suspense fallback={<div className="py-24" />}>
+              <About />
+            </Suspense>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <Footer isResumeVisible={isResumeVisible} />
+            <Suspense fallback={null}>
+              <Footer isResumeVisible={isResumeVisible} />
+            </Suspense>
           </div>
         </main>
       </div>

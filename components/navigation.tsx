@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   X,
@@ -26,7 +26,8 @@ import {
   CommandItem,
   CommandSeparator,
 } from "@/components/ui/command";
-import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
+// Lazy load confetti component since it's not critical for initial render
+const Fireworks = lazy(() => import("react-canvas-confetti/dist/presets/fireworks"));
 import { useAuth, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useNavigationStore } from "@/stores";
@@ -625,20 +626,22 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
         </CommandList>
       </CommandDialog>
 
-      {/* Confetti Component */}
+      {/* Confetti Component - Lazy loaded */}
       {isMounted && (
-        <Fireworks
-          onInit={handleConfettiInit}
-          width={canvasDimensions.width}
-          height={canvasDimensions.height}
-          style={{
-            position: "fixed",
-            pointerEvents: "none",
-            top: 0,
-            left: 0,
-            zIndex: 9999,
-          }}
-        />
+        <Suspense fallback={null}>
+          <Fireworks
+            onInit={handleConfettiInit}
+            width={canvasDimensions.width}
+            height={canvasDimensions.height}
+            style={{
+              position: "fixed",
+              pointerEvents: "none",
+              top: 0,
+              left: 0,
+              zIndex: 9999,
+            }}
+          />
+        </Suspense>
       )}
     </>
   );

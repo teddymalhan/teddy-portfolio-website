@@ -162,6 +162,8 @@ export function Experience() {
                                     : "object-contain"
                           }
                           sizes="64px"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
                     </div>
