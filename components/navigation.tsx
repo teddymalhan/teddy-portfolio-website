@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { useNavigationStore } from "@/stores";
 import { cn } from "@/lib/utils";
@@ -135,50 +135,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     fetchResumePath(isResumeVisible);
   }, [isResumeVisible, fetchResumePath]);
 
-  // Cubic bezier easing function for smooth scrolling
-  // Evaluates cubic-bezier(0.5, 1, 0.89, 1) at progress t (0 to 1)
-  const cubicBezierEase = (t: number): number => {
-    // Cubic bezier control points: (0.5, 1, 0.89, 1)
-    // P0 = (0, 0), P1 = (0.5, 1), P2 = (0.89, 1), P3 = (1, 1)
-    const p1x = 0.5;
-    const p1y = 1;
-    const p2x = 0.89;
-    const p2y = 1;
-
-    // Binary search to find the t value that gives us the desired x
-    // We need to find t such that bezier_x(t) = input_t
-    let start = 0;
-    let end = 1;
-    const targetX = t;
-
-    // Binary search for the t parameter that gives us targetX
-    for (let i = 0; i < 14; i++) {
-      const mid = (start + end) / 2;
-      // Evaluate bezier x at mid: Bx(t) = 3(1-t)²t*p1x + 3(1-t)t²*p2x + t³
-      const oneMinusT = 1 - mid;
-      const bezierX =
-        3 * oneMinusT * oneMinusT * mid * p1x +
-        3 * oneMinusT * mid * mid * p2x +
-        mid * mid * mid;
-
-      if (bezierX < targetX) {
-        start = mid;
-      } else {
-        end = mid;
-      }
-    }
-
-    // Now evaluate bezier y at the found t
-    const tParam = (start + end) / 2;
-    const oneMinusT = 1 - tParam;
-    const bezierY =
-      3 * oneMinusT * oneMinusT * tParam * p1y +
-      3 * oneMinusT * tParam * tParam * p2y +
-      tParam * tParam * tParam;
-
-    return bezierY;
-  };
-
   const scrollToSection = (href: string) => {
     const sectionId = href.slice(1);
     const element = document.getElementById(sectionId);
@@ -192,42 +148,17 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       const additionalOffset = 20; // Extra pixels for breathing room
       const offset = isMobile ? 0 : navBarHeight + additionalOffset;
 
-      // Use getBoundingClientRect for accurate positioning with complex layouts
+      // Calculate target position
       const targetPosition =
         element.getBoundingClientRect().top +
         globalThis.window.pageYOffset -
         offset;
-      const startPosition = globalThis.window.pageYOffset;
-      const distance = targetPosition - startPosition;
-      const duration = 180; // milliseconds
-      let startTime: number | null = null;
 
-      // Custom scroll animation with cubic-bezier easing
-      const animateScroll = (currentTime: number) => {
-        startTime ??= currentTime;
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-
-        // Apply cubic-bezier easing: cubic-bezier(0.5, 1, 0.89, 1)
-        const easedProgress = cubicBezierEase(progress);
-
-        const currentPosition = startPosition + distance * easedProgress;
-        globalThis.window.scrollTo(0, currentPosition);
-
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        }
-      };
-
-      if (prefersReducedMotion) {
-        // Fallback to instant scroll for reduced motion preference
-        globalThis.window.scrollTo({
-          top: targetPosition,
-          behavior: "auto",
-        });
-      } else {
-        globalThis.requestAnimationFrame(animateScroll);
-      }
+      // Use native smooth scrolling - GPU accelerated and fast
+      globalThis.window.scrollTo({
+        top: targetPosition,
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
     }
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
@@ -353,34 +284,18 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
         </div>
       </motion.nav>
 
-      {/* Mobile Navigation */}
-      <motion.header
-        className="md:hidden fixed top-4 left-4 right-4 z-50"
-        initial={prefersReducedMotion ? false : { y: 0, opacity: 1 }}
-        animate={
-          prefersReducedMotion
-            ? {}
-            : {
-                y: isVisible ? 0 : -100,
-                opacity: isVisible ? 1 : 0,
-              }
-        }
-        transition={
-          prefersReducedMotion
-            ? undefined
-            : {
-                duration: 0.3,
-                ease: "easeInOut",
-              }
-        }
+      {/* Mobile Navigation - Using CSS transitions for faster TTI */}
+      <header
+        className={cn(
+          "md:hidden fixed top-4 left-4 right-4 z-50 transition-all duration-300 ease-in-out",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
+        )}
       >
-        <motion.div
+        <div
           className={cn(
-            "flex items-center justify-between px-4 py-3 transition-colors duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
+            "flex items-center justify-between px-4 py-3 transition-all duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
             isMobileMenuOpen ? "rounded-t-2xl rounded-b-none" : "rounded-2xl",
           )}
-          layout
-          transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
         >
           <button
             onClick={triggerConfetti}
@@ -397,37 +312,31 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary/50 transition-colors duration-200"
               aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             >
-              <div className="w-5 h-5 flex items-center justify-center">
-                <AnimatePresence mode="wait">
-                  {isMobileMenuOpen ? (
-                    <motion.div
-                      key="close"
-                      initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
-                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                      exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
-                      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
-                    >
-                      <X className="w-5 h-5 text-foreground" strokeWidth={2} />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="hamburger"
-                      initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
-                      animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                      exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
-                      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
-                      className="flex flex-col gap-1"
-                    >
-                      <span className="w-5 h-0.5 bg-foreground rounded-full" />
-                      <span className="w-5 h-0.5 bg-foreground rounded-full" />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+              {/* CSS-only hamburger/X animation for faster interactivity */}
+              <div className="w-5 h-5 flex items-center justify-center relative">
+                <span 
+                  className={cn(
+                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
+                    isMobileMenuOpen ? "rotate-45" : "-translate-y-1"
+                  )} 
+                />
+                <span 
+                  className={cn(
+                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
+                    isMobileMenuOpen ? "opacity-0" : "opacity-100"
+                  )} 
+                />
+                <span 
+                  className={cn(
+                    "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
+                    isMobileMenuOpen ? "-rotate-45" : "translate-y-1"
+                  )} 
+                />
               </div>
             </button>
           </div>
-        </motion.div>
-      </motion.header>
+        </div>
+      </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
