@@ -11,7 +11,6 @@ import { useEffect, useState, useRef, lazy, Suspense } from "react"
 
 // Lazy load heavy animation components
 const AnimatedBackground = lazy(() => import("@/components/animated-background").then(mod => ({ default: mod.AnimatedBackground })))
-const FloatingElements = lazy(() => import("@/components/floating-elements").then(mod => ({ default: mod.FloatingElements })))
 
 interface HomeClientProps {
   isResumeVisible: boolean
@@ -56,7 +55,6 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
     <div className="min-h-screen bg-linear-to-b from-background via-muted to-background relative overflow-hidden">
       <Suspense fallback={null}>
         <AnimatedBackground isActive={isHeroVisible} />
-        <FloatingElements isActive={isHeroVisible} />
       </Suspense>
 
       <div className="relative z-10">

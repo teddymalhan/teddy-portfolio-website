@@ -61,6 +61,12 @@ type TextHighlighterProps = {
    * @default "ltr" (left to right)
    */
   direction?: HighlightDirection;
+
+  /**
+   * If true, the highlight will be instantly applied without animation
+   * @default false
+   */
+  instant?: boolean;
 } & React.HTMLAttributes<HTMLElement>;
 
 export type TextHighlighterRef = {
@@ -94,6 +100,7 @@ export const TextHighlighter = forwardRef<
       className,
       highlightColor = "hsl(25, 90%, 80%)",
       direction = "ltr",
+      instant = false,
       ...props
     },
     ref,
@@ -125,8 +132,9 @@ export const TextHighlighter = forwardRef<
       reset: () => setIsAnimating(false),
     }));
 
-    const shouldAnimate =
-      triggerType === "hover"
+    const shouldAnimate = instant
+      ? true
+      : triggerType === "hover"
         ? isHovered
         : triggerType === "inView"
           ? isInView
@@ -202,19 +210,31 @@ export const TextHighlighter = forwardRef<
         onMouseLeave={() => triggerType === "hover" && setIsHovered(false)}
         {...props}
       >
-        <motion.span
-          className={cn("inline", className)}
-          style={highlightStyle}
-          animate={{
-            backgroundSize: animatedSize,
-          }}
-          initial={{
-            backgroundSize: initialSize,
-          }}
-          transition={transition}
-        >
-          {children}
-        </motion.span>
+        {instant ? (
+          <span
+            className={cn("inline", className)}
+            style={{
+              ...highlightStyle,
+              backgroundSize: "100% 100%",
+            }}
+          >
+            {children}
+          </span>
+        ) : (
+          <motion.span
+            className={cn("inline", className)}
+            style={highlightStyle}
+            animate={{
+              backgroundSize: animatedSize,
+            }}
+            initial={{
+              backgroundSize: initialSize,
+            }}
+            transition={transition}
+          >
+            {children}
+          </motion.span>
+        )}
       </ElementTag>
     );
   },

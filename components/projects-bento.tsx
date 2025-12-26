@@ -27,8 +27,9 @@ const projects = [
           src="/digital_scorecards.webp"
           alt="Digital Scorecards"
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 400px, 362px"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          priority={false}
         />
       </div>
     ),

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
@@ -41,52 +40,24 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
       <div className="relative z-10 container mx-auto px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-5xl text-center">
           {/* Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-6xl tracking-tighter text-balance sm:text-6xl md:text-7xl lg:text-7xl font-bold mb-6 text-foreground drop-shadow-lg"
-          >
+          <h1 className="text-6xl tracking-tighter text-balance sm:text-6xl md:text-7xl lg:text-7xl font-bold mb-6 text-foreground drop-shadow-lg">
             <span className="relative inline-flex flex-wrap items-center justify-center gap-2">
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0 }}
-                className="text-foreground drop-shadow-md"
-              >
+              <span className="text-foreground drop-shadow-md">
                 hi!
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-foreground drop-shadow-md"
-              >
+              </span>
+              <span className="text-foreground drop-shadow-md">
                 i&apos;m teddy!
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, rotate: 0 }}
-                animate={{ opacity: 1, rotate: 20 }}
-                transition={{
-                  duration: 0.7,
-                  delay: 0.2,
-                  type: "spring",
-                  stiffness: 200,
-                }}
-                style={{ transformOrigin: "70% 70%", display: "inline-block" }}
+              </span>
+              <span
+                style={{ transformOrigin: "70% 70%", display: "inline-block", transform: "rotate(20deg)" }}
               >
                 👋
-              </motion.span>
+              </span>
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Description - CS Major */}
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="text-foreground/90 text-xl md:text-2xl mb-4 font-medium drop-shadow-md"
-          >
+          <h2 className="text-foreground/90 text-xl md:text-2xl mb-4 font-medium drop-shadow-md">
             cs major @{" "}
             <span className="inline-flex items-center gap-1">
               <Image
@@ -99,6 +70,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
               <TextHighlighter
                 highlightColor="rgb(212, 40, 55)"
                 className="text-white px-2 py-1 rounded font-bold"
+                instant={true}
               >
                 simon fraser university
               </TextHighlighter>
@@ -107,18 +79,14 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             <TextHighlighter
               highlightColor="rgb(16, 185, 129)"
               className="text-white px-2 py-1 rounded font-bold"
+              instant={true}
             >
               2027
             </TextHighlighter>
-          </motion.h2>
+          </h2>
 
           {/* Description - Previous Experience */}
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-foreground/90 text-xl md:text-2xl mb-8 font-medium drop-shadow-md"
-          >
+          <h2 className="text-foreground/90 text-xl md:text-2xl mb-8 font-medium drop-shadow-md">
             prev. swe intern at{" "}
             <span className="inline-flex items-center gap-1">
               <Image
@@ -131,6 +99,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
               <TextHighlighter
                 highlightColor="rgb(37, 99, 235)"
                 className="text-white px-2 py-1 rounded font-bold"
+                instant={true}
               >
                 electronic arts
               </TextHighlighter>
@@ -147,19 +116,15 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
               <TextHighlighter
                 highlightColor="rgb(147, 51, 234)"
                 className="text-white px-2 py-1 rounded font-bold"
+                instant={true}
               >
                 dialpad
               </TextHighlighter>
             </span>
-          </motion.h2>
+          </h2>
 
           {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
-          >
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             {isResumeVisible && (
               <InteractiveHoverButton
                 onClick={() => {
@@ -174,7 +139,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 view resume!
               </InteractiveHoverButton>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
