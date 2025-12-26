@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export function About() {
   return (
-    <section id="about" className="py-24">
+    <section id="about" className="pt-24 pb-24">
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Ambient glow (no card) */}
         <div className="pointer-events-none absolute -inset-x-12 -top-8 -bottom-8 opacity-60">
