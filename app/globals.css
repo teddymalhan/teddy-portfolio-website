@@ -152,39 +152,23 @@
   }
 }
 
-/* Completely hide scrollbar for all browsers */
-html {
+/* Hide scrollbar globally - consolidated for performance */
+html, body {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }
 
-html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-  width: 0;
-  height: 0;
-}
-
-body {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
+html::-webkit-scrollbar,
 body::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
   width: 0;
   height: 0;
 }
 
-/* Hide scrollbar for all elements */
-* {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-*::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
-  width: 0;
-  height: 0;
+/* Content visibility optimization for below-the-fold sections */
+.lazy-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
 }
 
 /* Utility classes for text selection */

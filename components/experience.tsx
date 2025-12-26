@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { Badge } from "./ui/badge";
-import { TextHighlighter } from "./fancy/text/text-highlighter";
 
 interface ExperienceItem {
   company: string;
@@ -14,13 +13,14 @@ interface ExperienceItem {
   tags?: string[];
 }
 
+// Using local images to avoid external DNS lookups and improve caching
 const experiences: ExperienceItem[] = [
   {
     company: "Electronic Arts",
     role: "Software Engineer Intern",
     period: "May 2025 - Aug 2025",
     location: "Vancouver, BC",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5EbAYJ4fnvZp8PBJa0gDeO7uEvmlAJjurig&s",
+    logo: "/ea-logo.jpg",
     logoStyle: "padded",
     tags: ["🕹️ EADP Arrival"],
   },
@@ -29,7 +29,7 @@ const experiences: ExperienceItem[] = [
     role: "Software Engineer Intern",
     period: "Jan 2025 - Apr 2025",
     location: "Vancouver, BC",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzji6wOPSF5w3pA8ATOaizQN2w-wFIs8FhKA&s",
+    logo: "/dialpad-logo.jpg",
     logoStyle: "square",
     tags: ["💼 Supervisor Team"],
   },
@@ -47,7 +47,7 @@ const experiences: ExperienceItem[] = [
     role: "Engineering Manager",
     period: "Sept 2024 - Feb 2025",
     location: "Remote",
-    logo: "https://media.licdn.com/dms/image/v2/C560BAQHKP2Tu00J6Cw/company-logo_200_200/company-logo_200_200/0/1678590187185/develop_for_good_logo?e=2147483647&v=beta&t=acs0ifffs2qrncn6j1ldjNP5QeNalM6WGXf69IpGVUg",
+    logo: "/nonprofit-heart-icon-blue.jpg",
     logoStyle: "padded",
     tags: ["🐈 Forgotten Felines of Sonoma County"],
   },
@@ -56,7 +56,7 @@ const experiences: ExperienceItem[] = [
     role: "Computer Science",
     period: "Expected May 2027",
     location: "Burnaby, BC",
-    logo: "https://praxis.encommun.io/media/notes/note_12478/sfu.jpg",
+    logo: "/sfu-logo.jpg",
     logoStyle: "circular",
     tags: ["📚 Education"],
   },

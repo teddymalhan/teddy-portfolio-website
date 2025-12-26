@@ -2,36 +2,14 @@
 
 import { useEffect, useRef, useState, lazy, Suspense } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import {
-  X,
-  Search,
-  Home,
-  Hammer,
-  Briefcase,
-  Mail,
-  FileText,
-  Github,
-  Linkedin,
-  LogIn,
-  Shield,
-  LogOut,
-} from "lucide-react";
+import { X, Search } from "lucide-react";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
-import {
-  CommandDialog,
-  CommandInput,
-  CommandList,
-  CommandEmpty,
-  CommandGroup,
-  CommandItem,
-  CommandSeparator,
-} from "@/components/ui/command";
-// Lazy load confetti component since it's not critical for initial render
-const Fireworks = lazy(() => import("react-canvas-confetti/dist/presets/fireworks"));
-import { useAuth, useClerk } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { useNavigationStore } from "@/stores";
 import { cn } from "@/lib/utils";
+
+// Lazy load heavy components since they're not critical for initial render
+const Fireworks = lazy(() => import("react-canvas-confetti/dist/presets/fireworks"));
+const CommandPalette = lazy(() => import("@/components/command-palette"));
 
 const navItems = [
   { name: "🏠 home", href: "#home", emoji: "" },
@@ -101,9 +79,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
 
   const conductorRef = useRef<any>(null);
   const prefersReducedMotion = useReducedMotion();
-  const { isSignedIn } = useAuth();
-  const { signOut } = useClerk();
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -285,19 +260,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [commandOpen, setCommandOpen, setIsMobileMenuOpen]);
-
-  const runCommand = (command: () => void) => {
-    setCommandOpen(false);
-    command();
-  };
-
-  const handleAdminClick = () => {
-    if (isSignedIn) {
-      router.push("/admin/dashboard");
-    } else {
-      router.push("/sign-in?redirect_url=/admin/dashboard");
-    }
-  };
 
   return (
     <>
@@ -506,125 +468,19 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
         )}
       </AnimatePresence>
 
-      {/* Command Dialog */}
-      <CommandDialog
-        open={commandOpen}
-        onOpenChange={setCommandOpen}
-        title="Search Portfolio"
-        description="Quickly navigate to any section or find what you're looking for"
-      >
-        <CommandInput placeholder="Type to search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-
-          <CommandGroup heading="Navigation">
-            <CommandItem
-              onSelect={() => runCommand(() => scrollToSection("#home"))}
-            >
-              <Home className="mr-2 h-4 w-4" />
-              <span>Home</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() => runCommand(() => scrollToSection("#experience"))}
-            >
-              <Briefcase className="mr-2 h-4 w-4" />
-              <span>My Experience</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() => runCommand(() => scrollToSection("#projects"))}
-            >
-              <Hammer className="mr-2 h-4 w-4" />
-              <span>Projects</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() => runCommand(() => scrollToSection("#about"))}
-            >
-              <Mail className="mr-2 h-4 w-4" />
-              <span>About Me</span>
-            </CommandItem>
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading="Quick Actions">
-            {isResumeVisible && (
-              <CommandItem
-                onSelect={() =>
-                  runCommand(() => {
-                    // Force fresh fetch by adding current timestamp
-                    const freshUrl = resumePath.includes("&t=")
-                      ? `${resumePath.split("&t=")[0]}&t=${Date.now()}`
-                      : `${resumePath}?t=${Date.now()}`;
-                    window.open(freshUrl, "_blank", "noopener,noreferrer");
-                  })
-                }
-              >
-                <FileText className="mr-2 h-4 w-4" />
-                <span>Download Resume</span>
-              </CommandItem>
-            )}
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => {
-                  window.open("https://github.com/teddymalhan", "_blank");
-                })
-              }
-            >
-              <Github className="mr-2 h-4 w-4" />
-              <span>View GitHub Profile</span>
-            </CommandItem>
-            <CommandItem
-              onSelect={() =>
-                runCommand(() => {
-                  window.open("https://linkedin.com/in/teddymalhan", "_blank");
-                })
-              }
-            >
-              <Linkedin className="mr-2 h-4 w-4" />
-              <span>Connect on LinkedIn</span>
-            </CommandItem>
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading="Authentication">
-            {!isSignedIn ? (
-              <>
-                <CommandItem
-                  onSelect={() => runCommand(() => router.push("/sign-in"))}
-                >
-                  <LogIn className="mr-2 h-4 w-4" />
-                  <span>Sign In</span>
-                </CommandItem>
-              </>
-            ) : (
-              <>
-                <CommandItem onSelect={() => runCommand(handleAdminClick)}>
-                  <Shield className="mr-2 h-4 w-4" />
-                  <span>Admin Dashboard</span>
-                </CommandItem>
-                <CommandItem
-                  onSelect={() =>
-                    runCommand(() => signOut(() => router.push("/")))
-                  }
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Sign Out</span>
-                </CommandItem>
-              </>
-            )}
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading="Fun">
-            <CommandItem onSelect={() => runCommand(() => triggerConfetti())}>
-              <span className="mr-2">🎉</span>
-              <span>Trigger Confetti</span>
-            </CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
+      {/* Command Dialog - Lazy loaded */}
+      {commandOpen && (
+        <Suspense fallback={null}>
+          <CommandPalette
+            open={commandOpen}
+            onOpenChange={setCommandOpen}
+            isResumeVisible={isResumeVisible}
+            resumePath={resumePath}
+            scrollToSection={scrollToSection}
+            triggerConfetti={triggerConfetti}
+          />
+        </Suspense>
+      )}
 
       {/* Confetti Component - Lazy loaded */}
       {isMounted && (

@@ -1,7 +1,5 @@
-"use client";
-
 import Image from "next/image";
-import { TextHighlighter } from "@/components/fancy/text/text-highlighter";
+import { InstantHighlighter } from "@/components/fancy/text/instant-highlighter";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
@@ -45,22 +43,20 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 priority
                 loading="eager"
               />
-              <TextHighlighter
+              <InstantHighlighter
                 highlightColor="rgb(212, 40, 55)"
                 className="text-white px-2 py-1 rounded font-bold"
-                instant={true}
               >
                 simon fraser university
-              </TextHighlighter>
+              </InstantHighlighter>
             </span>
             , graduating{" "}
-            <TextHighlighter
+            <InstantHighlighter
               highlightColor="rgb(16, 185, 129)"
               className="text-white px-2 py-1 rounded font-bold"
-              instant={true}
             >
               2027
-            </TextHighlighter>
+            </InstantHighlighter>
           </h2>
 
           {/* Description - Previous Experience */}
@@ -76,13 +72,12 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 priority
                 loading="eager"
               />
-              <TextHighlighter
+              <InstantHighlighter
                 highlightColor="rgb(37, 99, 235)"
                 className="text-white px-2 py-1 rounded font-bold"
-                instant={true}
               >
                 electronic arts
-              </TextHighlighter>
+              </InstantHighlighter>
             </span>{" "}
             &{" "}
             <span className="inline-flex items-center gap-1">
@@ -95,13 +90,12 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 priority
                 loading="eager"
               />
-              <TextHighlighter
+              <InstantHighlighter
                 highlightColor="rgb(147, 51, 234)"
                 className="text-white px-2 py-1 rounded font-bold"
-                instant={true}
               >
                 dialpad
-              </TextHighlighter>
+              </InstantHighlighter>
             </span>
           </h2>
 

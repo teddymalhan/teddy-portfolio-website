@@ -1,12 +1,13 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { Suspense } from "react"
+import { Suspense, lazy } from "react"
 import { ClerkProviderWrapper } from "@/components/clerk-provider-wrapper"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
+
+// Lazy load analytics to defer non-critical scripts
+const DeferredAnalytics = lazy(() => import("@/components/deferred-analytics"))
 
 const inter = Inter({
   subsets: ["latin"],
@@ -134,6 +135,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* DNS prefetch for external domains */}
+        <link rel="dns-prefetch" href="//github.com" />
+        <link rel="dns-prefetch" href="//linkedin.com" />
+        <link rel="dns-prefetch" href="//devpost.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
         {/* Preload critical resources */}
         <link
           rel="preload"
@@ -176,8 +183,9 @@ export default function RootLayout({
               <Suspense fallback={null}>
                 {children}
               </Suspense>
-              <Analytics />
-              <SpeedInsights />
+              <Suspense fallback={null}>
+                <DeferredAnalytics />
+              </Suspense>
             </div>
           </ThemeProvider>
         </ClerkProviderWrapper>

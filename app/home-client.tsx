@@ -65,17 +65,23 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
           <Hero isResumeVisible={isResumeVisible} />
           <div className="relative bg-background">
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <Suspense fallback={<div className="min-h-screen" />}>
-              <Experience />
-            </Suspense>
+            <div className="lazy-section">
+              <Suspense fallback={<div className="min-h-screen" />}>
+                <Experience />
+              </Suspense>
+            </div>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <Suspense fallback={<div className="min-h-screen" />}>
-              <ProjectsBento />
-            </Suspense>
+            <div className="lazy-section">
+              <Suspense fallback={<div className="min-h-screen" />}>
+                <ProjectsBento />
+              </Suspense>
+            </div>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
-            <Suspense fallback={<div className="py-24" />}>
-              <About />
-            </Suspense>
+            <div className="lazy-section">
+              <Suspense fallback={<div className="py-24" />}>
+                <About />
+              </Suspense>
+            </div>
             <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <Suspense fallback={null}>
               <Footer isResumeVisible={isResumeVisible} />
