@@ -1,6 +1,8 @@
 import { sql } from '@/lib/db'
-import { unstable_cache } from 'next/cache'
+import { unstable_cache, revalidateTag } from 'next/cache'
 import type { SettingsRow } from '@/types/database'
+
+const RESUME_VISIBILITY_TAG = 'resume-visibility'
 
 // Cached version of getResumeVisibility - cache for 5 minutes
 const getCachedResumeVisibility = unstable_cache(
@@ -29,6 +31,7 @@ const getCachedResumeVisibility = unstable_cache(
   ['resume-visibility'],
   {
     revalidate: 300, // 5 minutes
+    tags: [RESUME_VISIBILITY_TAG],
   }
 )
 
@@ -46,6 +49,9 @@ export const settingsService = {
       ON CONFLICT (key) 
       DO UPDATE SET value = ${valueString}, updated_at = NOW()
     `
+    
+    // Invalidate the cache so the next read gets the fresh value
+    revalidateTag(RESUME_VISIBILITY_TAG)
   },
 }
 
