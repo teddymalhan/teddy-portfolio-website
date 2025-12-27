@@ -51,9 +51,8 @@ export async function POST(request: NextRequest) {
     }
 
     const { isVisible } = validationResult.data;
-    await settingsService.setResumeVisibility(isVisible);
-
-    const verifiedValue = await settingsService.getResumeVisibility();
+    // setResumeVisibility returns the fresh value after updating
+    const verifiedValue = await settingsService.setResumeVisibility(isVisible);
 
     revalidatePath("/");
 
