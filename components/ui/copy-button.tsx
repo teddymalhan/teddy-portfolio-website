@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCopy, faCheck } from '@fortawesome/free-solid-svg-icons'
+import { Copy, Check } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
 interface CopyButtonProps {
@@ -16,7 +15,7 @@ export function CopyButton({ text, className }: CopyButtonProps) {
   const handleCopy = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
@@ -35,13 +34,11 @@ export function CopyButton({ text, className }: CopyButtonProps) {
       )}
       title={copied ? "Copied!" : "Copy to clipboard"}
     >
-      <FontAwesomeIcon 
-        icon={copied ? faCheck : faCopy} 
-        className={cn(
-          "w-4 h-4 transition-colors",
-          copied ? "text-green-500" : "text-primary"
-        )}
-      />
+      {copied ? (
+        <Check className="w-4 h-4 text-green-500 transition-colors" />
+      ) : (
+        <Copy className="w-4 h-4 text-primary transition-colors" />
+      )}
     </button>
   )
 }

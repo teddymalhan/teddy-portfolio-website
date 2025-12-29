@@ -160,12 +160,6 @@ export default function RootLayout({
           as="image"
           type="image/jpeg"
         />
-        <link
-          rel="preload"
-          href="/ted-aboutme.jpg"
-          as="image"
-          type="image/jpeg"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

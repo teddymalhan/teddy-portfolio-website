@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, Github, Linkedin } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function Footer({
   isResumeVisible,
@@ -10,6 +11,7 @@ export default function Footer({
   isResumeVisible: boolean;
 }) {
   const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     async function fetchResumePath() {
@@ -38,7 +40,13 @@ export default function Footer({
     }
   }, [isResumeVisible]);
   return (
-    <footer className="relative mx-auto w-full max-w-6xl px-6 py-10 md:py-14">
+    <motion.footer
+      className="relative mx-auto w-full max-w-6xl px-6 py-10 md:py-14 will-change-[transform,opacity]"
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Ambient glow (match About section) */}
       <div className="pointer-events-none absolute -inset-x-12 -top-8 -bottom-8 opacity-60">
         <div className="mx-auto h-full max-w-6xl rounded-[28px] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent blur-2xl" />
@@ -160,6 +168,6 @@ export default function Footer({
           </div>
         </nav>
       </div>
-    </footer>
+    </motion.footer>
   );
 }

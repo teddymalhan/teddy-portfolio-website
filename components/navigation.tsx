@@ -142,17 +142,10 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       // Show navigation temporarily for smooth UX
       useNavigationStore.getState().setIsVisible(true);
 
-      // Add offset for desktop to account for fixed navigation bar
-      const isMobile = globalThis.window.innerWidth < 768; // md breakpoint
-      const navBarHeight = 80; // Approximate height of the navigation bar
-      const additionalOffset = 20; // Extra pixels for breathing room
-      const offset = isMobile ? 0 : navBarHeight + additionalOffset;
-
-      // Calculate target position
+      // No offset - navbar overlaps content on both mobile and desktop
       const targetPosition =
         element.getBoundingClientRect().top +
-        globalThis.window.pageYOffset -
-        offset;
+        globalThis.window.pageYOffset;
 
       // Use native smooth scrolling - GPU accelerated and fast
       globalThis.window.scrollTo({
@@ -197,7 +190,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       {/* Desktop Navigation */}
       <motion.nav
         aria-label="Primary navigation"
-        className="hidden md:block fixed left-0 right-0 z-50"
+        className="hidden lg:block fixed left-0 right-0 z-50"
         initial={prefersReducedMotion ? false : { opacity: 1 }}
         animate={
           prefersReducedMotion
@@ -287,13 +280,13 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       {/* Mobile Navigation - Using CSS transitions for faster TTI */}
       <header
         className={cn(
-          "md:hidden fixed top-4 left-4 right-4 z-50 transition-all duration-300 ease-in-out",
+          "lg:hidden fixed top-4 left-4 right-4 z-50 transition-all duration-300 ease-in-out",
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
         )}
       >
         <div
           className={cn(
-            "flex items-center justify-between px-4 py-3 transition-all duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-xl border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
+            "flex items-center justify-between px-4 py-3 transition-all duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-md border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
             isMobileMenuOpen ? "rounded-t-2xl rounded-b-none" : "rounded-2xl",
           )}
         >
@@ -348,7 +341,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+              className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
               onClick={toggleMobileMenu}
             />
 
@@ -359,7 +352,7 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
               aria-label="Mobile navigation"
-              className="md:hidden fixed top-[76px] left-4 right-4 z-40 bg-gradient-to-r from-card/95 via-card/90 to-card/95 dark:from-card/98 dark:via-card/95 dark:to-card/98 backdrop-blur-xl border border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
+              className="lg:hidden fixed top-[76px] left-4 right-4 z-40 bg-gradient-to-r from-card/95 via-card/90 to-card/95 dark:from-card/98 dark:via-card/95 dark:to-card/98 backdrop-blur-md border border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
             >
               <div className="space-y-2">
                 {navItems.map((item, index) => (

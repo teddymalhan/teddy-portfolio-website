@@ -1,9 +1,21 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 
 export function About() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <section id="about" className="pt-24 pb-24">
+    <motion.section
+      id="about"
+      className="pt-24 pb-24 will-change-[transform,opacity]"
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Ambient glow (no card) */}
         <div className="pointer-events-none absolute -inset-x-12 -top-8 -bottom-8 opacity-60">
@@ -61,6 +73,6 @@ export function About() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

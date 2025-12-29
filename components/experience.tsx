@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { Badge } from "./ui/badge";
 
 interface ExperienceItem {
@@ -63,8 +64,17 @@ const experiences: ExperienceItem[] = [
 ];
 
 export function Experience() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
-    <div id="experience" className="min-h-screen">
+    <motion.div
+      id="experience"
+      className="min-h-screen will-change-[transform,opacity]"
+      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-24 pb-20">
         {/* Header */}
         <h1 className="text-5xl font-bold tracking-tight text-left text-foreground mb-8">
@@ -174,6 +184,6 @@ export function Experience() {
           ))}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

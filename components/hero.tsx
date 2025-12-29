@@ -41,7 +41,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 height={20}
                 className="w-5 h-5 rounded-full"
                 priority
-                loading="eager"
+                fetchPriority="high"
               />
               <InstantHighlighter
                 highlightColor="rgb(212, 40, 55)"
@@ -70,7 +70,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 height={20}
                 className="w-5 h-5 rounded-full"
                 priority
-                loading="eager"
+                fetchPriority="high"
               />
               <InstantHighlighter
                 highlightColor="rgb(37, 99, 235)"
@@ -88,7 +88,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 height={20}
                 className="w-5 h-5 rounded"
                 priority
-                loading="eager"
+                fetchPriority="high"
               />
               <InstantHighlighter
                 highlightColor="rgb(147, 51, 234)"
