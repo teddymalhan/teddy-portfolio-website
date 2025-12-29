@@ -1,7 +1,7 @@
 export function AnimatedBackground() {
   return (
     <div
-      className="fixed inset-0 pointer-events-none z-0"
+      className="absolute inset-0 pointer-events-none z-0 h-screen"
       style={{
         background: `
           radial-gradient(ellipse 80% 80% at 20% 20%, rgba(34, 211, 238, 0.6) 0%, transparent 50%),

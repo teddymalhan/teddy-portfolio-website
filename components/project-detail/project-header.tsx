@@ -34,10 +34,16 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
             {project.title}
           </h1>
           {project.award && (
-            <Badge className="bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white font-bold shadow-lg border-0">
-              <Trophy className="w-3 h-3 mr-1" />
-              {project.award}
-            </Badge>
+            <motion.div
+              initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
+              animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2, ease: [0.32, 0.72, 0, 1] }}
+            >
+              <Badge className="bg-foreground text-background dark:bg-background dark:text-foreground font-medium px-3 py-1.5 rounded-full border-0 text-sm flex items-center gap-1.5">
+                <Trophy className="w-3.5 h-3.5" />
+                {project.award}
+              </Badge>
+            </motion.div>
           )}
         </div>
 

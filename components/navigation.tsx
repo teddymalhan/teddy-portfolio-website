@@ -31,18 +31,17 @@ function MobileNavAccordionItem({
 }) {
   return (
     <motion.div
-      initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+      initial={prefersReducedMotion ? false : { opacity: 0 }}
+      animate={prefersReducedMotion ? {} : { opacity: 1 }}
       transition={
         prefersReducedMotion
           ? undefined
           : {
-              duration: 0.4,
-              delay: index * 0.08,
-              ease: [0.32, 0.72, 0, 1],
+              duration: 0.15,
+              delay: index * 0.03,
             }
       }
-      className="last:border-b-0"
+      className="last:border-b-0 transform-gpu"
     >
       <button
         onClick={() => {
@@ -286,9 +285,16 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       >
         <div
           className={cn(
-            "flex items-center justify-between px-4 py-3 transition-all duration-300 bg-gradient-to-r from-card/90 via-card/80 to-card/90 dark:from-card/95 dark:via-card/90 dark:to-card/95 backdrop-blur-md border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
-            isMobileMenuOpen ? "rounded-t-2xl rounded-b-none" : "rounded-2xl",
+            "flex items-center justify-between px-4 py-3 transition-all duration-300",
+            // Solid background on mobile for performance, blur only on capable devices
+            "bg-card/98 supports-[backdrop-filter]:bg-card/90 supports-[backdrop-filter]:backdrop-blur-md",
+            "dark:bg-card supports-[backdrop-filter]:dark:bg-card/95",
+            "border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
+            // GPU acceleration for smoother animations
+            "transform-gpu backface-hidden",
+            isMobileMenuOpen ? "rounded-t-2xl rounded-b-none border-b-0" : "rounded-2xl",
           )}
+          style={{ willChange: "transform" }}
         >
           <button
             onClick={triggerConfetti}
@@ -335,24 +341,24 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop - no blur for mobile performance */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="lg:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+              transition={{ duration: 0.2 }}
+              className="lg:hidden fixed inset-0 bg-background/90 z-40"
               onClick={toggleMobileMenu}
             />
 
-            {/* Menu Content */}
+            {/* Menu Content - solid bg for mobile performance */}
             <motion.nav
-              initial={{ opacity: 0, y: -20 }}
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
               aria-label="Mobile navigation"
-              className="lg:hidden fixed top-[76px] left-4 right-4 z-40 bg-gradient-to-r from-card/95 via-card/90 to-card/95 dark:from-card/98 dark:via-card/95 dark:to-card/98 backdrop-blur-md border border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 p-6 max-h-[calc(100vh-120px)] overflow-y-auto"
+              className="lg:hidden fixed top-[75px] left-4 right-4 z-40 bg-card dark:bg-card border border-t-0 border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 dark:ring-t-0 p-6 max-h-[calc(100vh-120px)] overflow-y-auto transform-gpu"
             >
               <div className="space-y-2">
                 {navItems.map((item, index) => (
