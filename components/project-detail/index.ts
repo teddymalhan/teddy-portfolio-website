@@ -1,0 +1,8 @@
+export { ProjectDetailPage } from "./project-detail-page";
+export { ProjectHeader } from "./project-header";
+export { ProjectHero } from "./project-hero";
+export { ProjectSidebar } from "./project-sidebar";
+export { TerminalAnimation } from "./terminal-animation";
+export { DemoSection } from "./demo-section";
+export { ContentSection } from "./content-section";
+export { ResultsTakeaways } from "./results-takeaways";
