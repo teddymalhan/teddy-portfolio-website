@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Upload,
   Trash2,
@@ -10,7 +11,6 @@ import {
   Loader2,
   Eye,
   Edit2,
-  FileStack,
   HardDrive,
   Clock,
   CheckCircle2,
@@ -24,7 +24,14 @@ import {
   Link2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -33,17 +40,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { useResumeManagerStore } from "@/stores";
-
-interface ResumeVersion {
-  id: number;
-  filename: string;
-  uploadedAt: string;
-  isActive: boolean;
-  notes?: string;
-  size?: number;
-  fileSize?: number;
-  path: string;
-}
 
 export function ResumeManager() {
   // Get state from Zustand store using selective subscriptions
@@ -164,8 +160,10 @@ export function ResumeManager() {
     toggleSelectAll(filteredAndSortedResumes.map((r) => r.id));
   };
 
+  // Reduced motion preference
+  const prefersReducedMotion = useReducedMotion();
+
   // Calculate statistics
-  const totalResumes = resumes.length;
   const activeResume = resumes.find((r) => r.isActive);
   const totalStorage = resumes.reduce((sum, r) => sum + (r.fileSize || 0), 0);
   const lastUpload =
@@ -177,402 +175,474 @@ export function ResumeManager() {
         })
       : null;
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">
-                Active Resume
-              </p>
-              {activeResume ? (
-                <>
-                  <p className="text-sm font-semibold mt-2 truncate">
-                    {activeResume.filename}
+      <motion.div
+        variants={prefersReducedMotion ? {} : containerVariants}
+        initial={prefersReducedMotion ? false : "hidden"}
+        animate={prefersReducedMotion ? {} : "show"}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+      >
+        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+          <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Active Resume
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {new Date(activeResume.uploadedAt).toLocaleDateString(
-                      "en-US",
-                      {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      },
-                    )}
-                  </p>
-                </>
-              ) : (
-                <p className="text-sm text-muted-foreground mt-2">None</p>
-              )}
-            </div>
-            <div className="h-12 w-12 rounded-full bg-green-500/10 flex items-center justify-center shrink-0 ml-2">
-              <CheckCircle2 className="h-6 w-6 text-green-500" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Total Storage
-              </p>
-              <p className="text-3xl font-bold mt-2">
-                {formatFileSize(totalStorage)}
-              </p>
-            </div>
-            <div className="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center">
-              <HardDrive className="h-6 w-6 text-purple-500" />
-            </div>
-          </div>
-        </Card>
-
-        <Card className="p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-muted-foreground">
-                Last Upload
-              </p>
-              {lastUpload ? (
-                <>
-                  <p className="text-sm font-semibold mt-2">
-                    {new Date(lastUpload.uploadedAt).toLocaleDateString(
-                      "en-US",
-                      {
-                        month: "short",
-                        day: "numeric",
-                      },
-                    )}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {new Date(lastUpload.uploadedAt).toLocaleTimeString(
-                      "en-US",
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      },
-                    )}
-                  </p>
-                </>
-              ) : (
-                <p className="text-sm text-muted-foreground mt-2">Never</p>
-              )}
-            </div>
-            <div className="h-12 w-12 rounded-full bg-orange-500/10 flex items-center justify-center shrink-0 ml-2">
-              <Clock className="h-6 w-6 text-orange-500" />
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <Card className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold mb-2">Resume Visibility</h2>
-            <p className="text-sm text-muted-foreground">
-              {isResumeVisible
-                ? "Resume is currently visible on the website. Visitors can view and download it."
-                : "Resume is currently hidden. No one can access it on the website."}
-            </p>
-          </div>
-          <Button
-            onClick={toggleVisibility}
-            disabled={togglingVisibility || cooldown}
-            variant={isResumeVisible ? "destructive" : "default"}
-            className="shrink-0"
-          >
-            {togglingVisibility ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {isResumeVisible ? "Hiding..." : "Showing..."}
-              </>
-            ) : (
-              <>
-                {isResumeVisible ? (
-                  <>
-                    <EyeOff className="w-4 h-4 mr-2" />
-                    Hide Resume
-                  </>
-                ) : (
-                  <>
-                    <EyeIcon className="w-4 h-4 mr-2" />
-                    Show Resume
-                  </>
-                )}
-              </>
-            )}
-          </Button>
-        </div>
-      </Card>
-
-      <Card className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-          <div className="flex items-center gap-4">
-            <h2 className="text-2xl font-semibold">Resume Versions</h2>
-            {selectedResumes.size > 0 && (
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={bulkDelete}
-                className="gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                Delete Selected ({selectedResumes.size})
-              </Button>
-            )}
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Search */}
-            <div className="relative flex-1 sm:min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search by filename or notes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-              />
-            </div>
-
-            {/* Filter */}
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-              <select
-                value={filterStatus}
-                onChange={(e) =>
-                  setFilterStatus(
-                    e.target.value as "all" | "active" | "inactive",
-                  )
-                }
-                className="pl-9 pr-8 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
-              >
-                <option value="all">All Resumes</option>
-                <option value="active">Active Only</option>
-                <option value="inactive">Inactive Only</option>
-              </select>
-            </div>
-
-            {/* Sort */}
-            <div className="relative">
-              <ArrowUpDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="pl-9 pr-8 py-2 text-sm border border-input rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
-              >
-                <option value="date-desc">Newest First</option>
-                <option value="date-asc">Oldest First</option>
-                <option value="name-asc">Name (A-Z)</option>
-                <option value="name-desc">Name (Z-A)</option>
-                <option value="size-desc">Largest First</option>
-                <option value="size-asc">Smallest First</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-          </div>
-        ) : resumes.length === 0 ? (
-          <p className="text-muted-foreground py-8 text-center">
-            No resumes uploaded yet. Upload your first resume above.
-          </p>
-        ) : filteredAndSortedResumes.length === 0 ? (
-          <p className="text-muted-foreground py-8 text-center">
-            No resumes match your search criteria.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {/* Select All Header */}
-            {filteredAndSortedResumes.length > 0 && (
-              <div className="flex items-center gap-2 pb-2 border-b">
-                <input
-                  type="checkbox"
-                  checked={
-                    selectedResumes.size === filteredAndSortedResumes.length &&
-                    filteredAndSortedResumes.length > 0
-                  }
-                  onChange={handleToggleSelectAll}
-                  className="w-4 h-4 rounded border-input cursor-pointer"
-                />
-                <span className="text-sm text-muted-foreground">
-                  Select all ({filteredAndSortedResumes.length})
-                </span>
-              </div>
-            )}
-            {filteredAndSortedResumes.map((resume) => (
-              <div
-                key={resume.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-              >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <input
-                    type="checkbox"
-                    checked={selectedResumes.has(resume.id)}
-                    onChange={() => toggleResumeSelection(resume.id)}
-                    className="w-4 h-4 rounded border-input cursor-pointer"
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <FileText className="w-5 h-5 text-muted-foreground shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium truncate">{resume.filename}</p>
-                      <button
-                        onClick={() => openRename(resume)}
-                        className="shrink-0 p-1 hover:bg-accent rounded transition-colors"
-                        title="Rename resume"
-                      >
-                        <Pencil className="w-3.5 h-3.5 text-muted-foreground hover:text-foreground" />
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <span>
-                        {new Date(resume.uploadedAt).toLocaleDateString(
+                  {activeResume ? (
+                    <>
+                      <p className="text-sm font-semibold mt-2 truncate">
+                        {activeResume.filename}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(activeResume.uploadedAt).toLocaleDateString(
                           "en-US",
                           {
-                            year: "numeric",
                             month: "short",
                             day: "numeric",
+                            year: "numeric",
+                          },
+                        )}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground mt-2">None</p>
+                  )}
+                </div>
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-500/20 to-green-500/5 flex items-center justify-center shrink-0 ml-2">
+                  <CheckCircle2 className="h-6 w-6 text-green-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+          <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Total Storage
+                  </p>
+                  <p className="text-3xl font-bold mt-2">
+                    {formatFileSize(totalStorage)}
+                  </p>
+                </div>
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-500/5 flex items-center justify-center">
+                  <HardDrive className="h-6 w-6 text-purple-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+          <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    Last Upload
+                  </p>
+                  {lastUpload ? (
+                    <>
+                      <p className="text-sm font-semibold mt-2">
+                        {new Date(lastUpload.uploadedAt).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                          },
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(lastUpload.uploadedAt).toLocaleTimeString(
+                          "en-US",
+                          {
                             hour: "2-digit",
                             minute: "2-digit",
                           },
                         )}
-                      </span>
-                      <span>•</span>
-                      <span>{formatFileSize(resume.fileSize)}</span>
-                    </div>
-                    {resume.notes && (
-                      <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
-                        {resume.notes}
                       </p>
-                    )}
-                  </div>
-                  {resume.isActive && (
-                    <span className="px-2 py-1 text-xs font-medium bg-green-500/20 text-green-600 dark:text-green-400 rounded-full shrink-0">
-                      Active
-                    </span>
+                    </>
+                  ) : (
+                    <p className="text-sm text-muted-foreground mt-2">Never</p>
                   )}
                 </div>
-                <div className="flex items-center gap-2 shrink-0 ml-4">
-                  {resume.isActive && (
-                    <>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => copyResumeLink(resume)}
-                        title="Copy resume link"
-                      >
-                        <Link2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => window.open("/", "_blank")}
-                        title="View on website"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </Button>
-                    </>
-                  )}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => openEditNotes(resume)}
-                    title="Edit notes"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPreviewResume(resume)}
-                    title="Preview resume"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <a
-                    href={resume.path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button variant="outline" size="sm" title="Download resume">
-                      <Download className="w-4 h-4" />
-                    </Button>
-                  </a>
-                  {!resume.isActive && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setActive(resume.id)}
-                    >
-                      <Check className="w-4 h-4 mr-1" />
-                      Set Active
-                    </Button>
-                  )}
-                  {!resume.isActive && (
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => deleteResume(resume.id, resume.filename)}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  )}
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/5 flex items-center justify-center shrink-0 ml-2">
+                  <Clock className="h-6 w-6 text-orange-500" />
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </Card>
-      {/* Upload Section */}
-      <Card className="p-6">
-        <h2 className="text-2xl font-semibold mb-4">Upload New Resume</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          Upload a new PDF resume. Maximum file size: 10MB
-        </p>
-        <div className="flex flex-col gap-4">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={handleUpload}
-              disabled={uploading}
-              className="hidden"
-            />
-            <Button disabled={uploading} asChild>
-              <span>
-                {uploading ? (
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
+        <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+          <CardContent className="pt-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold mb-1">Resume Visibility</h3>
+                <p className="text-sm text-muted-foreground">
+                  {isResumeVisible
+                    ? "Resume is currently visible on the website. Visitors can view and download it."
+                    : "Resume is currently hidden. No one can access it on the website."}
+                </p>
+              </div>
+              <Button
+                onClick={toggleVisibility}
+                disabled={togglingVisibility || cooldown}
+                variant={isResumeVisible ? "destructive" : "default"}
+                className="shrink-0"
+              >
+                {togglingVisibility ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Uploading...
+                    {isResumeVisible ? "Hiding..." : "Showing..."}
                   </>
                 ) : (
                   <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Choose PDF File
+                    {isResumeVisible ? (
+                      <>
+                        <EyeOff className="w-4 h-4 mr-2" />
+                        Hide Resume
+                      </>
+                    ) : (
+                      <>
+                        <EyeIcon className="w-4 h-4 mr-2" />
+                        Show Resume
+                      </>
+                    )}
                   </>
                 )}
-              </span>
-            </Button>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={autoSetActive}
-              onChange={(e) => setAutoSetActive(e.target.checked)}
-              className="w-4 h-4 rounded border-input"
-            />
-            <span className="text-sm text-muted-foreground">
-              Automatically set as active resume after upload
-            </span>
-          </label>
-        </div>
-      </Card>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+          <CardHeader className="pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <CardTitle className="text-xl">Resume Versions</CardTitle>
+                {selectedResumes.size > 0 && (
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={bulkDelete}
+                    className="gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Delete Selected ({selectedResumes.size})
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                {/* Search */}
+                <div className="relative flex-1 sm:min-w-[200px]">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <input
+                    type="text"
+                    placeholder="Search by filename or notes..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 text-sm border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  />
+                </div>
+
+                {/* Filter */}
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <select
+                    value={filterStatus}
+                    onChange={(e) =>
+                      setFilterStatus(
+                        e.target.value as "all" | "active" | "inactive",
+                      )
+                    }
+                    className="pl-9 pr-8 py-2 text-sm border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
+                  >
+                    <option value="all">All Resumes</option>
+                    <option value="active">Active Only</option>
+                    <option value="inactive">Inactive Only</option>
+                  </select>
+                </div>
+
+                {/* Sort */}
+                <div className="relative">
+                  <ArrowUpDown className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                    className="pl-9 pr-8 py-2 text-sm border border-input rounded-xl bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
+                  >
+                    <option value="date-desc">Newest First</option>
+                    <option value="date-asc">Oldest First</option>
+                    <option value="name-asc">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="size-desc">Largest First</option>
+                    <option value="size-asc">Smallest First</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </CardHeader>
+
+          <Separator className="mx-6 w-auto" />
+
+          <CardContent className="pt-6">
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : resumes.length === 0 ? (
+              <p className="text-muted-foreground py-8 text-center">
+                No resumes uploaded yet. Upload your first resume below.
+              </p>
+            ) : filteredAndSortedResumes.length === 0 ? (
+              <p className="text-muted-foreground py-8 text-center">
+                No resumes match your search criteria.
+              </p>
+            ) : (
+              <div className="space-y-3">
+                {/* Select All Header */}
+                {filteredAndSortedResumes.length > 0 && (
+                  <div className="flex items-center gap-2 pb-3 border-b border-border">
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedResumes.size === filteredAndSortedResumes.length &&
+                        filteredAndSortedResumes.length > 0
+                      }
+                      onChange={handleToggleSelectAll}
+                      className="w-4 h-4 rounded border-input cursor-pointer accent-primary"
+                    />
+                    <span className="text-sm text-muted-foreground">
+                      Select all ({filteredAndSortedResumes.length})
+                    </span>
+                  </div>
+                )}
+                {filteredAndSortedResumes.map((resume, index) => (
+                  <motion.div
+                    key={resume.id}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
+                    animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                    className="flex items-center justify-between p-4 border border-border dark:border-border/80 rounded-xl bg-card/30 hover:bg-accent/50 hover:border-primary/30 transition-all"
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <input
+                        type="checkbox"
+                        checked={selectedResumes.has(resume.id)}
+                        onChange={() => toggleResumeSelection(resume.id)}
+                        className="w-4 h-4 rounded border-input cursor-pointer accent-primary"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium truncate">{resume.filename}</p>
+                          <button
+                            onClick={() => openRename(resume)}
+                            className="shrink-0 p-1 hover:bg-accent rounded-lg transition-colors"
+                            title="Rename resume"
+                          >
+                            <Pencil className="w-3.5 h-3.5 text-muted-foreground hover:text-foreground" />
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                          <span>
+                            {new Date(resume.uploadedAt).toLocaleDateString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              },
+                            )}
+                          </span>
+                          <span>•</span>
+                          <span>{formatFileSize(resume.fileSize)}</span>
+                        </div>
+                        {resume.notes && (
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-1">
+                            {resume.notes}
+                          </p>
+                        )}
+                      </div>
+                      {resume.isActive && (
+                        <Badge className="bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30 hover:bg-green-500/30">
+                          Active
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0 ml-4">
+                      {resume.isActive && (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyResumeLink(resume)}
+                            title="Copy resume link"
+                            className="hover:bg-accent"
+                          >
+                            <Link2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => window.open("/", "_blank")}
+                            title="View on website"
+                            className="hover:bg-accent"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        </>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openEditNotes(resume)}
+                        title="Edit notes"
+                        className="hover:bg-accent"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setPreviewResume(resume)}
+                        title="Preview resume"
+                        className="hover:bg-accent"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                      <a
+                        href={resume.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Button variant="ghost" size="sm" title="Download resume" className="hover:bg-accent">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </a>
+                      {!resume.isActive && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setActive(resume.id)}
+                          className="gap-1"
+                        >
+                          <Check className="w-4 h-4" />
+                          Set Active
+                        </Button>
+                      )}
+                      {!resume.isActive && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => deleteResume(resume.id, resume.filename)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Upload Section */}
+      <motion.div
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
+      >
+        <Card className="border border-border dark:border-border/80 dark:bg-card/50">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold mb-2">Upload New Resume</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Upload a new PDF resume. Maximum file size: 10MB
+            </p>
+            <div className="flex flex-col gap-4">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="file"
+                  accept=".pdf"
+                  onChange={handleUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+                <Button disabled={uploading} asChild>
+                  <span>
+                    {uploading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        Choose PDF File
+                      </>
+                    )}
+                  </span>
+                </Button>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={autoSetActive}
+                  onChange={(e) => setAutoSetActive(e.target.checked)}
+                  className="w-4 h-4 rounded border-input accent-primary"
+                />
+                <span className="text-sm text-muted-foreground">
+                  Automatically set as active resume after upload
+                </span>
+              </label>
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <Dialog
         open={!!previewResume}
@@ -598,21 +668,23 @@ export function ResumeManager() {
         open={!!editingNotes}
         onOpenChange={(open) => !open && closeEditNotes()}
       >
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl border border-border dark:border-border/80 dark:bg-card">
           <DialogHeader>
-            <DialogTitle>Edit Notes - {editingNotes?.filename}</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">
+              Edit Notes - {editingNotes?.filename}
+            </DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <textarea
               value={notesText}
               onChange={(e) => setNotesText(e.target.value)}
               placeholder="Add notes about this resume version (e.g., 'Updated for tech roles', 'Added new project')..."
-              className="w-full min-h-[120px] px-3 py-2 text-sm rounded-md border border-input bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="w-full min-h-[120px] px-4 py-3 text-sm rounded-xl border border-input bg-background resize-none focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors"
               rows={5}
             />
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeEditNotes}>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={closeEditNotes}>
               Cancel
             </Button>
             <Button onClick={saveNotes}>Save Notes</Button>
@@ -625,9 +697,9 @@ export function ResumeManager() {
         open={!!renamingResume}
         onOpenChange={(open) => !open && closeRename()}
       >
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl border border-border dark:border-border/80 dark:bg-card">
           <DialogHeader>
-            <DialogTitle>Rename Resume</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">Rename Resume</DialogTitle>
           </DialogHeader>
           <div className="py-4">
             <label
@@ -651,15 +723,15 @@ export function ResumeManager() {
                 }
               }}
               placeholder="Enter new filename..."
-              className="w-full px-3 py-2 text-sm rounded-md border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+              className="w-full px-4 py-3 text-sm rounded-xl border border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 transition-colors"
               autoFocus
             />
             <p className="text-xs text-muted-foreground mt-2">
               This will only change the display name, not the actual file.
             </p>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={closeRename}>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" onClick={closeRename}>
               Cancel
             </Button>
             <Button onClick={saveRename}>Save</Button>
