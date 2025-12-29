@@ -10,7 +10,7 @@ import {
   useState,
   useCallback,
 } from "react";
-import { motion, Transition, useInView, UseInViewOptions } from "motion/react";
+import { motion, Transition, useInView, UseInViewOptions } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
