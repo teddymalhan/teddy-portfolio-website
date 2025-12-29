@@ -38,6 +38,10 @@ export function ProjectsBento() {
                 key={project.slug}
                 href={`/projects/${project.slug}`}
                 className="contents"
+                onClick={() => {
+                  // Store current scroll position before navigating
+                  sessionStorage.setItem('homeScrollPosition', window.pageYOffset.toString());
+                }}
               >
                 <BentoCard
                   name={project.name}
@@ -56,6 +60,9 @@ export function ProjectsBento() {
                         loading="lazy"
                         decoding="async"
                       />
+                      {project.slug === "kaeru" && (
+                        <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+                      )}
                     </div>
                   }
                 >

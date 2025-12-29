@@ -29,6 +29,9 @@ export function ProjectHero({ project }: ProjectHeroProps) {
             priority
             sizes="100vw"
           />
+          {project.slug === "kaeru" && (
+            <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+          )}
         </div>
       </div>
 
