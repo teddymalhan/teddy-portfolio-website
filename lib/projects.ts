@@ -215,7 +215,7 @@ export const projects: Project[] = [
     technologies: ["FastAPI", "Python", "React Native", "FAISS", "Neo4j"],
     type: "hackathon",
     description:
-      "Architected a FAISS & NLP based waste sorting system powered by RAG, OpenAI Embeddings, parsing 20k+ mappings of food items to bins.",
+      "AI-powered waste sorting for sustainable communities",
     cta: "Learn More",
     heroImage: "/wastewise.jpg",
     gridClassName: "col-span-3 lg:col-span-1",
@@ -248,7 +248,7 @@ export const projects: Project[] = [
         title: "Overview",
         paragraphs: [
           "WasteWise is an AI-powered mobile application that helps users correctly sort their waste by identifying items and providing disposal recommendations. The system uses a combination of computer vision and natural language processing to understand what users want to dispose of.",
-          "Built during a 36-hour hackathon, the application demonstrates how AI can make sustainability more accessible and reduce contamination in recycling streams.",
+          "Built at StormHacks 2024, the application demonstrates how AI can make sustainability more accessible and reduce contamination in recycling streams.",
         ],
       },
       {
@@ -302,10 +302,15 @@ export const projects: Project[] = [
     cta: "Learn More",
     heroImage: "/kaeru.png",
     gridClassName: "col-span-3 lg:col-span-3",
-    href: "https://github.com/teddymalhan/kaeru",
+    href: "https://kaeru-fawn.vercel.app/",
     github: "https://github.com/teddymalhan/kaeru",
-    demo: "https://github.com/teddymalhan/kaeru",
+    demo: "https://kaeru-fawn.vercel.app/",
     links: [
+      {
+        label: "View Live Demo",
+        href: "https://kaeru-fawn.vercel.app/",
+        icon: "ExternalLink",
+      },
       {
         label: "View on GitHub",
         href: "https://github.com/teddymalhan/kaeru",
@@ -332,7 +337,7 @@ export const projects: Project[] = [
       {
         title: "Overview",
         paragraphs: [
-          "Kaeru (帰る - to return, go back, or restore) is an AI-powered financial operations platform that automates the tedious tasks nobody wants to do: cancelling subscriptions, disputing fraudulent charges, and managing financial workflows.",
+          "Kaeru (帰る - to return, go back, or restore) is an AI-powered financial operations platform that automates the tedious tasks nobody wants to do: cancelling subscriptions, disputing fraudulent charges, and managing financial workflows. Built at StormHacks 2025.",
           "Built with Next.js and AWS, Kaeru leverages AI agents to handle phone calls and emails, real-time fraud detection to protect your money, and an intuitive dashboard to manage your financial life.",
         ],
       },
@@ -378,7 +383,7 @@ export const projects: Project[] = [
     featured: true,
     award: "Hackathon Winner",
     description:
-      "Hack-The-Sem 2024 Hackathon Winner. A financial social media platform designed to help students manage their finances.",
+      "A financial social media platform designed to help students manage their finances.",
     cta: "View Project",
     heroImage: "/grad-gains.png",
     gridClassName: "col-span-3 lg:col-span-1",
