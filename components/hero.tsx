@@ -1,10 +1,18 @@
 import Image from "next/image";
 import { InstantHighlighter } from "@/components/fancy/text/instant-highlighter";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { ChevronDown } from "lucide-react";
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
   // Resume path is handled by Navigation component, no need to fetch here
   // This reduces initial client-side JavaScript execution
+
+  const scrollToExperience = () => {
+    const experienceSection = document.getElementById("experience");
+    if (experienceSection) {
+      experienceSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <section
@@ -116,6 +124,25 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
           </div>
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <button
+        onClick={scrollToExperience}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 group cursor-pointer"
+        aria-label="Scroll to experience"
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            scroll
+          </span>
+          <div className="relative">
+            <ChevronDown 
+              className="h-6 w-6 text-muted-foreground animate-bounce group-hover:text-foreground transition-colors duration-300" 
+              strokeWidth={1.5}
+            />
+          </div>
+        </div>
+      </button>
     </section>
   );
 }
