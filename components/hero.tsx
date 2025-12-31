@@ -10,14 +10,15 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
   const scrollToExperience = () => {
     const experienceSection = document.getElementById("experience");
     if (experienceSection) {
-      experienceSection.scrollIntoView({ behavior: "smooth" });
+      const y = experienceSection.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
   return (
     <section
       id="home"
-      className="relative min-h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative min-h-screen h-dvh w-full overflow-hidden flex items-center justify-center"
     >
       <div className="relative z-10 container mx-auto px-4 py-24 sm:px-6 lg:px-8 lg:py-32">
         <div className="mx-auto max-w-5xl text-center">
