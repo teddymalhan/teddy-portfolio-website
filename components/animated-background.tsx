@@ -6,12 +6,9 @@ export function AnimatedBackground() {
   const { theme } = useTheme();
   const isDark = theme === "dark";
 
-  // Light mode: lightish professional blue
+  // Light mode: no blobs
   // Dark mode: slate colors
-  const lightModeGradient = `
-    radial-gradient(ellipse 90% 90% at 20% 20%, rgba(147, 197, 253, 0.5) 0%, transparent 50%),
-    radial-gradient(ellipse 90% 90% at 80% 70%, rgba(191, 219, 254, 0.5) 0%, transparent 50%)
-  `;
+  const lightModeGradient = `transparent`;
   
   const darkModeGradient = `
     radial-gradient(ellipse 90% 90% at 20% 20%, rgba(100, 116, 139, 0.6) 0%, transparent 50%),
