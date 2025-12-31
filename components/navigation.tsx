@@ -141,14 +141,17 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
       // Show navigation temporarily for smooth UX
       useNavigationStore.getState().setIsVisible(true);
 
-      // No offset - navbar overlaps content on both mobile and desktop
+      // Add offset to show some whitespace from previous section
+      // Experience section gets larger offset due to gradient blend
+      const offset = sectionId === "experience" ? 40 : 20;
       const targetPosition =
         element.getBoundingClientRect().top +
-        globalThis.window.pageYOffset;
+        globalThis.window.pageYOffset -
+        offset;
 
       // Use native smooth scrolling - GPU accelerated and fast
       globalThis.window.scrollTo({
-        top: targetPosition,
+        top: Math.max(0, targetPosition),
         behavior: prefersReducedMotion ? "auto" : "smooth",
       });
     }

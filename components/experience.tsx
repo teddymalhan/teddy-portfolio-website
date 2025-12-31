@@ -75,7 +75,7 @@ export function Experience() {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5 }}
     >
-      <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-24 pb-20">
+      <div className="max-w-6xl mx-auto px-6 lg:px-10 pt-16 pb-20">
         {/* Header */}
         <h1 className="text-5xl font-bold tracking-tight text-left text-foreground mb-8">
           Experience

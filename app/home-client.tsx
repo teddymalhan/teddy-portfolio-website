@@ -2,7 +2,6 @@
 
 import { Navigation } from "@/components/navigation"
 import { Hero } from "@/components/hero"
-import { Separator } from "@/components/ui/separator"
 import { AnimatedBackground } from "@/components/animated-background"
 import { lazy, Suspense, useLayoutEffect, useState } from "react"
 
@@ -46,26 +45,24 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         <Navigation isResumeVisible={isResumeVisible} />
         <main>
           <Hero isResumeVisible={isResumeVisible} />
+          {/* Gradient fade from hero to content */}
+          <div className="h-32 bg-gradient-to-b from-transparent to-background -mt-32 relative z-0" />
           <div className="relative bg-background">
-            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <div className="lazy-section">
               <Suspense fallback={<div className="min-h-screen" />}>
                 <Experience />
               </Suspense>
             </div>
-            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <div className="lazy-section">
               <Suspense fallback={<div className="min-h-screen" />}>
                 <ProjectsBento />
               </Suspense>
             </div>
-            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <div className="lazy-section">
               <Suspense fallback={<div className="py-24" />}>
                 <About />
               </Suspense>
             </div>
-            <Separator className="bg-linear-to-r from-transparent via-border to-transparent" />
             <Suspense fallback={null}>
               <Footer isResumeVisible={isResumeVisible} />
             </Suspense>

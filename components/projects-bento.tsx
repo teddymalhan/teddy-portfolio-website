@@ -17,7 +17,7 @@ export function ProjectsBento() {
   return (
     <motion.section
       id="projects"
-      className="min-h-screen pt-24 pb-8 will-change-[transform,opacity]"
+      className="min-h-screen pt-22 pb-8 will-change-[transform,opacity]"
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}

@@ -10,8 +10,9 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
   const scrollToExperience = () => {
     const experienceSection = document.getElementById("experience");
     if (experienceSection) {
-      const y = experienceSection.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: y, behavior: "smooth" });
+      const offset = 40;
+      const y = experienceSection.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
     }
   };
 
