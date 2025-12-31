@@ -45,31 +45,18 @@ export function About() {
             </div>
           </div>
 
-          {/* Highlighted heading */}
-          <div className="mx-auto mb-6 max-w-prose md:mb-8">
-            <h2 className="font-semibold tracking-tight text-2xl text-foreground md:text-3xl">
-              Hi, I&apos;m Teddy and I build thoughtful software.
-            </h2>
-          </div>
-
           {/* Copy */}
-          <div className="mx-auto max-w-prose space-y-5 text-left text-muted-foreground leading-relaxed md:space-y-6">
+          <div className="mx-auto max-w-prose space-y-5 text-left text-foreground text-lg md:text-xl leading-relaxed md:space-y-6">
             <p className="text-foreground">
-              I&apos;m a Computer Science student and software engineer focused
-              on backend and system engineering, with an emphasis on developer tooling, 
-              infrastructure-adjacent services, and data-driven applications.
+              Hi, I&apos;m Teddy and I&apos;m a Computer Science student at Simon Fraser Unversity, focused on distributed systems, networking, infrastructure and product engineering.
             </p>
-            <p>
-              I care about shipping fast without sacrificing polish. From 
-              system design and APIs to reliability and performance, I enjoy 
-              building software that scales cleanly and feels intentional 
-              to both users and developers.
+            <p className="text-foreground">
+              For me, programming is all about building and fixing. I love working on solutions that solve real problems while being scalable and reliable.
             </p>
-            <p>
-              When I&apos;m not coding, you&apos;ll find me on a tennis court,
-              at the gym, or studying well-designed systems and developer experiences. If you&apos;re building
-              something interesting, I&apos;d love to chat.
+            <p className="text-foreground">
+              In my free time, I love to play badminton, lift weights, and geek out over how large-scale systems are built. If you&apos;re building something interesting or want to chat, feel free to reach out!
             </p>
+
           </div>
         </div>
       </div>
