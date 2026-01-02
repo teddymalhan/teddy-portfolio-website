@@ -303,8 +303,20 @@ export const projects: Project[] = [
     cta: "View Project",
     heroImage: "/retrowatch.png",
     gridClassName: "col-span-3 lg:col-span-3",
-    href: "#",
-    links: [],
+    href: "https://full-stack-app-467902453710.us-west1.run.app/",
+    demo: "https://full-stack-app-467902453710.us-west1.run.app/",
+    links: [
+      {
+        label: "View Live Demo",
+        href: "https://full-stack-app-467902453710.us-west1.run.app/",
+        icon: "ExternalLink",
+      },
+      {
+        label: "View on GitHub",
+        href: "https://github.com/teddymalhan/RetroWatch",
+        icon: "Github",
+      },
+    ],
     features: [
       { text: "CRT television simulation", dotColor: "#4CAF50" },
       { text: "AI-generated era-relevant ads", dotColor: "#2196F3" },
