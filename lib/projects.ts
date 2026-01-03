@@ -308,7 +308,7 @@ export const projects: Project[] = [
     links: [
       {
         label: "View Live Demo",
-        href: "https://full-stack-app-467902453710.us-west1.run.app/",
+        href: "https://retrowatch.malhan.ca/",
         icon: "ExternalLink",
       },
       {
