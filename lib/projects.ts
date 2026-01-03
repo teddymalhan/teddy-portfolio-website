@@ -316,6 +316,11 @@ export const projects: Project[] = [
         href: "https://github.com/teddymalhan/RetroWatch",
         icon: "Github",
       },
+      {
+        label: "API Documentation",
+        href: "https://retrowatch.malhan.ca/docs/",
+        icon: "FileText",
+      },
     ],
     features: [
       { text: "CRT television simulation", dotColor: "#4CAF50" },
