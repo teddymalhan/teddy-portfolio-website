@@ -64,14 +64,14 @@ export default function Footer({
           </Link>
 
           <div className="mt-5 flex gap-2">
-            <a
+            <Link
               href="mailto:ama367@sfu.ca"
               aria-label="Email"
               className="fill rounded-md p-2"
             >
               <Mail className="w-5 h-5" />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://github.com/teddymalhan"
               target="_blank"
               rel="noreferrer noopener"
@@ -79,8 +79,8 @@ export default function Footer({
               className="fill rounded-md p-2"
             >
               <Github className="w-5 h-5" />
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://www.linkedin.com/in/teddymalhan/"
               target="_blank"
               rel="noreferrer noopener"
@@ -88,7 +88,7 @@ export default function Footer({
               className="fill rounded-md p-2"
             >
               <Linkedin className="w-5 h-5" />
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -116,33 +116,33 @@ export default function Footer({
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-medium text-foreground">Social</p>
-            <a
+            <Link
               href="https://github.com/teddymalhan"
               target="_blank"
               rel="noreferrer noopener"
               className="text-muted-foreground hover:text-foreground"
             >
               GitHub
-            </a>
-            <a
+            </Link>
+            <Link
               href="https://www.linkedin.com/in/teddymalhan/"
               target="_blank"
               rel="noreferrer noopener"
               className="text-muted-foreground hover:text-foreground"
             >
               LinkedIn
-            </a>
-            <a
+            </Link>
+            <Link
               href="mailto:ama367@sfu.ca"
               className="text-muted-foreground hover:text-foreground"
             >
               Email
-            </a>
+            </Link>
           </div>
           <div className="flex flex-col gap-2">
             <p className="font-medium text-foreground">More</p>
             {isResumeVisible && (
-              <a
+              <Link
                 href={resumePath}
                 target="_blank"
                 rel="noreferrer noopener"
@@ -157,7 +157,7 @@ export default function Footer({
                 className="text-muted-foreground hover:text-foreground"
               >
                 Resume
-              </a>
+              </Link>
             )}
             <Link
               href="#about"
@@ -165,9 +165,19 @@ export default function Footer({
             >
               About
             </Link>
+            <Link
+              href="https://cal.com/teddymalhan"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="text-muted-foreground hover:text-foreground"
+            >
+              Book a Call
+            </Link>
           </div>
         </nav>
       </div>
     </motion.footer>
   );
 }
+
+
