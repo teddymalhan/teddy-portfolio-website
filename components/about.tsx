@@ -48,7 +48,7 @@ export function About() {
           {/* Copy */}
           <div className="mx-auto max-w-prose space-y-5 text-left text-foreground text-lg md:text-xl leading-relaxed md:space-y-6">
             <p className="text-foreground">
-              Hi, I&apos;m Teddy and I&apos;m a Computer Science student at Simon Fraser Unversity, focused on distributed systems, networking, infrastructure and product engineering.
+              Hi, I&apos;m Teddy and I&apos;m a Computer Science student at Simon Fraser Unversity, focused on distributed systems, infrastructure and product engineering.
             </p>
             <p className="text-foreground">
               For me, programming is all about building and fixing. I love working on solutions that solve real problems while being scalable and reliable.
