@@ -4,9 +4,6 @@ import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button
 import { ChevronDown } from "lucide-react";
 
 export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
-  // Resume path is handled by Navigation component, no need to fetch here
-  // This reduces initial client-side JavaScript execution
-
   const scrollToExperience = () => {
     const experienceSection = document.getElementById("experience");
     if (experienceSection) {
@@ -60,13 +57,6 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 simon fraser university
               </InstantHighlighter>
             </span>
-            , graduating{" "}
-            <InstantHighlighter
-              highlightColor="rgb(16, 185, 129)"
-              className="text-white px-2 py-1 rounded font-bold"
-            >
-              2027
-            </InstantHighlighter>
           </h2>
 
           {/* Description - Previous Experience */}
