@@ -285,7 +285,7 @@ export const projects: Project[] = [
     name: "RetroWatch",
     title: "RetroWatch",
     tagline: "Watch content on a CRT with AI-generated era-relevant ads",
-    period: "In Progress",
+    period: "December 2025 - January 2026",
     year: 2025,
     technologies: [
       "Java",
@@ -352,7 +352,7 @@ export const projects: Project[] = [
         ],
       },
     ],
-    timeline: [{ date: "In Progress" }],
+    timeline: [{ date: "December 2025 - January 2026" }],
     tools: [
       "Java 21",
       "Spring Boot 3",
