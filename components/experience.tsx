@@ -23,7 +23,7 @@ const experiences: ExperienceItem[] = [
     location: "Vancouver, BC",
     logo: "/ea-logo-full.jpg",
     logoStyle: "padded",
-    tags: ["🕹️ EADP Arrival"],
+    tags: ["☁️ Digital Platform: Arrival"],
   },
   {
     company: "Dialpad",
