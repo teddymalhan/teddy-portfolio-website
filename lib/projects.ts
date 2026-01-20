@@ -206,81 +206,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "wastewise",
-    name: "WasteWise",
-    title: "WasteWise",
-    tagline: "AI-powered waste sorting for sustainable communities",
-    period: "Oct 2024",
-    year: 2024,
-    technologies: ["FastAPI", "Python", "React Native", "FAISS", "Neo4j"],
-    type: "hackathon",
-    description:
-      "AI-powered waste sorting for sustainable communities",
-    cta: "Learn More",
-    heroImage: "/wastewise.jpg",
-    gridClassName: "col-span-3 lg:col-span-1",
-    href: "https://devpost.com/software/wastewise-agcrsi",
-    github: "#",
-    demo: "https://devpost.com/software/wastewise-agcrsi",
-    links: [
-      {
-        label: "View on Devpost",
-        href: "https://devpost.com/software/wastewise-agcrsi",
-        icon: "ExternalLink",
-      },
-    ],
-    features: [
-      { text: "RAG-powered item classification", dotColor: "#4CAF50" },
-      { text: "20k+ food item mappings", dotColor: "#2196F3" },
-      { text: "Real-time sorting recommendations", dotColor: "#FF9800" },
-      { text: "Neo4j knowledge graph for relationships", dotColor: "#9C27B0" },
-    ],
-    terminalSteps: [
-      { text: "python -m uvicorn main:app --reload", type: "command" },
-      { text: "Loading FAISS index...", type: "output", delay: 40 },
-      { text: "Connecting to Neo4j database...", type: "output", delay: 40 },
-      { text: "Initializing OpenAI embeddings...", type: "output", delay: 40 },
-      { text: "Server running on http://localhost:8000", type: "success", delay: 40 },
-    ],
-    terminalProgressMessage: "Processing waste classification query...",
-    sections: [
-      {
-        title: "Overview",
-        paragraphs: [
-          "WasteWise is an AI-powered mobile application that helps users correctly sort their waste by identifying items and providing disposal recommendations. The system uses a combination of computer vision and natural language processing to understand what users want to dispose of.",
-          "Built at StormHacks 2024, the application demonstrates how AI can make sustainability more accessible and reduce contamination in recycling streams.",
-        ],
-      },
-      {
-        title: "Technical Architecture",
-        paragraphs: [
-          "The core of WasteWise is a Retrieval-Augmented Generation (RAG) system built on FAISS for vector similarity search and OpenAI embeddings for semantic understanding. This allows the app to match user queries against a database of 20,000+ food and household items.",
-          "A Neo4j graph database stores relationships between items, materials, and disposal methods, enabling complex queries like 'what else can be recycled with this item?' or 'what are alternatives to throwing this away?'",
-        ],
-      },
-    ],
-    timeline: [{ date: "Oct 2024" }],
-    tools: [
-      "FastAPI",
-      "Python",
-      "React Native",
-      "FAISS",
-      "Neo4j",
-      "OpenAI API",
-      "Docker",
-    ],
-    results: [
-      "Built complete MVP in 36 hours",
-      "20,000+ items in classification database",
-      "Sub-100ms query response time with FAISS",
-    ],
-    takeaways: [
-      "RAG systems provide accurate, contextual responses without fine-tuning",
-      "Graph databases excel at representing complex relationships",
-      "Hackathons are great for rapid prototyping and validation",
-    ],
-  },
-  {
     slug: "retrowatch",
     name: "RetroWatch",
     title: "RetroWatch",
@@ -293,16 +218,13 @@ export const projects: Project[] = [
       "React",
       "Vite",
       "Google Cloud",
-      "Cloud Run",
-      "Cloud Tasks",
     ],
     type: "personal",
-    featured: true,
     description:
       "Stream content on a virtual CRT television with AI-generated era-appropriate advertisements for an authentic retro viewing experience.",
     cta: "View Project",
     heroImage: "/retrowatch.png",
-    gridClassName: "col-span-3 lg:col-span-3",
+    gridClassName: "col-span-3 lg:col-span-1",
     href: "https://full-stack-app-467902453710.us-west1.run.app/",
     demo: "https://full-stack-app-467902453710.us-west1.run.app/",
     links: [
@@ -366,6 +288,107 @@ export const projects: Project[] = [
       "Generative AI enables creative content generation at scale",
       "Serverless architecture provides cost-effective scalability",
       "Nostalgia-driven experiences create unique user engagement",
+    ],
+  },
+  {
+    slug: "argus",
+    name: "Argus",
+    title: "Argus",
+    tagline: "Secure versioning for quant research workflows",
+    period: "January 2026",
+    year: 2026,
+    technologies: [
+      "Rust",
+      "Python",
+      "Textual",
+      "Gemini AI",
+      "Vultr",
+    ],
+    type: "hackathon",
+    featured: true,
+    description:
+      "A dev tool that integrates model/dataset workflows with seamless and secure versioning, designed for quant researchers to track experiments with a bird's-eye view.",
+    cta: "View Project",
+    heroImage: "/argus.png",
+    gridClassName: "col-span-3 lg:col-span-3",
+    href: "https://github.com/teddymalhan/argus",
+    github: "https://github.com/teddymalhan/argus",
+    links: [
+      {
+        label: "View on GitHub",
+        href: "https://github.com/teddymalhan/argus",
+        icon: "Github",
+      },
+    ],
+    features: [
+      { text: "Secure hash-based versioning", dotColor: "#14F195" },
+      { text: "IC, Rank IC & t-stat tracking", dotColor: "#9945FF" },
+      { text: "Gemini AI run summaries", dotColor: "#4285F4" },
+      { text: "Terminal UI with Textual", dotColor: "#FF9800" },
+      { text: "Vultr cloud storage integration", dotColor: "#00BCD4" },
+    ],
+    terminalSteps: [
+      { text: "argus init", type: "command" },
+      { text: "Initializing Argus project...", type: "output", delay: 40 },
+      { text: "Setting up local database...", type: "output", delay: 40 },
+      { text: "Argus initialized", type: "success", delay: 40 },
+      { text: "argus commit --model rf_v2 --dataset signals_q4", type: "command" },
+      { text: "Hashing artifacts...", type: "output", delay: 40 },
+      { text: "Recording IC: 0.042, Rank IC: 0.038, t-stat: 2.31", type: "output", delay: 40 },
+      { text: "Run committed: hash_8x7f...", type: "success", delay: 40 },
+    ],
+    terminalProgressMessage: "Committing run to Argus...",
+    sections: [
+      {
+        title: "Inspiration",
+        paragraphs: [
+          "We attended the Connor, Clark & Lunn Investment Management panel session and realized that the Data and Research team often has to go through many iterations of figuring out what signals align best with the actual datasets.",
+          "What we realized is that figuring out that in-between such rapid iterations of various models and datasets to confirm signals from hypothesis, many-a-times quant researchers would have to maintain multiple tools to track Information Coefficient (IC), Rank IC (Spearman) and IC t-stat across various runs, with ever changing datasets and models, whose data isn't accurately targeted by Git because it lies solely on the static code of the datasets and models but does not give us the ability to have a bird's-eye view of various signals and experiments and the corresponding static artifacts with it.",
+        ],
+      },
+      {
+        title: "What It Does",
+        paragraphs: [
+          "Argus is a dev tool that integrates models/dataset workflows with seamless and secure versioning - designed for quant researchers. It achieves this by utilizing hashes of all your saved (committed) runs, and allows you to effectively store and query the relevant models/datasets based on this.",
+        ],
+      },
+      {
+        title: "Technical Architecture",
+        paragraphs: [
+          "We used Rust for the core hashing logic, Python and Textual for the frontend and middleware, Gemini AI API to effectively summarize the model run and the dataset and the relevant metrics, SQLite DB for local record storage, and Vultr for scalable long term cloud storage of datasets/models.",
+        ],
+      },
+      {
+        title: "Challenges & Accomplishments",
+        paragraphs: [
+          "Connecting the frontend TUI with the backend to ensure commands work in the terminal was a significant challenge. Getting Rust integrated with Python and resolving version conflicts was a pain, but we're proud of learning Quantitative Finance concepts and committing to the grind to finish the project.",
+        ],
+      },
+      {
+        title: "What's Next",
+        paragraphs: [
+          "We intend to build a native Jupyter Notebook integration to the project so that it fits directly into the workflows for many Quantitative Researchers.",
+        ],
+      },
+    ],
+    timeline: [{ date: "January 2026" }],
+    tools: [
+      "Rust",
+      "Python",
+      "Textual",
+      "Gemini AI",
+      "SQLite",
+      "Vultr",
+    ],
+    results: [
+      "Built complete hash-based versioning system for quant workflows",
+      "Rust core with Python/Textual TUI integration",
+      "Terminal UI for seamless workflow integration",
+    ],
+    takeaways: [
+      "Hash-based versioning provides immutable audit trails for experiments",
+      "Terminal UIs can provide powerful developer experiences",
+      "Quantitative research requires specialized tooling beyond traditional version control",
     ],
   },
   {
