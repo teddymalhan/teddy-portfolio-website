@@ -40,7 +40,10 @@ export function ProjectsBento() {
                 className="contents"
                 onClick={() => {
                   // Store current scroll position before navigating
-                  sessionStorage.setItem('homeScrollPosition', window.pageYOffset.toString());
+                  // CLAUDE.md 7.5: wrap in try-catch for incognito/Safari
+                  try {
+                    sessionStorage.setItem('homeScrollPosition', window.pageYOffset.toString());
+                  } catch { /* ignore - graceful degradation */ }
                 }}
               >
                 <BentoCard

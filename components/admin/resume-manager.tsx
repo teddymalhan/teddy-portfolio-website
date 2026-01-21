@@ -41,6 +41,24 @@ import {
 } from "@/components/ui/dialog";
 import { useResumeManagerStore } from "@/stores";
 
+// Hoisted animation variants (CLAUDE.md 6.3 - Hoist Static JSX Elements)
+const CONTAINER_VARIANTS = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+} as const;
+
+const ITEM_VARIANTS = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+} as const;
+
+const REDUCED_MOTION_VARIANTS = {} as const;
+
 export function ResumeManager() {
   // Get state from Zustand store using selective subscriptions
   const resumes = useResumeManagerStore((state) => state.resumes);
@@ -128,8 +146,8 @@ export function ResumeManager() {
       filtered = filtered.filter((r) => !r.isActive);
     }
 
-    // Sort
-    const sorted = [...filtered].sort((a, b) => {
+    // Sort (CLAUDE.md 7.12 - Use toSorted() for Immutability)
+    const sorted = filtered.toSorted((a, b) => {
       switch (sortBy) {
         case "date-desc":
           return (
@@ -163,44 +181,32 @@ export function ResumeManager() {
   // Reduced motion preference
   const prefersReducedMotion = useReducedMotion();
 
-  // Calculate statistics
-  const activeResume = resumes.find((r) => r.isActive);
-  const totalStorage = resumes.reduce((sum, r) => sum + (r.fileSize || 0), 0);
-  const lastUpload =
-    resumes.length > 0
-      ? resumes.reduce((latest, r) => {
-          const rDate = new Date(r.uploadedAt);
-          const latestDate = new Date(latest.uploadedAt);
-          return rDate > latestDate ? r : latest;
-        })
-      : null;
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-  };
+  // Calculate statistics (CLAUDE.md 7.6 - Combine Multiple Array Iterations)
+  const { activeResume, totalStorage, lastUpload } = useMemo(() => {
+    if (resumes.length === 0) {
+      return { activeResume: undefined, totalStorage: 0, lastUpload: null };
+    }
+    let active: typeof resumes[0] | undefined;
+    let storage = 0;
+    let latest = resumes[0];
+    for (const resume of resumes) {
+      if (resume.isActive) active = resume;
+      storage += resume.fileSize || 0;
+      if (new Date(resume.uploadedAt) > new Date(latest.uploadedAt)) latest = resume;
+    }
+    return { activeResume: active, totalStorage: storage, lastUpload: latest };
+  }, [resumes]);
 
   return (
     <div className="space-y-8">
       {/* Statistics Cards */}
       <motion.div
-        variants={prefersReducedMotion ? {} : containerVariants}
+        variants={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : CONTAINER_VARIANTS}
         initial={prefersReducedMotion ? false : "hidden"}
-        animate={prefersReducedMotion ? {} : "show"}
+        animate={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : "show"}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
       >
-        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+        <motion.div variants={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : ITEM_VARIANTS}>
           <Card className="border border-border dark:border-border/80 dark:bg-card/50">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -236,7 +242,7 @@ export function ResumeManager() {
           </Card>
         </motion.div>
 
-        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+        <motion.div variants={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : ITEM_VARIANTS}>
           <Card className="border border-border dark:border-border/80 dark:bg-card/50">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -256,7 +262,7 @@ export function ResumeManager() {
           </Card>
         </motion.div>
 
-        <motion.div variants={prefersReducedMotion ? {} : itemVariants}>
+        <motion.div variants={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : ITEM_VARIANTS}>
           <Card className="border border-border dark:border-border/80 dark:bg-card/50">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
@@ -300,7 +306,7 @@ export function ResumeManager() {
 
       <motion.div
         initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        animate={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : { opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
         <Card className="border border-border dark:border-border/80 dark:bg-card/50">
@@ -348,7 +354,7 @@ export function ResumeManager() {
 
       <motion.div
         initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        animate={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : { opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.3 }}
       >
         <Card className="border border-border dark:border-border/80 dark:bg-card/50">
@@ -458,7 +464,7 @@ export function ResumeManager() {
                   <motion.div
                     key={resume.id}
                     initial={prefersReducedMotion ? false : { opacity: 0, y: 10 }}
-                    animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                    animate={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : { opacity: 1, y: 0 }}
                     transition={{ duration: 0.2, delay: index * 0.05 }}
                     className="flex items-center justify-between p-4 border border-border dark:border-border/80 rounded-xl bg-card/30 hover:bg-accent/50 hover:border-primary/30 transition-all"
                   >
@@ -594,7 +600,7 @@ export function ResumeManager() {
       {/* Upload Section */}
       <motion.div
         initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-        animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+        animate={prefersReducedMotion ? REDUCED_MOTION_VARIANTS : { opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.4 }}
       >
         <Card className="border border-border dark:border-border/80 dark:bg-card/50">

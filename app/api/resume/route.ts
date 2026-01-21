@@ -55,13 +55,13 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now()
     const blobKey = `resumes/resume-${timestamp}.pdf`
 
-    // Upload to Vercel Blob
-    const blob = await put(blobKey, file!, {
+    // Start both operations in parallel (CLAUDE.md 1.3 - Prevent Waterfall Chains)
+    const blobPromise = put(blobKey, file!, {
       access: 'public',
       contentType: 'application/pdf',
     })
-
-    const userId = await getCurrentUserId()
+    const userIdPromise = getCurrentUserId()
+    const [blob, userId] = await Promise.all([blobPromise, userIdPromise])
 
     // Save metadata to database
     const resumeRow = await resumeService.createResume({

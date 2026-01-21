@@ -19,20 +19,26 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
   const [isReady, setIsReady] = useState(false)
 
   useLayoutEffect(() => {
-    const savedScrollPosition = sessionStorage.getItem("homeScrollPosition")
+    // CLAUDE.md 7.5 - Cache Storage API Calls: wrap in try-catch for incognito/Safari
+    try {
+      const savedScrollPosition = sessionStorage.getItem("homeScrollPosition")
 
-    if (savedScrollPosition) {
-      sessionStorage.removeItem("homeScrollPosition")
-      const scrollY = parseInt(savedScrollPosition, 10)
+      if (savedScrollPosition) {
+        sessionStorage.removeItem("homeScrollPosition")
+        const scrollY = parseInt(savedScrollPosition, 10)
 
-      // Restore scroll position and wait for it to apply
-      window.scrollTo(0, scrollY)
+        // Restore scroll position and wait for it to apply
+        window.scrollTo(0, scrollY)
 
-      // Small delay to ensure scroll takes effect before showing content
-      requestAnimationFrame(() => {
+        // Small delay to ensure scroll takes effect before showing content
+        requestAnimationFrame(() => {
+          setIsReady(true)
+        })
+      } else {
         setIsReady(true)
-      })
-    } else {
+      }
+    } catch {
+      // Graceful degradation if sessionStorage is unavailable (incognito mode, etc.)
       setIsReady(true)
     }
   }, [])
