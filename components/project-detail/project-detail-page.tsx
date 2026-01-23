@@ -2,6 +2,7 @@
 
 import { Suspense, lazy } from "react";
 import type { Project } from "@/lib/projects";
+import { ProjectNavigation } from "./project-navigation";
 import { ProjectHeader } from "./project-header";
 import { ProjectHero } from "./project-hero";
 import { ProjectSidebar } from "./project-sidebar";
@@ -19,7 +20,8 @@ interface ProjectDetailPageProps {
 export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto px-6 py-12 lg:py-24">
+      <ProjectNavigation project={project} />
+      <div className="max-w-6xl mx-auto px-6 pt-24 pb-12 lg:py-24">
         <ProjectHeader project={project} />
 
         <ProjectHero project={project} />

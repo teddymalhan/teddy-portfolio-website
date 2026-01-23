@@ -14,7 +14,6 @@ interface ExperienceItem {
   tags?: string[];
 }
 
-// Using local images to avoid external DNS lookups and improve caching
 const experiences: ExperienceItem[] = [
   {
     company: "Electronic Arts",
@@ -23,7 +22,7 @@ const experiences: ExperienceItem[] = [
     location: "Vancouver, BC",
     logo: "/ea-logo-full.jpg",
     logoStyle: "padded",
-    tags: ["☸️ Digital Platform: Arrival"],
+    tags: ["🕹️ Digital Platform: Arrival"],
   },
   {
     company: "Dialpad",

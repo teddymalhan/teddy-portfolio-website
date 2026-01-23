@@ -41,6 +41,7 @@ export interface ContentSection {
   title: string;
   paragraphs: string[];
   bullets?: string[];
+  emoji?: string;
 }
 
 // Project type categories
@@ -122,8 +123,8 @@ export const projects: Project[] = [
     name: "Digital Scorecards",
     title: "Digital Scorecards",
     tagline:
-      "Enterprise-grade performance visibility for contact center teams",
-    period: "Internship",
+      "Expanding KPI (Key Performance Indicators) visibility for agents on contact center teams",
+    period: "January 2025 - April 2025 (Internship)",
     year: 2024,
     technologies: ["Vue.js", "Django", "Python", "Google Cloud Platform"],
     type: "internship",
@@ -164,6 +165,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Overview",
+        emoji: "📋",
         paragraphs: [
           "Digital Scorecards is an enterprise feature built for Dialpad's contact center platform, enabling managers to track and evaluate agent performance in real-time. The system provides customizable scoring criteria and automated performance reports.",
           "As a Software Engineering Intern, I designed and implemented the full-stack solution, working closely with product managers and senior engineers to deliver a feature that now serves thousands of contact center agents.",
@@ -171,6 +173,7 @@ export const projects: Project[] = [
       },
       {
         title: "Background",
+        emoji: "📚",
         paragraphs: [
           "Contact centers face a constant challenge: how do you measure and improve agent performance at scale? Traditional methods relied on manual call reviews and subjective assessments, which were time-consuming and inconsistent.",
           "The goal was to create an automated, data-driven system that could score agent interactions based on customizable criteria, providing managers with actionable insights while giving agents clear feedback on their performance.",
@@ -178,6 +181,7 @@ export const projects: Project[] = [
       },
       {
         title: "Technical Implementation",
+        emoji: "⚙️",
         paragraphs: [
           "The frontend was built with Vue.js, featuring a responsive dashboard with real-time updates via WebSocket connections. The scoring interface allows managers to define custom evaluation criteria with weighted scoring.",
           "The backend, built with Django and Python, handles score calculation, aggregation, and report generation. Data is stored in Google Cloud SQL with caching through Memcached for high-performance queries.",
@@ -261,6 +265,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Overview",
+        emoji: "📺",
         paragraphs: [
           "RetroWatch brings the nostalgic experience of watching television on a CRT to the modern web. The platform simulates the look and feel of vintage television, complete with AI-generated advertisements that match the era of the content being watched.",
           "Using generative AI, RetroWatch creates contextually appropriate ads that would have aired during the time period of your content, creating an immersive and authentic retro viewing experience.",
@@ -268,6 +273,7 @@ export const projects: Project[] = [
       },
       {
         title: "Technical Architecture",
+        emoji: "🏗️",
         paragraphs: [
           "The backend is built with Java and Spring Boot, deployed on Google Cloud Run for serverless scalability. Google Cloud Tasks handles the asynchronous generation of AI advertisements.",
           "The frontend uses React with Vite for a fast, responsive CRT simulation complete with scan lines, color bleeding, and authentic analog artifacts.",
@@ -294,8 +300,8 @@ export const projects: Project[] = [
     slug: "argus",
     name: "Argus",
     title: "Argus",
-    tagline: "Secure versioning for quant research workflows",
-    period: "January 2026",
+    tagline: "Deterministic replay with version controlled runs for quant researchers.",
+    period: "nwHacks 2026 Winner",
     year: 2026,
     technologies: [
       "Rust",
@@ -341,6 +347,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Inspiration",
+        emoji: "💡",
         paragraphs: [
           "We attended the Connor, Clark & Lunn Investment Management panel session and realized that the Data and Research team often has to go through many iterations of figuring out what signals align best with the actual datasets.",
           "What we realized is that figuring out that in-between such rapid iterations of various models and datasets to confirm signals from hypothesis, many-a-times quant researchers would have to maintain multiple tools to track Information Coefficient (IC), Rank IC (Spearman) and IC t-stat across various runs, with ever changing datasets and models, whose data isn't accurately targeted by Git because it lies solely on the static code of the datasets and models but does not give us the ability to have a bird's-eye view of various signals and experiments and the corresponding static artifacts with it.",
@@ -348,24 +355,28 @@ export const projects: Project[] = [
       },
       {
         title: "What It Does",
+        emoji: "🎯",
         paragraphs: [
           "Argus is a dev tool that integrates models/dataset workflows with seamless and secure versioning - designed for quant researchers. It achieves this by utilizing hashes of all your saved (committed) runs, and allows you to effectively store and query the relevant models/datasets based on this.",
         ],
       },
       {
         title: "Technical Architecture",
+        emoji: "🏗️",
         paragraphs: [
           "We used Rust for the core hashing logic, Python and Textual for the frontend and middleware, Gemini AI API to effectively summarize the model run and the dataset and the relevant metrics, SQLite DB for local record storage, and Vultr for scalable long term cloud storage of datasets/models.",
         ],
       },
       {
         title: "Challenges & Accomplishments",
+        emoji: "🏆",
         paragraphs: [
           "Connecting the frontend TUI with the backend to ensure commands work in the terminal was a significant challenge. Getting Rust integrated with Python and resolving version conflicts was a pain, but we're proud of learning Quantitative Finance concepts and committing to the grind to finish the project.",
         ],
       },
       {
         title: "What's Next",
+        emoji: "🚀",
         paragraphs: [
           "We intend to build a native Jupyter Notebook integration to the project so that it fits directly into the workflows for many Quantitative Researchers.",
         ],
@@ -396,7 +407,7 @@ export const projects: Project[] = [
     name: "Kaeru",
     title: "Kaeru",
     tagline: "Return, restore, and reclaim your finances with AI-powered automation",
-    period: "2024",
+    period: "SFU Surge StormHacks 2025",
     year: 2024,
     technologies: [
       "Next.js",
@@ -447,6 +458,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Overview",
+        emoji: "📋",
         paragraphs: [
           "Kaeru (帰る - to return, go back, or restore) is an AI-powered financial operations platform that automates the tedious tasks nobody wants to do: cancelling subscriptions, disputing fraudulent charges, and managing financial workflows. Built at StormHacks 2025.",
           "Built with Next.js and AWS, Kaeru leverages AI agents to handle phone calls and emails, real-time fraud detection to protect your money, and an intuitive dashboard to manage your financial life.",
@@ -454,13 +466,14 @@ export const projects: Project[] = [
       },
       {
         title: "Core Features",
+        emoji: "✨",
         paragraphs: [
           "Smart Cancellations automate subscription cancellations across multiple providers with AI agents making calls and sending emails. Real-time Fraud Detection uses advanced AI to monitor transactions 24/7, automatically detecting and disputing suspicious charges.",
           "The Agent Dashboard provides live monitoring of AI agent status and workflow progress. Transaction Management gives you a comprehensive view of all financial activities with export capabilities, while Activity Tracking maintains a complete audit trail of all operations.",
         ],
       },
     ],
-    timeline: [{ date: "Oct 2025" }],
+    timeline: [{ date: "October 2025" }],
     tools: [
       "Next.js 14",
       "TypeScript",
@@ -487,12 +500,11 @@ export const projects: Project[] = [
     name: "GradGains",
     title: "GradGains",
     tagline: "Financial social platform for students",
-    period: "2024",
+    period: "Google DSC Hack-The-Sem Winner (January 2024 - April 2024)",
     year: 2024,
     technologies: ["Drizzle ORM", "React", "Next.js"],
     type: "hackathon",
     featured: true,
-    award: "Hackathon Winner",
     description:
       "A financial social media platform designed to help students manage their finances.",
     cta: "View Project",
@@ -525,6 +537,7 @@ export const projects: Project[] = [
     sections: [
       {
         title: "Overview",
+        emoji: "📋",
         paragraphs: [
           "GradGains is a financial social platform that helps students manage their money by combining personal finance tools with social features. Users can track expenses, set budgets, and see anonymized comparisons with peers in similar situations.",
           "The project won Hack-The-Sem 2024, recognized for its innovative approach to making financial literacy accessible and engaging for students.",
@@ -532,6 +545,7 @@ export const projects: Project[] = [
       },
       {
         title: "Social Finance",
+        emoji: "👥",
         paragraphs: [
           "The key insight behind GradGains is that financial decisions are often influenced by social context. Students wonder if they're spending too much on food, rent, or entertainment compared to their peers.",
           "By providing anonymized, aggregate comparisons, GradGains helps users understand their spending in context without compromising privacy. Gamification elements like achievements and streaks encourage healthy financial habits.",

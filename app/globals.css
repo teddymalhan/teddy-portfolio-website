@@ -171,6 +171,18 @@ body::-webkit-scrollbar {
   contain-intrinsic-size: 0 800px;
 }
 
+/* Hide scrollbar for horizontal scrolling containers */
+.scrollbar-hide {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
+}
+
 /* Utility classes for text selection */
 .selectable-text {
   user-select: text !important;

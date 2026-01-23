@@ -1,4 +1,5 @@
 export { ProjectDetailPage } from "./project-detail-page";
+export { ProjectNavigation } from "./project-navigation";
 export { ProjectHeader } from "./project-header";
 export { ProjectHero } from "./project-hero";
 export { ProjectSidebar } from "./project-sidebar";

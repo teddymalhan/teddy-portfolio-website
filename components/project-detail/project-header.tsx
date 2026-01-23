@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { ArrowLeft, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/lib/projects";
@@ -12,11 +11,6 @@ interface ProjectHeaderProps {
 
 export function ProjectHeader({ project }: ProjectHeaderProps) {
   const prefersReducedMotion = useReducedMotion();
-  const router = useRouter();
-
-  const handleBackClick = () => {
-    router.push("/");
-  };
 
   return (
     <motion.header
@@ -25,14 +19,6 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
       transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
       className="mb-12"
     >
-      <button
-        onClick={handleBackClick}
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 group"
-      >
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-        <span>Back to projects</span>
-      </button>
-
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-4 flex-wrap">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
