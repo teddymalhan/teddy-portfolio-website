@@ -27,7 +27,7 @@ export function ContentSection({ section, index }: ContentSectionProps) {
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="mb-12 scroll-mt-24"
+      className="mb-12 scroll-mt-8"
     >
       <h2 className="text-2xl font-bold text-foreground mb-4 tracking-tight">
         {section.title}

@@ -1,12 +1,14 @@
 "use client";
 
 import { Suspense, lazy } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import type { Project } from "@/lib/projects";
-import { ProjectNavigation } from "./project-navigation";
 import { ProjectHeader } from "./project-header";
 import { ProjectHero } from "./project-hero";
 import { ProjectSidebar } from "./project-sidebar";
 import { ContentSection } from "./content-section";
+import { TableOfContents } from "./table-of-contents";
 
 // Lazy load heavier components
 const DemoSection = lazy(() =>
@@ -18,10 +20,26 @@ interface ProjectDetailPageProps {
 }
 
 export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
+  const router = useRouter();
+
+  const handleBackClick = () => {
+    router.push("/");
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      <ProjectNavigation project={project} />
-      <div className="max-w-6xl mx-auto px-6 pt-24 pb-12 lg:py-24">
+      {/* Back button */}
+      <div className="max-w-6xl mx-auto px-6 pt-8 pb-4">
+        <button
+          onClick={handleBackClick}
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+          aria-label="Back to home"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm font-medium">Back</span>
+        </button>
+      </div>
+      <div className="max-w-6xl mx-auto px-6 pb-12 lg:pb-24">
         <ProjectHeader project={project} />
 
         <ProjectHero project={project} />
@@ -37,14 +55,22 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
           </Suspense>
         )}
 
-        {/* Main Content with Sidebar */}
-        <div className="grid lg:grid-cols-[1fr_280px] gap-12 lg:gap-16">
+        {/* Table of Contents - Mobile Only */}
+        <TableOfContents sections={project.sections} variant="mobile" />
+
+        {/* Main Content with Sidebars */}
+        <div className="grid lg:grid-cols-[240px_1fr_280px] gap-8 lg:gap-12">
+          {/* Table of Contents - Desktop Only */}
+          <TableOfContents sections={project.sections} variant="desktop" />
+
+          {/* Main Content */}
           <main>
             {project.sections.map((section, i) => (
               <ContentSection key={section.title} section={section} index={i} />
             ))}
           </main>
 
+          {/* Project Info Sidebar */}
           <ProjectSidebar project={project} />
         </div>
       </div>
