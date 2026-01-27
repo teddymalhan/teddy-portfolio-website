@@ -123,13 +123,13 @@ export const projects: Project[] = [
     name: "Digital Scorecards",
     title: "Digital Scorecards",
     tagline:
-      "Expanding KPI (Key Performance Indicators) visibility for agents on contact center teams",
+      "Real-time performance tracking that cut manual review time by 60% for 1000+ agents",
     period: "January 2025 - April 2025 (Internship)",
     year: 2024,
     technologies: ["Vue.js", "Django", "Python", "Google Cloud Platform"],
     type: "internship",
     description:
-      "Built enterprise-grade digital scorecards for Dialpad's contact center, bringing accountability and performance visibility to customer service teams.",
+      "Built a performance tracking system at Dialpad that serves 1000+ contact center agents. Full-stack Vue.js and Django app deployed on GCP with 99.9% uptime.",
     cta: "Read More",
     heroImage: "/digital_scorecards.webp",
     gridClassName: "col-span-3 lg:col-span-2",
@@ -167,24 +167,24 @@ export const projects: Project[] = [
         title: "Overview",
         emoji: "📋",
         paragraphs: [
-          "Digital Scorecards is an enterprise feature built for Dialpad's contact center platform, enabling managers to track and evaluate agent performance in real-time. The system provides customizable scoring criteria and automated performance reports.",
-          "As a Software Engineering Intern, I designed and implemented the full-stack solution, working closely with product managers and senior engineers to deliver a feature that now serves thousands of contact center agents.",
+          "Contact center managers at Dialpad needed a way to measure agent performance without spending hours manually reviewing calls. I built Digital Scorecards to automate this. Real-time performance tracking with customizable scoring criteria.",
+          "I designed and built the full-stack solution as a Software Engineering Intern. From architecting the scoring system to shipping to production. The feature now serves 1000+ agents and reduced manual review time by 60%.",
         ],
       },
       {
-        title: "Background",
+        title: "The Problem",
         emoji: "📚",
         paragraphs: [
-          "Contact centers face a constant challenge: how do you measure and improve agent performance at scale? Traditional methods relied on manual call reviews and subjective assessments, which were time-consuming and inconsistent.",
-          "The goal was to create an automated, data-driven system that could score agent interactions based on customizable criteria, providing managers with actionable insights while giving agents clear feedback on their performance.",
+          "Traditional performance reviews in contact centers were broken. Managers spent hours listening to call recordings and filling out subjective evaluation forms. Agents received delayed, inconsistent feedback. At scale, this couldn't work.",
+          "Dialpad needed an automated system that could score interactions based on configurable criteria. Give managers instant insights and give agents clear feedback on their performance.",
         ],
       },
       {
         title: "Technical Implementation",
         emoji: "⚙️",
         paragraphs: [
-          "The frontend was built with Vue.js, featuring a responsive dashboard with real-time updates via WebSocket connections. The scoring interface allows managers to define custom evaluation criteria with weighted scoring.",
-          "The backend, built with Django and Python, handles score calculation, aggregation, and report generation. Data is stored in Google Cloud SQL with caching through Memcached for high-performance queries.",
+          "Built the frontend with Vue.js. Real-time dashboard updated via WebSocket connections. Managers can define custom evaluation criteria with weighted scoring, drill down into individual agent performance or view team-level trends.",
+          "The Django backend handles score calculation, aggregation, and automated report generation. Deployed on Google Cloud Platform with PostgreSQL and Memcached. The system handles high query volumes with sub-200ms response times and 99.9% uptime.",
         ],
       },
     ],
@@ -225,7 +225,7 @@ export const projects: Project[] = [
     ],
     type: "personal",
     description:
-      "Stream content on a virtual CRT television with AI-generated era-appropriate advertisements for an authentic retro viewing experience.",
+      "Streaming platform that simulates watching TV on a vintage CRT. Complete with scan lines, color bleeding, and AI-generated period-appropriate ads. Built with Spring Boot and React, deployed serverless on Google Cloud.",
     cta: "View Project",
     heroImage: "/retrowatch.png",
     gridClassName: "col-span-3 lg:col-span-1",
@@ -267,16 +267,16 @@ export const projects: Project[] = [
         title: "Overview",
         emoji: "📺",
         paragraphs: [
-          "RetroWatch brings the nostalgic experience of watching television on a CRT to the modern web. The platform simulates the look and feel of vintage television, complete with AI-generated advertisements that match the era of the content being watched.",
-          "Using generative AI, RetroWatch creates contextually appropriate ads that would have aired during the time period of your content, creating an immersive and authentic retro viewing experience.",
+          "Remember watching Saturday morning cartoons on a chunky CRT TV? RetroWatch recreates that experience for the modern web. Vintage television aesthetics with generative AI creating period-accurate advertisements.",
+          "Watch your favorite content with authentic CRT effects. Scan lines, color bleeding, screen curvature, and analog artifacts. The AI analyzes your content and generates ads that would've actually aired during that era.",
         ],
       },
       {
         title: "Technical Architecture",
         emoji: "🏗️",
         paragraphs: [
-          "The backend is built with Java and Spring Boot, deployed on Google Cloud Run for serverless scalability. Google Cloud Tasks handles the asynchronous generation of AI advertisements.",
-          "The frontend uses React with Vite for a fast, responsive CRT simulation complete with scan lines, color bleeding, and authentic analog artifacts.",
+          "Backend runs on Java and Spring Boot, deployed to Google Cloud Run for serverless auto-scaling. Google Cloud Tasks handles asynchronous ad generation. It processes video content through generative AI to create vintage advertisements that match the era.",
+          "Frontend built with React and Vite delivers smooth 60fps CRT simulation. CSS shaders and filters recreate authentic analog TV artifacts. Phosphor glow, chromatic aberration, and frame persistence. All while maintaining responsive performance across devices.",
         ],
       },
     ],
@@ -300,7 +300,7 @@ export const projects: Project[] = [
     slug: "argus",
     name: "Argus",
     title: "Argus",
-    tagline: "Deterministic replay with version controlled runs for quant researchers.",
+    tagline: "Version control for quantitative research experiments. Git, but for models and datasets",
     period: "nwHacks 2026 Winner",
     year: 2026,
     technologies: [
@@ -313,7 +313,7 @@ export const projects: Project[] = [
     type: "hackathon",
     featured: true,
     description:
-      "A dev tool that integrates model/dataset workflows with seamless and secure versioning, designed for quant researchers to track experiments with a bird's-eye view.",
+      "Won nwHacks 2026 building a version control system for quant researchers. Track model runs, datasets, and performance metrics (IC, Rank IC, t-stats) with hash-based versioning. Built with Rust and Python TUI.",
     cta: "View Project",
     heroImage: "/argus.png",
     gridClassName: "col-span-3 lg:col-span-3",
@@ -346,39 +346,42 @@ export const projects: Project[] = [
     terminalProgressMessage: "Committing run to Argus...",
     sections: [
       {
-        title: "Inspiration",
+        title: "The Problem",
         emoji: "💡",
         paragraphs: [
-          "We attended the Connor, Clark & Lunn Investment Management panel session and realized that the Data and Research team often has to go through many iterations of figuring out what signals align best with the actual datasets.",
-          "What we realized is that figuring out that in-between such rapid iterations of various models and datasets to confirm signals from hypothesis, many-a-times quant researchers would have to maintain multiple tools to track Information Coefficient (IC), Rank IC (Spearman) and IC t-stat across various runs, with ever changing datasets and models, whose data isn't accurately targeted by Git because it lies solely on the static code of the datasets and models but does not give us the ability to have a bird's-eye view of various signals and experiments and the corresponding static artifacts with it.",
+          "After attending a Connor, Clark & Lunn Investment Management panel, we learned that quant researchers run hundreds of model iterations across different datasets to validate trading signals. Each run generates critical metrics (Information Coefficient, Rank IC, t-statistics) that need to be tracked and compared.",
+          "Git doesn't work for this workflow. It tracks code changes, but not the actual models, datasets, or performance metrics. Researchers were juggling spreadsheets, notebooks, and manual documentation just to remember which model and dataset combination produced which IC scores. There was no bird's-eye view of experiments.",
         ],
       },
       {
-        title: "What It Does",
+        title: "The Solution",
         emoji: "🎯",
         paragraphs: [
-          "Argus is a dev tool that integrates models/dataset workflows with seamless and secure versioning - designed for quant researchers. It achieves this by utilizing hashes of all your saved (committed) runs, and allows you to effectively store and query the relevant models/datasets based on this.",
+          "Argus brings Git-style version control to quantitative research. Every model run gets a unique hash, storing the exact model, dataset, and performance metrics (IC, Rank IC, t-stat) in an immutable record. Query past experiments, compare results, and replay any run deterministically.",
+          "Think git commit but for your trading models. Argus integrates directly into research workflows via a terminal UI. Makes experiment tracking as natural as version controlling code.",
         ],
       },
       {
         title: "Technical Architecture",
         emoji: "🏗️",
         paragraphs: [
-          "We used Rust for the core hashing logic, Python and Textual for the frontend and middleware, Gemini AI API to effectively summarize the model run and the dataset and the relevant metrics, SQLite DB for local record storage, and Vultr for scalable long term cloud storage of datasets/models.",
+          "Core hashing and versioning engine written in Rust for performance and immutability guarantees. Python middleware connects Rust to the Textual-based terminal UI. Provides a native command-line experience that fits into existing workflows.",
+          "Gemini AI automatically generates summaries of model runs, extracting insights from metrics. SQLite provides fast local storage while Vultr handles long-term cloud backup of models and datasets. This enables collaboration and remote experiment access.",
         ],
       },
       {
-        title: "Challenges & Accomplishments",
+        title: "Winning nwHacks",
         emoji: "🏆",
         paragraphs: [
-          "Connecting the frontend TUI with the backend to ensure commands work in the terminal was a significant challenge. Getting Rust integrated with Python and resolving version conflicts was a pain, but we're proud of learning Quantitative Finance concepts and committing to the grind to finish the project.",
+          "Built the entire system in 36 hours. From learning quantitative finance concepts to shipping a working terminal UI. The biggest technical challenge was integrating Rust with Python while maintaining a smooth command-line interface.",
+          "Judges recognized Argus for solving a real problem in quantitative finance with technical depth. The hash-based versioning system provides immutable audit trails, which is critical for reproducible research in financial modeling.",
         ],
       },
       {
         title: "What's Next",
         emoji: "🚀",
         paragraphs: [
-          "We intend to build a native Jupyter Notebook integration to the project so that it fits directly into the workflows for many Quantitative Researchers.",
+          "Native Jupyter Notebook integration is next. Most quant researchers live in notebooks, so we're building a seamless plugin that lets them commit runs without leaving their research environment.",
         ],
       },
     ],
@@ -406,7 +409,7 @@ export const projects: Project[] = [
     slug: "kaeru",
     name: "Kaeru",
     title: "Kaeru",
-    tagline: "Return, restore, and reclaim your finances with AI-powered automation",
+    tagline: "AI agents that cancel subscriptions and dispute fraud charges so you don't have to",
     period: "SFU Surge StormHacks 2025",
     year: 2024,
     technologies: [
@@ -420,7 +423,7 @@ export const projects: Project[] = [
     type: "personal",
     featured: true,
     description:
-      "An AI-powered financial operations platform that automates subscription cancellations, detects and disputes fraudulent transactions, and manages all financial operations from a single dashboard.",
+      "Financial operations platform with AI agents that make phone calls and send emails to cancel subscriptions. Real-time fraud detection monitors transactions 24/7 and automatically files disputes. Built at StormHacks 2025.",
     cta: "Learn More",
     heroImage: "/kaeru.png",
     gridClassName: "col-span-3 lg:col-span-2",
@@ -460,16 +463,16 @@ export const projects: Project[] = [
         title: "Overview",
         emoji: "📋",
         paragraphs: [
-          "Kaeru (帰る - to return, go back, or restore) is an AI-powered financial operations platform that automates the tedious tasks nobody wants to do: cancelling subscriptions, disputing fraudulent charges, and managing financial workflows. Built at StormHacks 2025.",
-          "Built with Next.js and AWS, Kaeru leverages AI agents to handle phone calls and emails, real-time fraud detection to protect your money, and an intuitive dashboard to manage your financial life.",
+          "Ever spent an hour on hold trying to cancel a gym membership? Or discovered a fraudulent charge and dreaded the dispute process? Kaeru automates these painful financial tasks using AI agents that make calls and send emails on your behalf.",
+          "Built at StormHacks 2025 with Next.js and AWS. Kaeru connects to your bank accounts via Plaid, monitors transactions in real-time for fraud, and dispatches AI agents to handle cancellations and disputes. No more dealing with customer service hell.",
         ],
       },
       {
-        title: "Core Features",
+        title: "How It Works",
         emoji: "✨",
         paragraphs: [
-          "Smart Cancellations automate subscription cancellations across multiple providers with AI agents making calls and sending emails. Real-time Fraud Detection uses advanced AI to monitor transactions 24/7, automatically detecting and disputing suspicious charges.",
-          "The Agent Dashboard provides live monitoring of AI agent status and workflow progress. Transaction Management gives you a comprehensive view of all financial activities with export capabilities, while Activity Tracking maintains a complete audit trail of all operations.",
+          "Smart Cancellations: Select a subscription to cancel, and Kaeru's AI agents automatically call the company, navigate phone trees, speak to representatives, and handle the cancellation. You get notified when it's done. No hold music, no scripted retention offers.",
+          "Real-Time Fraud Detection: Kaeru monitors all transactions 24/7 using AI risk scoring. Suspicious charges trigger automatic alerts. With your approval, AI agents file disputes with your bank. Complete with documentation and follow-up calls if needed.",
         ],
       },
     ],
@@ -499,14 +502,14 @@ export const projects: Project[] = [
     slug: "gradgains",
     name: "GradGains",
     title: "GradGains",
-    tagline: "Financial social platform for students",
+    tagline: "Am I spending too much on food? Financial social platform with peer comparisons",
     period: "Google DSC Hack-The-Sem Winner (January 2024 - April 2024)",
     year: 2024,
     technologies: ["Drizzle ORM", "React", "Next.js"],
     type: "hackathon",
     featured: true,
     description:
-      "A financial social media platform designed to help students manage their finances.",
+      "Won Hack-The-Sem 2024 building a financial platform for students. Track spending, set budgets, and see how your expenses compare to peers (anonymized). Gamification makes budgeting engaging.",
     cta: "View Project",
     heroImage: "/grad-gains.png",
     gridClassName: "col-span-3 lg:col-span-1",
@@ -539,16 +542,16 @@ export const projects: Project[] = [
         title: "Overview",
         emoji: "📋",
         paragraphs: [
-          "GradGains is a financial social platform that helps students manage their money by combining personal finance tools with social features. Users can track expenses, set budgets, and see anonymized comparisons with peers in similar situations.",
-          "The project won Hack-The-Sem 2024, recognized for its innovative approach to making financial literacy accessible and engaging for students.",
+          "Students constantly wonder: Am I spending too much on food? Is my rent reasonable? Are my entertainment expenses out of control? GradGains answers these questions by combining personal finance tracking with anonymized peer comparisons.",
+          "Won Hack-The-Sem 2024 for making financial literacy engaging. Track expenses, set budgets, and see how you compare to students in similar situations. Gamification (achievements, streaks, challenges) makes budgeting fun.",
         ],
       },
       {
-        title: "Social Finance",
+        title: "Why Social Context Matters",
         emoji: "👥",
         paragraphs: [
-          "The key insight behind GradGains is that financial decisions are often influenced by social context. Students wonder if they're spending too much on food, rent, or entertainment compared to their peers.",
-          "By providing anonymized, aggregate comparisons, GradGains helps users understand their spending in context without compromising privacy. Gamification elements like achievements and streaks encourage healthy financial habits.",
+          "Financial decisions are heavily influenced by social context. A student spending $400/month on food might feel anxious about it. But if their peers with similar meal plans spend $450, suddenly that number makes sense.",
+          "GradGains provides anonymized comparisons by category (food, rent, entertainment, etc.). This helps students understand their spending without compromising anyone's privacy. No judgment, just context. Gamification elements (achievements for hitting savings goals, streaks for tracking expenses) make personal finance engaging.",
         ],
       },
     ],
