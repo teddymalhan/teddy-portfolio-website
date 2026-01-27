@@ -19,7 +19,6 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
   const [isReady, setIsReady] = useState(false)
 
   useLayoutEffect(() => {
-    // CLAUDE.md 7.5 - Cache Storage API Calls: wrap in try-catch for incognito/Safari
     try {
       const savedScrollPosition = sessionStorage.getItem("homeScrollPosition")
 
@@ -27,10 +26,8 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         sessionStorage.removeItem("homeScrollPosition")
         const scrollY = parseInt(savedScrollPosition, 10)
 
-        // Restore scroll position and wait for it to apply
         window.scrollTo(0, scrollY)
 
-        // Small delay to ensure scroll takes effect before showing content
         requestAnimationFrame(() => {
           setIsReady(true)
         })
@@ -38,7 +35,6 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         setIsReady(true)
       }
     } catch {
-      // Graceful degradation if sessionStorage is unavailable (incognito mode, etc.)
       setIsReady(true)
     }
   }, [])
@@ -51,7 +47,6 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
         <Navigation isResumeVisible={isResumeVisible} />
         <main>
           <Hero isResumeVisible={isResumeVisible} />
-          {/* Gradient fade from hero to content */}
           <div className="h-32 bg-gradient-to-b from-transparent to-background -mt-32 relative z-0" />
           <div className="relative bg-background">
             <div className="lazy-section">

@@ -37,31 +37,20 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
             </span>
           </h1>
 
-          {/* Description - CS Major */}
-          <h2 className="text-foreground/90 text-xl md:text-2xl mb-4 font-medium drop-shadow-md">
-            cs major @{" "}
-            <span className="inline-flex items-center gap-1">
-              <Image
-                src="/sfu-logo.jpg"
-                alt="SFU logo"
-                width={20}
-                height={20}
-                className="w-5 h-5 rounded-full"
-                quality={90}
-                priority
-                fetchPriority="high"
-              />
-              <InstantHighlighter
-                highlightColor="rgb(212, 40, 55)"
+          <p className="text-foreground/90 text-2xl md:text-3xl mb-4 font-semibold drop-shadow-md">
+            I build <InstantHighlighter
+                highlightColor="rgb(0, 165, 41)"
                 className="text-white px-2 py-1 rounded font-bold"
-              >
-                simon fraser university
+            >backend</InstantHighlighter> systems that{" "}
+            <InstantHighlighter
+                highlightColor="rgb(255, 32, 39)"
+                className="text-white px-2 py-1 rounded font-bold"
+              > 
+                scale
               </InstantHighlighter>
-            </span>
-          </h2>
+          </p>
 
-          {/* Description - Previous Experience */}
-          <h2 className="text-foreground/90 text-xl md:text-2xl mb-8 font-medium drop-shadow-md">
+          <p className="text-foreground/90 text-2xl md:text-3xl mb-8 font-semibold drop-shadow-md">
             prev. swe intern at{" "}
             <span className="inline-flex items-center gap-1">
               <Image
@@ -100,7 +89,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 dialpad
               </InstantHighlighter>
             </span>
-          </h2>
+          </p>
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -113,7 +102,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 }}
                 className="bg-teal-700 hover:bg-amber-600 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-white [&>div>div]:opacity-90 [&>div:last-child]:bg-amber-600 [&>div:last-child]:text-white"
               >
-                view resume!
+                View Resume & Projects
               </InteractiveHoverButton>
             )}
           </div>
