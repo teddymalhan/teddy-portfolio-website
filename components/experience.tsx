@@ -170,9 +170,10 @@ export function Experience() {
                                     ? "object-cover"
                                     : "object-contain"
                           }
-                          sizes="64px"
+                          sizes="(min-resolution: 2dppx) 128px, 64px"
                           loading="lazy"
                           decoding="async"
+                          quality={90}
                         />
                       </div>
                     </div>

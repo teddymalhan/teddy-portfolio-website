@@ -47,6 +47,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
+                quality={90}
                 priority
                 fetchPriority="high"
               />
@@ -69,6 +70,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded-full"
+                quality={90}
                 priority
                 fetchPriority="high"
               />
@@ -87,6 +89,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 width={20}
                 height={20}
                 className="w-5 h-5 rounded"
+                quality={90}
                 priority
                 fetchPriority="high"
               />

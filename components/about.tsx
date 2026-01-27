@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 
 export function About() {
@@ -40,7 +39,8 @@ export function About() {
                 className="size-full object-cover object-[center_top]"
                 style={{ objectPosition: '50% 30%' }}
                 priority
-                sizes="(max-width: 768px) 144px, 176px"
+                sizes="(max-width: 768px) 288px, 352px"
+                quality={90}
               />
             </div>
           </div>
