@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { PHProvider } from "./posthog-provider"
 
 /**
  * Deferred Analytics Component
@@ -61,10 +62,10 @@ export function DeferredAnalytics() {
   }
 
   return (
-    <>
+    <PHProvider>
       <Analytics />
       <SpeedInsights />
-    </>
+    </PHProvider>
   )
 }
 

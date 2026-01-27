@@ -4,6 +4,7 @@ import { isAuthorizedAdmin, getCurrentUserId } from '@/lib/auth'
 import { resumeService } from '@/lib/services/resume-service'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
 import { validateFile } from '@/lib/validations/resume'
+import { capturePostHogEvent } from '@/lib/posthog-server'
 
 // Use ISR with revalidation every 5 minutes
 export const revalidate = 300
@@ -14,6 +15,10 @@ export async function GET() {
     const resume = await resumeService.getActiveResume()
 
     if (!resume) {
+      await capturePostHogEvent('api_resume_get_no_active', {
+        endpoint: '/api/resume',
+        method: 'GET',
+      })
       return createSuccessResponse({
         id: null,
         filename: null,
@@ -24,12 +29,24 @@ export async function GET() {
       })
     }
 
+    await capturePostHogEvent('api_resume_get_success', {
+      endpoint: '/api/resume',
+      method: 'GET',
+      resumeId: resume.id,
+      filename: resume.filename,
+    })
+
     const response = createSuccessResponse(resume)
     // Stale-while-revalidate: serve cached for 5 min, revalidate in background
     response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600')
     return response
   } catch (error) {
     logError('GET /api/resume', error)
+    await capturePostHogEvent('api_resume_get_error', {
+      endpoint: '/api/resume',
+      method: 'GET',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
     return createErrorResponse('Failed to fetch resume', 500, 'FETCH_ERROR')
   }
 }
@@ -38,6 +55,10 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   const isAdmin = await isAuthorizedAdmin()
   if (!isAdmin) {
+    await capturePostHogEvent('api_resume_upload_unauthorized', {
+      endpoint: '/api/resume',
+      method: 'POST',
+    })
     return createErrorResponse('Unauthorized', 403, 'UNAUTHORIZED')
   }
 
@@ -48,6 +69,11 @@ export async function POST(request: NextRequest) {
     // Validate file
     const fileValidation = validateFile(file)
     if (!fileValidation.valid) {
+      await capturePostHogEvent('api_resume_upload_invalid_file', {
+        endpoint: '/api/resume',
+        method: 'POST',
+        error: fileValidation.error,
+      })
       return createErrorResponse(fileValidation.error!, 400, 'INVALID_FILE')
     }
 
@@ -73,16 +99,30 @@ export async function POST(request: NextRequest) {
       mime_type: file!.type,
     })
 
+    await capturePostHogEvent('api_resume_uploaded', {
+      endpoint: '/api/resume',
+      method: 'POST',
+      resumeId: resumeRow.id,
+      filename: resumeRow.filename,
+      fileSize: file!.size,
+      uploadedBy: userId || 'unknown',
+    })
+
     return createSuccessResponse({
       id: resumeRow.id,
       filename: resumeRow.filename,
       blob_url: resumeRow.blob_url,
-      uploadedAt: typeof resumeRow.uploaded_at === 'string' 
-        ? resumeRow.uploaded_at 
+      uploadedAt: typeof resumeRow.uploaded_at === 'string'
+        ? resumeRow.uploaded_at
         : resumeRow.uploaded_at.toISOString(),
     })
   } catch (error) {
     logError('POST /api/resume', error)
+    await capturePostHogEvent('api_resume_upload_error', {
+      endpoint: '/api/resume',
+      method: 'POST',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    })
     return createErrorResponse('Failed to upload resume', 500, 'UPLOAD_ERROR')
   }
 }

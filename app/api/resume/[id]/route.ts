@@ -8,6 +8,7 @@ import {
   logError,
 } from "@/lib/api-response";
 import { resumeUpdateSchema } from "@/lib/validations/resume";
+import { capturePostHogEvent } from "@/lib/posthog-server";
 
 export async function PUT(
   request: NextRequest,
@@ -15,6 +16,10 @@ export async function PUT(
 ) {
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
+    await capturePostHogEvent("api_resume_update_unauthorized", {
+      endpoint: "/api/resume/[id]",
+      method: "PUT",
+    });
     return createErrorResponse("Unauthorized", 403, "UNAUTHORIZED");
   }
 
@@ -23,6 +28,11 @@ export async function PUT(
     const resumeId = Number.parseInt(id, 10);
 
     if (Number.isNaN(resumeId)) {
+      await capturePostHogEvent("api_resume_update_invalid_id", {
+        endpoint: "/api/resume/[id]",
+        method: "PUT",
+        id,
+      });
       return createErrorResponse("Invalid resume ID", 400, "INVALID_RESUME_ID");
     }
 
@@ -30,6 +40,12 @@ export async function PUT(
     const validationResult = resumeUpdateSchema.safeParse(body);
 
     if (!validationResult.success) {
+      await capturePostHogEvent("api_resume_update_validation_error", {
+        endpoint: "/api/resume/[id]",
+        method: "PUT",
+        resumeId,
+        error: validationResult.error.issues[0]?.message,
+      });
       return createErrorResponse(
         validationResult.error.issues[0]?.message || "Invalid request",
         400,
@@ -43,6 +59,14 @@ export async function PUT(
       filename,
     });
 
+    await capturePostHogEvent("api_resume_updated", {
+      endpoint: "/api/resume/[id]",
+      method: "PUT",
+      resumeId,
+      filename: resumeRow.filename,
+      hasNotes: !!resumeRow.notes,
+    });
+
     return createSuccessResponse({
       id: resumeRow.id,
       filename: resumeRow.filename,
@@ -50,6 +74,12 @@ export async function PUT(
     });
   } catch (error) {
     logError("PUT /api/resume/[id]", error);
+
+    await capturePostHogEvent("api_resume_update_error", {
+      endpoint: "/api/resume/[id]",
+      method: "PUT",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
 
     if (error instanceof Error && error.message === "Resume not found") {
       return createErrorResponse("Resume not found", 404, "RESUME_NOT_FOUND");
@@ -65,6 +95,10 @@ export async function DELETE(
 ) {
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
+    await capturePostHogEvent("api_resume_delete_unauthorized", {
+      endpoint: "/api/resume/[id]",
+      method: "DELETE",
+    });
     return createErrorResponse("Unauthorized", 403, "UNAUTHORIZED");
   }
 
@@ -73,6 +107,11 @@ export async function DELETE(
     const resumeId = Number.parseInt(id, 10);
 
     if (Number.isNaN(resumeId)) {
+      await capturePostHogEvent("api_resume_delete_invalid_id", {
+        endpoint: "/api/resume/[id]",
+        method: "DELETE",
+        id,
+      });
       return createErrorResponse("Invalid resume ID", 400, "INVALID_RESUME_ID");
     }
 
@@ -80,11 +119,22 @@ export async function DELETE(
     const resume = await resumeService.getResumeById(resumeId);
 
     if (!resume) {
+      await capturePostHogEvent("api_resume_delete_not_found", {
+        endpoint: "/api/resume/[id]",
+        method: "DELETE",
+        resumeId,
+      });
       return createErrorResponse("Resume not found", 404, "RESUME_NOT_FOUND");
     }
 
     // Don't allow deleting the active resume
     if (resume.is_active) {
+      await capturePostHogEvent("api_resume_delete_active_blocked", {
+        endpoint: "/api/resume/[id]",
+        method: "DELETE",
+        resumeId,
+        filename: resume.filename,
+      });
       return createErrorResponse(
         "Cannot delete active resume. Set another resume as active first.",
         400,
@@ -103,9 +153,22 @@ export async function DELETE(
     // Delete from database
     await resumeService.deleteResume(resumeId);
 
+    await capturePostHogEvent("api_resume_deleted", {
+      endpoint: "/api/resume/[id]",
+      method: "DELETE",
+      resumeId,
+      filename: resume.filename,
+      fileSize: resume.file_size,
+    });
+
     return createSuccessResponse({ deleted: true });
   } catch (error) {
     logError("DELETE /api/resume/[id]", error);
+    await capturePostHogEvent("api_resume_delete_error", {
+      endpoint: "/api/resume/[id]",
+      method: "DELETE",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
     return createErrorResponse("Failed to delete resume", 500, "DELETE_ERROR");
   }
 }
