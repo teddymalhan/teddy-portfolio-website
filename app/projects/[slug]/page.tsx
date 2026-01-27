@@ -7,6 +7,15 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+// Only allow pre-generated project slugs (SSG optimization)
+export const dynamicParams = false;
+
+// Force static generation at build time
+export const dynamic = 'force-static';
+
+// Revalidate once per day for static content updates
+export const revalidate = 86400;
+
 export async function generateStaticParams() {
   const projects = getAllProjects();
   return projects.map((project) => ({

@@ -38,7 +38,8 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60,
+    // Extended cache for static images (24 hours)
+    minimumCacheTTL: 86400,
   },
   // Compression
   compress: true,
@@ -58,6 +59,9 @@ const nextConfig = {
   // Experimental optimizations
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons', 'framer-motion'],
+    // SSG performance optimizations
+    optimizeCss: true,
+    optimizeServerReact: true,
   },
   // Compiler options to target modern browsers and reduce legacy JavaScript
   compiler: {
