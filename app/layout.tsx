@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Plus_Jakarta_Sans, Manrope } from "next/font/google"
 import { Suspense, lazy } from "react"
 import { ClerkProviderWrapper } from "@/components/clerk-provider-wrapper"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -9,12 +9,24 @@ import "./globals.css"
 // Lazy load analytics to defer non-critical scripts
 const DeferredAnalytics = lazy(() => import("@/components/deferred-analytics"))
 
-const inter = Inter({
+// Display font for headings - bold, distinctive
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   preload: true,
   adjustFontFallback: true,
-  variable: "--font-inter",
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800"],
+})
+
+// Body font for text - clean, readable
+const manrope = Manrope({
+  subsets: ["latin"],
+  display: "swap",
+  preload: true,
+  adjustFontFallback: true,
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -165,7 +177,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className={`${inter.variable} font-sans`}>
+      <body className={`${plusJakarta.variable} ${manrope.variable} font-sans`}>
         <ClerkProviderWrapper>
           <ThemeProvider
             attribute="class"

@@ -102,7 +102,7 @@ export function Hero({ isResumeVisible }: { isResumeVisible: boolean }) {
                 }}
                 className="bg-teal-700 hover:bg-amber-600 text-white font-bold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0 [&>div>div]:bg-white [&>div>div]:opacity-90 [&>div:last-child]:bg-amber-600 [&>div:last-child]:text-white"
               >
-                View Resume & Projects
+                View My Resume
               </InteractiveHoverButton>
             )}
           </div>

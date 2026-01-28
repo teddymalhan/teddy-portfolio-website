@@ -4,82 +4,81 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light theme for modern developer portfolio design */
-  --background: oklch(0.98 0.005 240); /* Clean white background */
-  --foreground: oklch(0.15 0.05 240); /* Dark blue-gray text */
-  --card: oklch(0.96 0.01 240); /* Very light gray for cards */
-  --card-foreground: oklch(0.15 0.05 240);
-  --popover: oklch(0.98 0.005 240);
-  --popover-foreground: oklch(0.15 0.05 240);
-  --primary: oklch(0.45 0.25 240); /* Strong blue accent */
-  --primary-foreground: oklch(0.98 0.005 240);
-  --secondary: oklch(0.92 0.02 240); /* Light gray */
-  --secondary-foreground: oklch(0.15 0.05 240);
-  --muted: oklch(0.94 0.01 240); /* Very light muted background */
-  --muted-foreground: oklch(0.45 0.05 240); /* Muted gray text */
-  --accent: oklch(0.45 0.25 240); /* Blue accent */
-  --accent-foreground: oklch(0.98 0.005 240);
+  /* Light theme - Technical Craftsman aesthetic with warm amber tones */
+  --background: oklch(0.98 0.005 60); /* Warm white background */
+  --foreground: oklch(0.15 0.02 40); /* Deep charcoal text */
+  --card: oklch(0.97 0.008 50); /* Warm light card */
+  --card-foreground: oklch(0.15 0.02 40);
+  --popover: oklch(0.98 0.005 60);
+  --popover-foreground: oklch(0.15 0.02 40);
+  --primary: oklch(0.55 0.20 40); /* Warm amber primary */
+  --primary-foreground: oklch(0.98 0.005 60);
+  --secondary: oklch(0.92 0.015 45); /* Warm light gray */
+  --secondary-foreground: oklch(0.15 0.02 40);
+  --muted: oklch(0.94 0.01 50); /* Warm muted background */
+  --muted-foreground: oklch(0.45 0.03 40); /* Muted warm text */
+  --accent: oklch(0.60 0.22 25); /* Burnt orange accent */
+  --accent-foreground: oklch(0.98 0.005 60);
   --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.98 0.005 240);
-  --border: oklch(0.85 0.02 240); /* Light gray border */
-  --input: oklch(0.96 0.01 240);
-  --ring: oklch(0.45 0.25 240); /* Blue focus ring */
-  --chart-1: oklch(0.45 0.25 240);
-  --chart-2: oklch(0.5 0.2 220);
-  --chart-3: oklch(0.4 0.22 260);
-  --chart-4: oklch(0.35 0.25 280);
-  --chart-5: oklch(0.55 0.18 200);
+  --destructive-foreground: oklch(0.98 0.005 60);
+  --border: oklch(0.87 0.015 45); /* Warm border */
+  --input: oklch(0.97 0.008 50);
+  --ring: oklch(0.55 0.20 40); /* Amber focus ring */
+  --chart-1: oklch(0.55 0.20 40);
+  --chart-2: oklch(0.60 0.18 30);
+  --chart-3: oklch(0.50 0.22 50);
+  --chart-4: oklch(0.45 0.20 35);
+  --chart-5: oklch(0.65 0.16 45);
   --radius: 0.5rem;
-  --sidebar: oklch(0.96 0.01 240);
-  --sidebar-foreground: oklch(0.15 0.05 240);
-  --sidebar-primary: oklch(0.45 0.25 240);
-  --sidebar-primary-foreground: oklch(0.98 0.005 240);
-  --sidebar-accent: oklch(0.92 0.02 240);
-  --sidebar-accent-foreground: oklch(0.15 0.05 240);
-  --sidebar-border: oklch(0.85 0.02 240);
-  --sidebar-ring: oklch(0.45 0.25 240);
+  --sidebar: oklch(0.97 0.008 50);
+  --sidebar-foreground: oklch(0.15 0.02 40);
+  --sidebar-primary: oklch(0.55 0.20 40);
+  --sidebar-primary-foreground: oklch(0.98 0.005 60);
+  --sidebar-accent: oklch(0.92 0.015 45);
+  --sidebar-accent-foreground: oklch(0.15 0.02 40);
+  --sidebar-border: oklch(0.87 0.015 45);
+  --sidebar-ring: oklch(0.55 0.20 40);
 }
 
 .dark {
-  /* Dark theme for modern developer portfolio design */
-  --background: oklch(0.08 0.01 240); /* Dark background */
-  --foreground: oklch(0.92 0.01 240); /* Light text */
-  --card: oklch(0.12 0.015 240); /* Dark card background */
-  --card-foreground: oklch(0.92 0.01 240);
-  --popover: oklch(0.08 0.01 240);
-  --popover-foreground: oklch(0.92 0.01 240);
-  --primary: oklch(0.65 0.2 240); /* Lighter blue for dark mode */
-  --primary-foreground: oklch(0.08 0.01 240);
-  --secondary: oklch(0.18 0.015 240); /* Dark secondary */
-  --secondary-foreground: oklch(0.92 0.01 240);
-  --muted: oklch(0.15 0.015 240); /* Dark muted background */
-  --muted-foreground: oklch(0.65 0.02 240); /* Muted light text */
-  --accent: oklch(0.65 0.2 240); /* Light blue accent */
-  --accent-foreground: oklch(0.08 0.01 240);
+  /* Dark theme - Technical Craftsman aesthetic with warm tones */
+  --background: oklch(0.10 0.015 40); /* Warm dark background */
+  --foreground: oklch(0.93 0.01 50); /* Warm light text */
+  --card: oklch(0.14 0.02 40); /* Warm dark card */
+  --card-foreground: oklch(0.93 0.01 50);
+  --popover: oklch(0.10 0.015 40);
+  --popover-foreground: oklch(0.93 0.01 50);
+  --primary: oklch(0.70 0.18 45); /* Bright amber for dark mode */
+  --primary-foreground: oklch(0.10 0.015 40);
+  --secondary: oklch(0.20 0.02 40); /* Warm dark secondary */
+  --secondary-foreground: oklch(0.93 0.01 50);
+  --muted: oklch(0.17 0.02 40); /* Warm muted dark */
+  --muted-foreground: oklch(0.65 0.015 45); /* Warm muted text */
+  --accent: oklch(0.75 0.20 30); /* Bright orange accent */
+  --accent-foreground: oklch(0.10 0.015 40);
   --destructive: oklch(0.65 0.245 27.325);
-  --destructive-foreground: oklch(0.92 0.01 240);
-  --border: oklch(0.25 0.015 240); /* Dark border */
-  --input: oklch(0.12 0.015 240);
-  --ring: oklch(0.65 0.2 240); /* Light blue focus ring */
-  --chart-1: oklch(0.65 0.2 240);
-  --chart-2: oklch(0.7 0.15 220);
-  --chart-3: oklch(0.6 0.18 260);
-  --chart-4: oklch(0.55 0.2 280);
-  --chart-5: oklch(0.75 0.12 200);
-  --sidebar: oklch(0.12 0.015 240);
-  --sidebar-foreground: oklch(0.92 0.01 240);
-  --sidebar-primary: oklch(0.65 0.2 240);
-  --sidebar-primary-foreground: oklch(0.08 0.01 240);
-  --sidebar-accent: oklch(0.18 0.015 240);
-  --sidebar-accent-foreground: oklch(0.92 0.01 240);
-  --sidebar-border: oklch(0.25 0.015 240);
-  --sidebar-ring: oklch(0.65 0.2 240);
+  --destructive-foreground: oklch(0.93 0.01 50);
+  --border: oklch(0.27 0.02 40); /* Warm dark border */
+  --input: oklch(0.14 0.02 40);
+  --ring: oklch(0.70 0.18 45); /* Bright amber focus ring */
+  --chart-1: oklch(0.70 0.18 45);
+  --chart-2: oklch(0.75 0.16 35);
+  --chart-3: oklch(0.65 0.20 50);
+  --chart-4: oklch(0.60 0.18 40);
+  --chart-5: oklch(0.80 0.14 45);
+  --sidebar: oklch(0.14 0.02 40);
+  --sidebar-foreground: oklch(0.93 0.01 50);
+  --sidebar-primary: oklch(0.70 0.18 45);
+  --sidebar-primary-foreground: oklch(0.10 0.015 40);
+  --sidebar-accent: oklch(0.20 0.02 40);
+  --sidebar-accent-foreground: oklch(0.93 0.01 50);
+  --sidebar-border: oklch(0.27 0.02 40);
+  --sidebar-ring: oklch(0.70 0.18 45);
 }
 
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
-    var(--font-inter), "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji";
+  --font-sans: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-display), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -136,7 +135,7 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     /* Prevent Safari from allowing the entire page to scroll when navigation is fixed */
     position: relative;
@@ -144,11 +143,17 @@
     font-variation-settings: normal;
     -webkit-font-smoothing: antialiased;
   }
-  
+
   /* Ensure fixed navigation stays in place in Safari */
   .fixed {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
+  }
+
+  /* Use display font for headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
   }
 }
 
