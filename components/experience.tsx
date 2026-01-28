@@ -22,7 +22,7 @@ const experiences: ExperienceItem[] = [
     location: "Vancouver, BC",
     logo: "/ea-logo-full.jpg",
     logoStyle: "padded",
-    tags: ["🕹️ Digital Platform: Arrival (Plaform Engineering)"],
+    tags: ["🕹️ Digital Platform: Arrival"],
   },
   {
     company: "Dialpad",
@@ -31,7 +31,7 @@ const experiences: ExperienceItem[] = [
     location: "Vancouver, BC",
     logo: "/dialpad-logo-full.jpg",
     logoStyle: "square",
-    tags: ["💼 Supervisor Team (Real-Time Communication)"],
+    tags: ["💼 Supervisor Team"],
   },
   {
     company: "SFU Blueprint",
@@ -40,7 +40,7 @@ const experiences: ExperienceItem[] = [
     location: "Vancouver, BC",
     logo: "https://media.licdn.com/dms/image/v2/D560BAQGUjTCDhAjcFA/company-logo_200_200/company-logo_200_200/0/1690849546053/sfu_blueprint_logo?e=2147483647&v=beta&t=JFlsmyor7g50Tsl22WLuHPB8UODRlSMUKJ91Ek3vOxU",
     logoStyle: "padded",
-    tags: ["💻 Full-Stack Dev | Blueprint Website"],
+    tags: ["💻 Blueprint Website"],
   },
   {
     company: "Develop for Good",
@@ -49,7 +49,7 @@ const experiences: ExperienceItem[] = [
     location: "Remote",
     logo: "/dfg-logo.png",
     logoStyle: "padded",
-    tags: ["🐈 Engineering Manager | Nonprofit Tech"],
+    tags: ["🐈 Engineering Manager"],
   },
   {
     company: "Simon Fraser University",
