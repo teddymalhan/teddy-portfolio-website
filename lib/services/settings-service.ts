@@ -1,12 +1,13 @@
 import { sql } from '@/lib/db'
-import { unstable_cache } from 'next/cache'
+import { cacheLife } from 'next/cache'
+import { cacheTag } from 'next/cache'
 import type { SettingsRow } from '@/types/database'
 
 // Direct database read (uncached) - used after writes to get fresh value
 async function getResumeVisibilityDirect(): Promise<boolean> {
   try {
     const result = await sql`
-      SELECT value FROM settings 
+      SELECT value FROM settings
       WHERE key = 'resume_visible'
       LIMIT 1
     ` as SettingsRow[]
@@ -26,14 +27,14 @@ async function getResumeVisibilityDirect(): Promise<boolean> {
   }
 }
 
-// Cached version of getResumeVisibility - cache for 5 minutes
-const getCachedResumeVisibility = unstable_cache(
-  getResumeVisibilityDirect,
-  ['resume-visibility'],
-  {
-    revalidate: 300, // 5 minutes
-  }
-)
+// Cached version of getResumeVisibility
+async function getCachedResumeVisibility(): Promise<boolean> {
+  'use cache'
+  cacheLife('resume-data')
+  cacheTag('resume-visibility')
+
+  return getResumeVisibilityDirect()
+}
 
 export const settingsService = {
   async getResumeVisibility(): Promise<boolean> {
@@ -47,12 +48,11 @@ export const settingsService = {
     await sql`
       INSERT INTO settings (key, value, updated_at)
       VALUES ('resume_visible', ${valueString}, NOW())
-      ON CONFLICT (key) 
+      ON CONFLICT (key)
       DO UPDATE SET value = ${valueString}, updated_at = NOW()
     `
-    
+
     // Return fresh value directly from DB (bypassing cache)
     return getResumeVisibilityDirect()
   },
 }
-

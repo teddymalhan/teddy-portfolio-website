@@ -3,11 +3,9 @@ import { put } from '@vercel/blob'
 import { isAuthorizedAdmin, getCurrentUserId } from '@/lib/auth'
 import { resumeService } from '@/lib/services/resume-service'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
+import { revalidateTag } from 'next/cache'
 import { validateFile } from '@/lib/validations/resume'
 import { capturePostHogEvent } from '@/lib/posthog-server'
-
-// Use ISR with revalidation every 5 minutes
-export const revalidate = 300
 
 // GET - Get current active resume
 export async function GET() {
@@ -107,6 +105,8 @@ export async function POST(request: NextRequest) {
       fileSize: file!.size,
       uploadedBy: userId || 'unknown',
     })
+
+    revalidateTag('active-resume', 'resume-data')
 
     return createSuccessResponse({
       id: resumeRow.id,

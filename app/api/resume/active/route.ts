@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import { isAuthorizedAdmin } from '@/lib/auth'
 import { resumeService } from '@/lib/services/resume-service'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
+import { revalidateTag } from 'next/cache'
 import { setActiveResumeSchema } from '@/lib/validations/resume'
 import { capturePostHogEvent } from '@/lib/posthog-server'
 
@@ -41,6 +42,8 @@ export async function PUT(request: NextRequest) {
       resumeId,
       filename: resumeRow.filename,
     })
+
+    revalidateTag('active-resume', 'resume-data')
 
     return createSuccessResponse({
       id: resumeRow.id,

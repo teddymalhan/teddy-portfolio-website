@@ -1,5 +1,6 @@
 import { sql } from '@/lib/db'
-import { unstable_cache } from 'next/cache'
+import { cacheLife } from 'next/cache'
+import { cacheTag } from 'next/cache'
 import type { ResumeRow } from '@/types/database'
 import type { ResumeResponse } from '@/types/api'
 
@@ -17,27 +18,25 @@ function mapResumeRowToResponse(row: ResumeRow): ResumeResponse {
   }
 }
 
-// Cached version of getActiveResume - cache for 5 minutes
-const getCachedActiveResume = unstable_cache(
-  async (): Promise<ResumeResponse | null> => {
-    const result = await sql`
-      SELECT * FROM resumes 
-      WHERE is_active = TRUE 
-      ORDER BY uploaded_at DESC 
-      LIMIT 1
-    ` as ResumeRow[]
+// Cached version of getActiveResume
+async function getCachedActiveResume(): Promise<ResumeResponse | null> {
+  'use cache'
+  cacheLife('resume-data')
+  cacheTag('active-resume')
 
-    if (result.length === 0) {
-      return null
-    }
+  const result = await sql`
+    SELECT * FROM resumes
+    WHERE is_active = TRUE
+    ORDER BY uploaded_at DESC
+    LIMIT 1
+  ` as ResumeRow[]
 
-    return mapResumeRowToResponse(result[0])
-  },
-  ['active-resume'],
-  {
-    revalidate: 300, // 5 minutes
+  if (result.length === 0) {
+    return null
   }
-)
+
+  return mapResumeRowToResponse(result[0])
+}
 
 export const resumeService = {
   async getActiveResume(): Promise<ResumeResponse | null> {
@@ -46,7 +45,7 @@ export const resumeService = {
 
   async getAllResumes(): Promise<ResumeResponse[]> {
     const result = await sql`
-      SELECT * FROM resumes 
+      SELECT * FROM resumes
       ORDER BY uploaded_at DESC
     ` as ResumeRow[]
 
@@ -90,21 +89,21 @@ export const resumeService = {
 
     if (updates.notes !== undefined && updates.filename !== undefined) {
       result = await sql`
-        UPDATE resumes 
+        UPDATE resumes
         SET notes = ${updates.notes ?? null}, filename = ${updates.filename.trim()}
         WHERE id = ${id}
         RETURNING *
       ` as ResumeRow[]
     } else if (updates.notes !== undefined) {
       result = await sql`
-        UPDATE resumes 
+        UPDATE resumes
         SET notes = ${updates.notes ?? null}
         WHERE id = ${id}
         RETURNING *
       ` as ResumeRow[]
     } else if (updates.filename !== undefined) {
       result = await sql`
-        UPDATE resumes 
+        UPDATE resumes
         SET filename = ${updates.filename.trim()}
         WHERE id = ${id}
         RETURNING *
@@ -138,8 +137,8 @@ export const resumeService = {
       WITH deactivate_all AS (
         UPDATE resumes SET is_active = FALSE WHERE is_active = TRUE
       )
-      UPDATE resumes 
-      SET is_active = TRUE 
+      UPDATE resumes
+      SET is_active = TRUE
       WHERE id = ${id}
       RETURNING *
     ` as ResumeRow[]
@@ -151,4 +150,3 @@ export const resumeService = {
     return result[0]
   },
 }
-

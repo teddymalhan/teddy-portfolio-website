@@ -4,9 +4,6 @@ import { settingsService } from '@/lib/services/settings-service'
 import { logError } from '@/lib/api-response'
 import { capturePostHogEvent } from '@/lib/posthog-server'
 
-// Use ISR with revalidation every 5 minutes
-export const revalidate = 300
-
 export async function GET(request: NextRequest) {
   try {
     // Check if resume is visible

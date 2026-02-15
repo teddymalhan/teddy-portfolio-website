@@ -7,6 +7,7 @@ import {
   createSuccessResponse,
   logError,
 } from "@/lib/api-response";
+import { revalidateTag } from "next/cache";
 import { resumeUpdateSchema } from "@/lib/validations/resume";
 import { capturePostHogEvent } from "@/lib/posthog-server";
 
@@ -152,6 +153,8 @@ export async function DELETE(
 
     // Delete from database
     await resumeService.deleteResume(resumeId);
+
+    revalidateTag('active-resume', 'resume-data');
 
     await capturePostHogEvent("api_resume_deleted", {
       endpoint: "/api/resume/[id]",

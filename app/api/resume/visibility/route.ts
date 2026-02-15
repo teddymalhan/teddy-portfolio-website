@@ -6,7 +6,7 @@ import {
   createSuccessResponse,
   logError,
 } from "@/lib/api-response";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { resumeVisibilitySchema } from "@/lib/validations/resume";
 import type { VisibilityResponse } from "@/types/api";
 import { capturePostHogEvent } from "@/lib/posthog-server";
@@ -80,7 +80,8 @@ export async function POST(request: NextRequest) {
       isVisible: verifiedValue,
     });
 
-    revalidatePath("/");
+    revalidateTag('resume-visibility', 'resume-data');
+    revalidateTag('home-page', 'hours');
 
     return createSuccessResponse<VisibilityResponse>({
       isVisible: verifiedValue,

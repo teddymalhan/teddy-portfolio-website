@@ -4,6 +4,14 @@ const __filename = fileURLToPath(import.meta.url);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  cacheComponents: true,
+  cacheLife: {
+    'resume-data': {
+      stale: 60,
+      revalidate: 300,
+      expire: 3600,
+    },
+  },
   // Enable ESLint and TypeScript checks (fix errors instead of ignoring)
   eslint: {
     ignoreDuringBuilds: false,
