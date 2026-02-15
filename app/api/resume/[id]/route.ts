@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, connection } from "next/server";
 import { del } from "@vercel/blob";
 import { isAuthorizedAdmin } from "@/lib/auth";
 import { resumeService } from "@/lib/services/resume-service";
@@ -15,6 +15,7 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  await connection();
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
     await capturePostHogEvent("api_resume_update_unauthorized", {
@@ -94,6 +95,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  await connection();
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
     await capturePostHogEvent("api_resume_delete_unauthorized", {

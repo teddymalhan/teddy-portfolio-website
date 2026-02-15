@@ -178,23 +178,25 @@ export default function RootLayout({
         />
       </head>
       <body className={`${plusJakarta.variable} ${manrope.variable} font-sans`}>
-        <ClerkProviderWrapper>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div>
-              <Suspense fallback={null}>
-                {children}
-              </Suspense>
-              <Suspense fallback={null}>
-                <DeferredAnalytics />
-              </Suspense>
-            </div>
-          </ThemeProvider>
-        </ClerkProviderWrapper>
+        <Suspense fallback={null}>
+          <ClerkProviderWrapper>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <div>
+                <Suspense fallback={null}>
+                  {children}
+                </Suspense>
+                <Suspense fallback={null}>
+                  <DeferredAnalytics />
+                </Suspense>
+              </div>
+            </ThemeProvider>
+          </ClerkProviderWrapper>
+        </Suspense>
       </body>
     </html>
   )

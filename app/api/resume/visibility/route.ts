@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, connection } from "next/server";
 import { isAuthorizedAdmin } from "@/lib/auth";
 import { settingsService } from "@/lib/services/settings-service";
 import {
@@ -12,6 +12,7 @@ import type { VisibilityResponse } from "@/types/api";
 import { capturePostHogEvent } from "@/lib/posthog-server";
 
 export async function GET() {
+  await connection();
   try {
     const isVisible = await settingsService.getResumeVisibility();
     await capturePostHogEvent("api_resume_visibility_fetched", {
@@ -44,6 +45,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
+  await connection();
   const isAdmin = await isAuthorizedAdmin();
   if (!isAdmin) {
     await capturePostHogEvent("api_resume_visibility_unauthorized", {

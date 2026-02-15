@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, connection } from 'next/server'
 import { put } from '@vercel/blob'
 import { isAuthorizedAdmin, getCurrentUserId } from '@/lib/auth'
 import { resumeService } from '@/lib/services/resume-service'
@@ -9,6 +9,7 @@ import { capturePostHogEvent } from '@/lib/posthog-server'
 
 // GET - Get current active resume
 export async function GET() {
+  await connection()
   try {
     const resume = await resumeService.getActiveResume()
 
@@ -51,6 +52,7 @@ export async function GET() {
 
 // POST - Upload new resume (admin only)
 export async function POST(request: NextRequest) {
+  await connection()
   const isAdmin = await isAuthorizedAdmin()
   if (!isAdmin) {
     await capturePostHogEvent('api_resume_upload_unauthorized', {

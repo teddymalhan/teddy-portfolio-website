@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import { NextRequest, connection } from 'next/server'
 import { isAuthorizedAdmin } from '@/lib/auth'
 import { resumeService } from '@/lib/services/resume-service'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
@@ -7,6 +7,7 @@ import { setActiveResumeSchema } from '@/lib/validations/resume'
 import { capturePostHogEvent } from '@/lib/posthog-server'
 
 export async function PUT(request: NextRequest) {
+  await connection()
   const isAdmin = await isAuthorizedAdmin()
   if (!isAdmin) {
     await capturePostHogEvent('api_resume_active_unauthorized', {

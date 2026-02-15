@@ -1,10 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse, connection } from 'next/server'
 import { resumeService } from '@/lib/services/resume-service'
 import { settingsService } from '@/lib/services/settings-service'
 import { logError } from '@/lib/api-response'
 import { capturePostHogEvent } from '@/lib/posthog-server'
 
 export async function GET(request: NextRequest) {
+  await connection()
   try {
     // Check if resume is visible
     const isVisible = await settingsService.getResumeVisibility()

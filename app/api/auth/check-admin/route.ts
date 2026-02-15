@@ -1,8 +1,10 @@
+import { connection } from 'next/server'
 import { isAuthorizedAdmin } from '@/lib/auth'
 import { createErrorResponse, createSuccessResponse, logError } from '@/lib/api-response'
 import { capturePostHogEvent } from '@/lib/posthog-server'
 
 export async function GET() {
+  await connection()
   try {
     const authorized = await isAuthorizedAdmin()
 
