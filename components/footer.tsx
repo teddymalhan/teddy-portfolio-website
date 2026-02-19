@@ -1,46 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail, Github, Linkedin } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
+import { useNavigationStore } from "@/stores";
 
 export default function Footer({
   isResumeVisible,
 }: {
   isResumeVisible: boolean;
 }) {
-  const [resumePath, setResumePath] = useState("/Teddy_Malhan_Resume.pdf");
+  const resumePath = useNavigationStore((state) => state.resumePath);
   const prefersReducedMotion = useReducedMotion();
 
-  useEffect(() => {
-    async function fetchResumePath() {
-      try {
-        const res = await fetch("/api/resume", {
-          cache: "no-store",
-          headers: {
-            "Cache-Control": "no-cache",
-          },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          // Use resume ID + timestamp as cache-buster - ensures fresh fetch every time
-          const timestamp = Date.now();
-          setResumePath(`/Teddy_Malhan_Resume.pdf?v=${data.id}&t=${timestamp}`);
-        }
-      } catch (error) {
-        console.error("Failed to fetch resume info:", error);
-        // Fallback to timestamp-based cache-busting
-        setResumePath(`/Teddy_Malhan_Resume.pdf?t=${Date.now()}`);
-      }
-    }
-
-    if (isResumeVisible) {
-      fetchResumePath();
-    }
-  }, [isResumeVisible]);
   return (
-    <motion.footer
+    <m.footer
       className="relative mx-auto w-full max-w-6xl px-6 py-10 md:py-14 will-change-[transform,opacity]"
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
@@ -147,7 +121,6 @@ export default function Footer({
                 target="_blank"
                 rel="noreferrer noopener"
                 onClick={(e) => {
-                  // Force fresh fetch by adding current timestamp
                   e.preventDefault();
                   const freshUrl = resumePath.includes("&t=")
                     ? `${resumePath.split("&t=")[0]}&t=${Date.now()}`
@@ -176,8 +149,6 @@ export default function Footer({
           </div>
         </nav>
       </div>
-    </motion.footer>
+    </m.footer>
   );
 }
-
-

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import type { Project } from "@/lib/projects";
 
 interface ProjectHeroProps {
@@ -12,7 +12,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.section
+    <m.section
       initial={prefersReducedMotion ? false : { opacity: 0, y: 30 }}
       animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.1 }}
@@ -35,6 +35,6 @@ export function ProjectHero({ project }: ProjectHeroProps) {
         </div>
       </div>
 
-    </motion.section>
+    </m.section>
   );
 }

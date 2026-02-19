@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import type { ContentSection as ContentSectionType } from "@/lib/projects";
 
 interface ContentSectionProps {
@@ -21,7 +21,7 @@ export function ContentSection({ section, index }: ContentSectionProps) {
   const sectionId = createSlug(section.title);
 
   return (
-    <motion.section
+    <m.section
       id={sectionId}
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
@@ -34,18 +34,18 @@ export function ContentSection({ section, index }: ContentSectionProps) {
       </h2>
 
       <div className="space-y-4 text-muted-foreground leading-relaxed">
-        {section.paragraphs.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
+        {section.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
         ))}
 
         {section.bullets && section.bullets.length > 0 && (
           <ul className="list-disc list-inside space-y-2 mt-4 ml-2">
-            {section.bullets.map((bullet, i) => (
-              <li key={i}>{bullet}</li>
+            {section.bullets.map((bullet) => (
+              <li key={bullet}>{bullet}</li>
             ))}
           </ul>
         )}
       </div>
-    </motion.section>
+    </m.section>
   );
 }

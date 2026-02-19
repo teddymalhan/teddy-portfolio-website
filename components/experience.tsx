@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Badge } from "./ui/badge";
 
 interface ExperienceItem {
@@ -66,7 +66,7 @@ export function Experience() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.div
+    <m.div
       id="experience"
       className="min-h-screen will-change-[transform,opacity]"
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
@@ -82,12 +82,10 @@ export function Experience() {
 
         {/* Experience List */}
         <div className="space-y-16">
-          {experiences.map((experience, index) => {
-            const isInternship = experience.company === "Electronic Arts" || experience.company === "Dialpad";
-
+          {experiences.map((experience) => {
             return (
               <div
-                key={index}
+                key={experience.company}
                 className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-8 md:gap-16 pb-16 last:pb-0 group"
               >
                 {/* Left side - Date & Location */}
@@ -189,6 +187,6 @@ export function Experience() {
           })}
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

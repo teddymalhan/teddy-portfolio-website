@@ -20,8 +20,8 @@ export const resumeVisibilitySchema = z.object({
 })
 
 // File upload validation (handled separately as FormData)
-export const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-export const ALLOWED_MIME_TYPES = ['application/pdf'] as const
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+const ALLOWED_MIME_TYPES = ['application/pdf'] as const
 
 export function validateFile(file: File | null): { valid: boolean; error?: string } {
   if (!file) {

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
@@ -15,7 +15,7 @@ export function ProjectsBento() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.section
+    <m.section
       id="projects"
       className="min-h-screen pt-22 pb-8 will-change-[transform,opacity]"
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
@@ -100,6 +100,6 @@ export function ProjectsBento() {
           })}
         </BentoGrid>
       </div>
-    </motion.section>
+    </m.section>
   );
 }

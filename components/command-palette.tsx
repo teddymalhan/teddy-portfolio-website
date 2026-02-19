@@ -33,7 +33,7 @@ interface CommandPaletteProps {
   triggerConfetti: () => void;
 }
 
-export function CommandPalette({
+function CommandPalette({
   open,
   onOpenChange,
   isResumeVisible,

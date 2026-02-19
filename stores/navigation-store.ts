@@ -48,6 +48,7 @@ interface NavigationState {
   toggleMobileMenu: () => void
   setCommandOpen: (open: boolean) => void
   toggleCommand: () => void
+  handleEscape: () => void
   setCanvasDimensions: (dimensions: CanvasDimensions) => void
   updateCanvasDimensions: () => void
 }
@@ -155,6 +156,7 @@ export const useNavigationStore = createStore<NavigationState>(
       set((state: NavigationState) => ({
         commandOpen: !state.commandOpen,
       })),
+    handleEscape: () => set({ commandOpen: false, isMobileMenuOpen: false }),
     setCanvasDimensions: (dimensions) => set({ canvasDimensions: dimensions }),
     updateCanvasDimensions: () => {
       if (typeof window === 'undefined') return

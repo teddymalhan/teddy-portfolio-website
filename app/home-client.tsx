@@ -20,23 +20,15 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
 
   useLayoutEffect(() => {
     try {
-      const savedScrollPosition = sessionStorage.getItem("homeScrollPosition")
-
-      if (savedScrollPosition) {
+      const saved = sessionStorage.getItem("homeScrollPosition")
+      if (saved) {
         sessionStorage.removeItem("homeScrollPosition")
-        const scrollY = parseInt(savedScrollPosition, 10)
-
-        window.scrollTo(0, scrollY)
-
-        requestAnimationFrame(() => {
-          setIsReady(true)
-        })
-      } else {
-        setIsReady(true)
+        window.scrollTo(0, parseInt(saved, 10))
       }
     } catch {
-      setIsReady(true)
+      // ignore sessionStorage errors
     }
+    setIsReady(true)
   }, [])
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import type { ProjectMedia } from "@/lib/projects";
 
@@ -12,7 +12,7 @@ export function DemoSection({ media }: DemoSectionProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.section
+    <m.section
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
       whileInView={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
@@ -57,6 +57,6 @@ export function DemoSection({ media }: DemoSectionProps) {
           </div>
         )}
       </div>
-    </motion.section>
+    </m.section>
   );
 }

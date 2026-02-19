@@ -10,7 +10,7 @@ import { PHProvider } from "./posthog-provider"
  * Loads Vercel Analytics and SpeedInsights after user interaction or idle time
  * This improves initial page load performance by deferring non-critical scripts
  */
-export function DeferredAnalytics() {
+export default function DeferredAnalytics() {
   const [shouldLoad, setShouldLoad] = useState(false)
 
   useEffect(() => {
@@ -69,5 +69,4 @@ export function DeferredAnalytics() {
   )
 }
 
-export default DeferredAnalytics
 

@@ -12,22 +12,6 @@ export interface ResumeResponse {
   notes?: string | null
 }
 
-export interface ResumeUploadRequest {
-  file: File
-}
-
-export interface ResumeUpdateRequest {
-  notes?: string | null
-  filename?: string
-}
-
-export interface SetActiveResumeRequest {
-  resumeId: number
-}
-
-export interface ResumeVisibilityRequest {
-  isVisible: boolean
-}
 
 // API Response wrappers
 export interface ApiSuccessResponse<T = unknown> {

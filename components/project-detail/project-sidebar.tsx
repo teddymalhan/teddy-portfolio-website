@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { ExternalLink, Github, Youtube, FileText, Play } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import type { Project, ProjectLink } from "@/lib/projects";
 
 const iconMap = {
@@ -36,7 +35,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.aside
+    <m.aside
       initial={prefersReducedMotion ? false : { opacity: 0, x: 20 }}
       animate={prefersReducedMotion ? {} : { opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.4 }}
@@ -49,8 +48,8 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
             Timeline
           </h3>
           <div className="space-y-2">
-            {project.timeline.map((entry, i) => (
-              <div key={i} className="text-muted-foreground">
+            {project.timeline.map((entry) => (
+              <div key={entry.date} className="text-muted-foreground">
                 <span className="font-medium text-foreground">{entry.date}</span>
                 {entry.event && <span className="ml-2">- {entry.event}</span>}
               </div>
@@ -84,6 +83,6 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
           </div>
         </div>
       )}
-    </motion.aside>
+    </m.aside>
   );
 }

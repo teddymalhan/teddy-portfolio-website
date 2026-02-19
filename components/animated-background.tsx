@@ -1,17 +1,15 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+
+const emptySubscribe = () => () => {};
 
 export function AnimatedBackground() {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  if (!isMounted) return null;
 
   return (
     <div className="absolute inset-0 pointer-events-none z-0 h-screen overflow-hidden">

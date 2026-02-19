@@ -2,8 +2,10 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Plus_Jakarta_Sans, Manrope } from "next/font/google"
 import { Suspense, lazy } from "react"
+import Script from "next/script"
 import { ClerkProviderWrapper } from "@/components/clerk-provider-wrapper"
 import { ThemeProvider } from "@/components/theme-provider"
+import { MotionProvider } from "@/components/motion-provider"
 import "./globals.css"
 
 // Lazy load analytics to defer non-critical scripts
@@ -114,7 +116,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://malhan.ca"
-  
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -152,7 +154,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//linkedin.com" />
         <link rel="dns-prefetch" href="//devpost.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        
+
         {/* Preload critical resources */}
         <link
           rel="preload"
@@ -172,12 +174,15 @@ export default function RootLayout({
           as="image"
           type="image/jpeg"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
       </head>
       <body className={`${plusJakarta.variable} ${manrope.variable} font-sans`}>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          strategy="afterInteractive"
+        >
+          {JSON.stringify(structuredData)}
+        </Script>
         <Suspense fallback={null}>
           <ClerkProviderWrapper>
             <ThemeProvider
@@ -186,14 +191,16 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <div>
-                <Suspense fallback={null}>
-                  {children}
-                </Suspense>
-                <Suspense fallback={null}>
-                  <DeferredAnalytics />
-                </Suspense>
-              </div>
+              <MotionProvider>
+                <div>
+                  <Suspense fallback={null}>
+                    {children}
+                  </Suspense>
+                  <Suspense fallback={null}>
+                    <DeferredAnalytics />
+                  </Suspense>
+                </div>
+              </MotionProvider>
             </ThemeProvider>
           </ClerkProviderWrapper>
         </Suspense>

@@ -54,5 +54,3 @@ export function InstantHighlighter({
   );
 }
 
-export default InstantHighlighter;
-

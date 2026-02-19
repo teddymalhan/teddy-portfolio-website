@@ -1,15 +1,16 @@
-"use client"
+import { Suspense } from 'react'
+import type { Metadata } from 'next'
+import { SignInContent } from './sign-in-content'
 
-import { SignIn } from '@clerk/nextjs'
-import { useSearchParams } from 'next/navigation'
+export const metadata: Metadata = {
+  title: 'Sign In',
+  description: 'Sign in to access the admin dashboard',
+}
 
 export default function SignInPage() {
-  const searchParams = useSearchParams()
-  const redirectUrl = searchParams.get('redirect_url') || '/'
-
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <SignIn fallbackRedirectUrl={redirectUrl} />
-    </div>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen" />}>
+      <SignInContent />
+    </Suspense>
   )
 }

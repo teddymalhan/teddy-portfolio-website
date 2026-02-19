@@ -1,7 +1,7 @@
 "use client";
 
 import { Trophy } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import type { Project } from "@/lib/projects";
 
@@ -13,7 +13,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.header
+    <m.header
       initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
       animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
@@ -25,7 +25,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
             {project.title}
           </h1>
           {project.award && (
-            <motion.div
+            <m.div
               initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.95 }}
               animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2, ease: [0.32, 0.72, 0, 1] }}
@@ -34,7 +34,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
                 <Trophy className="w-3.5 h-3.5" />
                 {project.award}
               </Badge>
-            </motion.div>
+            </m.div>
           )}
         </div>
 
@@ -46,6 +46,6 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
           </p>
         )}
       </div>
-    </motion.header>
+    </m.header>
   );
 }

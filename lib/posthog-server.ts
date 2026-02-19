@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 
 let posthogClient: PostHog | null = null
 
-export function getPostHogClient(): PostHog {
+function getPostHogClient(): PostHog {
   if (!posthogClient) {
     posthogClient = new PostHog(process.env.NEXT_PUBLIC_POSTHOG_KEY!, {
       host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
@@ -34,7 +34,7 @@ export async function capturePostHogEvent(
   await posthog.shutdown()
 }
 
-export async function getDistinctId(): Promise<string> {
+async function getDistinctId(): Promise<string> {
   // Try to get user ID from Clerk
   const { userId } = await auth()
   if (userId) return userId

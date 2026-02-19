@@ -100,7 +100,7 @@ export interface Project {
 }
 
 // Simplified type for bento card display
-export type BentoProject = Pick<
+type BentoProject = Pick<
   Project,
   | "slug"
   | "name"
@@ -117,7 +117,7 @@ export type BentoProject = Pick<
 >;
 
 // Project data
-export const projects: Project[] = [
+const projects: Project[] = [
   {
     slug: "digital-scorecards",
     name: "Digital Scorecards",
@@ -618,6 +618,3 @@ export function getBentoProjects(): BentoProject[] {
   );
 }
 
-export function getFeaturedProjects(): Project[] {
-  return projects.filter((p) => p.featured);
-}

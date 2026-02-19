@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 export function About() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <motion.section
+    <m.section
       id="about"
       className="pt-24 pb-24 will-change-[transform,opacity]"
       initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
@@ -60,6 +60,6 @@ export function About() {
           </div>
         </div>
       </div>
-    </motion.section>
+    </m.section>
   );
 }
