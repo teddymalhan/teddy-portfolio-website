@@ -146,17 +146,21 @@ export const useNavigationStore = createStore<NavigationState>(
     },
 
     // UI actions
-    setIsMobileMenuOpen: (open) => set({ isMobileMenuOpen: open }),
+    setIsMobileMenuOpen: (open) => {
+      set({ isMobileMenuOpen: open });
+    },
     toggleMobileMenu: () =>
-      set((state: NavigationState) => ({
-        isMobileMenuOpen: !state.isMobileMenuOpen,
-      })),
+      set((state: NavigationState) => {
+        return { isMobileMenuOpen: !state.isMobileMenuOpen };
+      }),
     setCommandOpen: (open) => set({ commandOpen: open }),
     toggleCommand: () =>
       set((state: NavigationState) => ({
         commandOpen: !state.commandOpen,
       })),
-    handleEscape: () => set({ commandOpen: false, isMobileMenuOpen: false }),
+    handleEscape: () => {
+      set({ commandOpen: false, isMobileMenuOpen: false });
+    },
     setCanvasDimensions: (dimensions) => set({ canvasDimensions: dimensions }),
     updateCanvasDimensions: () => {
       if (typeof window === 'undefined') return

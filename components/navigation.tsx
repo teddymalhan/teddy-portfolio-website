@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, lazy, Suspense, useCallback } from "react";
-import { m, AnimatePresence, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { Search } from "lucide-react";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 import { useNavigationStore } from "@/stores";
@@ -18,30 +18,31 @@ const navItems = [
   { name: "👤 about me", href: "#about", emoji: "" },
 ];
 
+// Stagger variants — parent drives timing, children inherit
+const menuVariants = {
+  open: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
+  closed: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
+};
+
+const itemVariants = {
+  open: { opacity: 1, y: 0 },
+  closed: { opacity: 0, y: 50 },
+};
+
 function MobileNavAccordionItem({
   item,
-  index,
   scrollToSection,
   prefersReducedMotion,
 }: {
   item: { name: string; href: string; emoji: string };
-  index: number;
   scrollToSection: (href: string) => void;
   prefersReducedMotion: boolean;
 }) {
   return (
     <m.div
-      initial={prefersReducedMotion ? false : { opacity: 0 }}
-      animate={prefersReducedMotion ? {} : { opacity: 1 }}
-      transition={
-        prefersReducedMotion
-          ? undefined
-          : {
-              duration: 0.15,
-              delay: index * 0.03,
-            }
-      }
-      className="last:border-b-0 transform-gpu"
+      variants={prefersReducedMotion ? undefined : itemVariants}
+      transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+      className="transform-gpu"
     >
       <button
         onClick={() => {
@@ -162,118 +163,105 @@ function DesktopNavigation({ scrollToSection, triggerConfetti, prefersReducedMot
   );
 }
 
-function MobileNavHeader({ triggerConfetti }: { triggerConfetti: () => void }) {
+function MobileNav({
+  scrollToSection,
+  triggerConfetti,
+  prefersReducedMotion,
+}: {
+  scrollToSection: (href: string) => void;
+  triggerConfetti: () => void;
+  prefersReducedMotion: boolean;
+}) {
   const isVisible = useNavigationStore((state) => state.isVisible);
   const isMobileMenuOpen = useNavigationStore((state) => state.isMobileMenuOpen);
   const setIsMobileMenuOpen = useNavigationStore((state) => state.setIsMobileMenuOpen);
 
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
-
   return (
-    <header
-      className={cn(
-        "lg:hidden fixed top-4 left-4 right-4 z-50 transition-all duration-300 ease-in-out",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
-      )}
-    >
+    <>
       <div
         className={cn(
-          "flex items-center justify-between px-4 py-3 transition-all duration-300",
+          "lg:hidden fixed inset-0 z-40 backdrop-blur-sm bg-background/30 transition-opacity duration-300",
+          isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setIsMobileMenuOpen(false)}
+        aria-hidden="true"
+      />
+      <div
+        className={cn(
+          "lg:hidden fixed top-4 left-4 right-4 z-50 transition-[opacity,transform] duration-300 ease-in-out",
+          isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full"
+        )}
+      >
+      <m.div
+        initial={false}
+        animate={{ height: isMobileMenuOpen ? "auto" : 60 }}
+        transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+        className={cn(
+          "overflow-hidden rounded-2xl",
           "bg-card/98 supports-[backdrop-filter]:bg-card/90 supports-[backdrop-filter]:backdrop-blur-md",
           "dark:bg-card supports-[backdrop-filter]:dark:bg-card/95",
           "border border-border dark:border-border/90 shadow-lg dark:shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10",
           "transform-gpu backface-hidden",
-          isMobileMenuOpen ? "rounded-t-2xl rounded-b-none border-b-0" : "rounded-2xl",
         )}
+        onAnimationStart={() => console.log("[MobileNav] animation start", { isMobileMenuOpen })}
+        onAnimationComplete={() => console.log("[MobileNav] animation complete", { isMobileMenuOpen })}
       >
-        <button
-          onClick={triggerConfetti}
-          className="text-2xl hover:scale-110 transition-transform duration-200 cursor-pointer"
-          aria-label="Trigger confetti"
-        >
-          🧸
-        </button>
-
-        <div className="flex items-center gap-2">
-          <AnimatedThemeToggler className="w-9 h-9 rounded-full border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors duration-200" />
+        <div className="h-[60px] flex items-center justify-between px-4 shrink-0">
           <button
-            onClick={toggleMobileMenu}
-            className="relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-secondary/50 transition-colors duration-200"
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+            onClick={() => {
+              triggerConfetti();
+            }}
+            className="text-2xl hover:scale-110 transition-transform duration-200 cursor-pointer"
+            aria-label="Trigger confetti"
           >
-            <div className="w-5 h-5 flex items-center justify-center relative">
-              <span
-                className={cn(
-                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
-                  isMobileMenuOpen ? "rotate-45" : "-translate-y-1"
-                )}
-              />
-              <span
-                className={cn(
-                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
-                  isMobileMenuOpen ? "opacity-0" : "opacity-100"
-                )}
-              />
-              <span
-                className={cn(
-                  "absolute w-5 h-0.5 bg-foreground rounded-full transition-all duration-200",
-                  isMobileMenuOpen ? "-rotate-45" : "translate-y-1"
-                )}
-              />
-            </div>
+            🧸
           </button>
+
+          <div className="flex items-center gap-2">
+            <AnimatedThemeToggler className="w-9 h-9 rounded-full border border-border bg-background hover:bg-accent hover:text-accent-foreground flex items-center justify-center transition-colors duration-200" />
+            <button
+              onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+              }}
+              className="h-10 w-10 flex flex-col items-center justify-center gap-[6px] rounded-full hover:bg-secondary/50 transition-colors duration-200 cursor-pointer"
+              aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileMenuOpen}
+            >
+              <span
+                className={cn(
+                  "block w-[22px] h-0.5 bg-foreground rounded-full transition-all duration-300 origin-center",
+                  isMobileMenuOpen ? "translate-y-[4px] rotate-45" : ""
+                )}
+              />
+              <span
+                className={cn(
+                  "block w-[22px] h-0.5 bg-foreground rounded-full transition-all duration-300 origin-center",
+                  isMobileMenuOpen ? "-translate-y-[4px] -rotate-45" : ""
+                )}
+              />
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
-  );
-}
 
-function MobileMenuPanel({
-  scrollToSection,
-  prefersReducedMotion,
-}: {
-  scrollToSection: (href: string) => void;
-  prefersReducedMotion: boolean;
-}) {
-  const isMobileMenuOpen = useNavigationStore((state) => state.isMobileMenuOpen);
-  const setIsMobileMenuOpen = useNavigationStore((state) => state.setIsMobileMenuOpen);
-
-  return (
-    <AnimatePresence>
-      {isMobileMenuOpen && (
-        <>
-          <m.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden fixed inset-0 bg-background/90 z-40"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-
-          <m.nav
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
-            aria-label="Mobile navigation"
-            className="lg:hidden fixed top-[75px] left-4 right-4 z-40 bg-card dark:bg-card border border-t-0 border-border/50 dark:border-border/90 rounded-b-2xl rounded-t-none shadow-2xl dark:shadow-black/30 shadow-blue-500/10 dark:ring-1 dark:ring-white/10 dark:ring-t-0 p-6 max-h-[calc(100vh-120px)] overflow-y-auto transform-gpu"
-          >
-            <div className="space-y-2">
-              {navItems.map((item, index) => (
-                <MobileNavAccordionItem
-                  key={item.name}
-                  item={item}
-                  index={index}
-                  scrollToSection={scrollToSection}
-                  prefersReducedMotion={prefersReducedMotion}
-                />
-              ))}
-            </div>
-          </m.nav>
-        </>
-      )}
-    </AnimatePresence>
+        <m.nav
+          aria-label="Mobile navigation"
+          aria-hidden={!isMobileMenuOpen}
+          variants={prefersReducedMotion ? undefined : menuVariants}
+          animate={isMobileMenuOpen ? "open" : "closed"}
+          className="px-4 pb-4 space-y-1"
+        >
+          {navItems.map((item) => (
+            <MobileNavAccordionItem
+              key={item.name}
+              item={item}
+              scrollToSection={scrollToSection}
+              prefersReducedMotion={prefersReducedMotion}
+            />
+          ))}
+        </m.nav>
+      </m.div>
+    </div>
+    </>
   );
 }
 
@@ -287,7 +275,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     handleEscape,
   } = useNavigationStore();
 
-  const isMobileMenuOpen = useNavigationStore((state) => state.isMobileMenuOpen);
   const commandOpen = useNavigationStore((state) => state.commandOpen);
   const resumePath = useNavigationStore((state) => state.resumePath);
   const canvasDimensions = useNavigationStore((state) => state.canvasDimensions);
@@ -322,17 +309,6 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   }, [updateCanvasDimensions]);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
     fetchResumePath(isResumeVisible);
   }, [isResumeVisible, fetchResumePath]);
 
@@ -355,16 +331,23 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
     if (element) {
       useNavigationStore.getState().setIsVisible(true);
       const offset = sectionId === "experience" ? 40 : 20;
-      const targetPosition =
-        element.getBoundingClientRect().top +
-        globalThis.window.pageYOffset -
-        offset;
-      globalThis.window.scrollTo({
-        top: Math.max(0, targetPosition),
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-      });
+      // Close mobile menu first, then scroll after the closing
+      // animation (400ms) finishes — layout shifts during the
+      // height animation cancel smooth scrollTo calls.
+      setIsMobileMenuOpen(false);
+      setTimeout(() => {
+        const targetPosition =
+          element.getBoundingClientRect().top +
+          globalThis.window.pageYOffset -
+          offset;
+        globalThis.window.scrollTo({
+          top: Math.max(0, targetPosition),
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+        });
+      }, 450);
+    } else {
+      setIsMobileMenuOpen(false);
     }
-    setIsMobileMenuOpen(false);
   }, [prefersReducedMotion, setIsMobileMenuOpen]);
 
   const triggerConfetti = () => {
@@ -387,9 +370,9 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   return (
     <>
       <DesktopNavigation {...navProps} />
-      <MobileNavHeader triggerConfetti={triggerConfetti} />
-      <MobileMenuPanel
+      <MobileNav
         scrollToSection={scrollToSection}
+        triggerConfetti={triggerConfetti}
         prefersReducedMotion={!!prefersReducedMotion}
       />
 

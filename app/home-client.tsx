@@ -5,7 +5,6 @@ import { Hero } from "@/components/hero"
 import { AnimatedBackground } from "@/components/animated-background"
 import { lazy, Suspense, useLayoutEffect, useState } from "react"
 
-// Lazy load non-critical sections for better initial load performance
 const Experience = lazy(() => import("@/components/experience").then(mod => ({ default: mod.Experience })))
 const ProjectsBento = lazy(() => import("@/components/projects-bento").then(mod => ({ default: mod.ProjectsBento })))
 const About = lazy(() => import("@/components/about").then(mod => ({ default: mod.About })))
@@ -42,17 +41,17 @@ export function HomeClient({ isResumeVisible }: HomeClientProps) {
           <div className="h-32 bg-gradient-to-b from-transparent to-background -mt-32 relative z-0" />
           <div className="relative bg-background">
             <div className="lazy-section">
-              <Suspense fallback={<div className="min-h-screen" />}>
+              <Suspense fallback={<div id="experience" className="min-h-screen" />}>
                 <Experience />
               </Suspense>
             </div>
             <div className="lazy-section">
-              <Suspense fallback={<div className="min-h-screen" />}>
+              <Suspense fallback={<div id="projects" className="min-h-screen" />}>
                 <ProjectsBento />
               </Suspense>
             </div>
             <div className="lazy-section">
-              <Suspense fallback={<div className="py-24" />}>
+              <Suspense fallback={<div id="about" className="py-24" />}>
                 <About />
               </Suspense>
             </div>
