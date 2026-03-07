@@ -328,25 +328,33 @@ export function Navigation({ isResumeVisible }: { isResumeVisible: boolean }) {
   const scrollToSection = useCallback((href: string) => {
     const sectionId = href.slice(1);
     const element = document.getElementById(sectionId);
-    if (element) {
-      useNavigationStore.getState().setIsVisible(true);
-      const offset = sectionId === "experience" ? 40 : 20;
-      // Close mobile menu first, then scroll after the closing
-      // animation (400ms) finishes — layout shifts during the
-      // height animation cancel smooth scrollTo calls.
+    if (!element) {
       setIsMobileMenuOpen(false);
-      setTimeout(() => {
-        const targetPosition =
-          element.getBoundingClientRect().top +
-          globalThis.window.pageYOffset -
-          offset;
-        globalThis.window.scrollTo({
-          top: Math.max(0, targetPosition),
-          behavior: prefersReducedMotion ? "auto" : "smooth",
-        });
-      }, 450);
+      return;
+    }
+
+    useNavigationStore.getState().setIsVisible(true);
+    const offset = sectionId === "experience" ? 40 : 20;
+    const isMobileMenuOpen = useNavigationStore.getState().isMobileMenuOpen;
+
+    const doScroll = () => {
+      const targetPosition =
+        element.getBoundingClientRect().top +
+        globalThis.window.pageYOffset -
+        offset;
+      globalThis.window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+      });
+    };
+
+    if (isMobileMenuOpen) {
+      // Wait for mobile menu closing animation (400ms) to finish —
+      // layout shifts during the height animation cancel smooth scrollTo calls.
+      setIsMobileMenuOpen(false);
+      setTimeout(doScroll, 450);
     } else {
-      setIsMobileMenuOpen(false);
+      doScroll();
     }
   }, [prefersReducedMotion, setIsMobileMenuOpen]);
 
