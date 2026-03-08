@@ -25,7 +25,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
             src={project.heroImage}
             alt={project.title}
             fill
-            className="object-cover"
+            className={`${project.heroImageFit === "contain" ? "object-contain p-8" : "object-cover"}`}
             priority
             sizes="100vw"
           />

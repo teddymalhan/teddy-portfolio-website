@@ -42,6 +42,7 @@ export interface ContentSection {
   paragraphs: string[];
   bullets?: string[];
   emoji?: string;
+  image?: { src: string; alt: string; caption?: string };
 }
 
 // Project type categories
@@ -67,6 +68,7 @@ export interface Project {
   description: string;
   cta: string;
   heroImage: string;
+  heroImageFit?: "cover" | "contain";
   gridClassName: string;
 
   // External links
@@ -113,100 +115,128 @@ type BentoProject = Pick<
   | "award"
   | "type"
   | "heroImage"
+  | "heroImageFit"
   | "gridClassName"
 >;
 
 // Project data
 const projects: Project[] = [
   {
-    slug: "digital-scorecards",
-    name: "Digital Scorecards",
-    title: "Digital Scorecards",
+    slug: "electronic-arts",
+    name: "Electronic Arts",
+    title: "Arrival Copilot at Electronic Arts",
     tagline:
-      "Real-time performance tracking that cut manual review time by 60% for 1000+ agents",
-    period: "January 2025 - April 2025 (Internship)",
-    year: 2024,
-    technologies: ["Vue.js", "Django", "Python", "Google Cloud Platform"],
-    type: "internship",
-    description:
-      "Built a performance tracking system at Dialpad that serves 1000+ contact center agents. Full-stack Vue.js and Django app deployed on GCP with 99.9% uptime.",
-    cta: "Read More",
-    heroImage: "/digital_scorecards.webp",
-    gridClassName: "col-span-3 lg:col-span-2",
-    href: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/?utm_source=chatgpt.com#:~:text=Digital%20dispositions%20and-,digital%20scorecards,-bring%20accountability%20and",
-    github: "#",
-    demo: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/?utm_source=chatgpt.com#:~:text=Digital%20dispositions%20and-,digital%20scorecards,-bring%20accountability%20and",
-    links: [
-      {
-        label: "Read Blog Post",
-        href: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/",
-        icon: "ExternalLink",
-      },
+      "AI agent for level/quest generation and multi-tenant GraphQL MCP Server at EA's Central Tech team",
+    period: "May 2025 to Aug 2025 (Internship)",
+    year: 2025,
+    technologies: [
+      "Kubernetes",
+      "Python",
+      "Scala",
+      "FastAPI",
+      "LangGraph",
+      "Rust",
+      "GraphQL",
+      "AWS EKS",
+      "ArgoCD",
+      "Docker",
+      "Helm",
     ],
+    type: "internship",
+    featured: true,
+    description:
+      "Built an AI agent for level & quest generation at EADP Arrival, saving 100+ hours/month for game producers.",
+    cta: "Read More",
+    heroImage: "/ea-banner.png",
+    heroImageFit: "contain",
+    gridClassName: "col-span-3 lg:col-span-2",
+    href: "https://www.ea.com",
+    links: [],
     features: [
-      { text: "Real-time agent performance tracking", dotColor: "#4CAF50" },
-      { text: "Customizable scoring metrics and criteria", dotColor: "#2196F3" },
       {
-        text: "Manager dashboard with drill-down analytics",
-        dotColor: "#FF9800",
+        text: "AI agent for level & quest generation (FastAPI + LangGraph)",
+        dotColor: "#2563EB",
       },
-      { text: "Integration with Dialpad's contact center", dotColor: "#9C27B0" },
-      { text: "Automated performance reports", dotColor: "#00BCD4" },
+      {
+        text: "JSON-RPC integration with Scala monolith — 100+ hrs/month saved",
+        dotColor: "#3B82F6",
+      },
+      {
+        text: "Multi-tenant Apollo GraphQL MCP Server in Rust",
+        dotColor: "#60A5FA",
+      },
+      {
+        text: "75% compute cost reduction on AWS EKS (Kubernetes)",
+        dotColor: "#93C5FD",
+      },
+      {
+        text: "10k+ concurrent requests sustained under k6 stress-tests",
+        dotColor: "#1D4ED8",
+      },
     ],
     terminalSteps: [
-      { text: "npm run build", type: "command" },
-      { text: "Compiling Vue.js components...", type: "output", delay: 40 },
-      { text: "Building Django backend...", type: "output", delay: 40 },
-      { text: "Running test suite...", type: "output", delay: 40 },
-      { text: "All 47 tests passed", type: "success", delay: 40 },
-      { text: "Deploying to GCP...", type: "output", delay: 40 },
+      { text: "docker build -t arrival-copilot .", type: "command" },
+      { text: "Building FastAPI + LangGraph image...", type: "output", delay: 40 },
+      { text: "helm upgrade --install arrival-copilot ./chart", type: "command" },
+      { text: "Deploying to AWS EKS via ArgoCD...", type: "output", delay: 40 },
+      { text: "k6 run stress-test.js", type: "command" },
+      { text: "Running 10k concurrent virtual users...", type: "output", delay: 40 },
+      { text: "All thresholds passed ✓", type: "success", delay: 40 },
     ],
-    terminalProgressMessage: "Deploying to Google Cloud Platform...",
+    terminalProgressMessage: "Deploying to AWS EKS via ArgoCD...",
     sections: [
       {
         title: "Overview",
-        emoji: "📋",
+        emoji: "🎮",
         paragraphs: [
-          "Contact center managers at Dialpad needed a way to measure agent performance without spending hours manually reviewing calls. I built Digital Scorecards to automate this. Real-time performance tracking with customizable scoring criteria.",
-          "I designed and built the full-stack solution as a Software Engineering Intern. From architecting the scoring system to shipping to production. The feature now serves 1000+ agents and reduced manual review time by 60%.",
+          "At Electronic Arts Digital Platform,  I joined the Arrival team and built Arrival Copilot; a full-stack AI agent that accelerates level and quest generation for game producers.",
+          "By exposing GraphQL operations as MCP tools via LangGraph, Arrival Copilot enables real-time querying across millions of records, eliminating 100+ hours of manual work per month for the studio.",
         ],
       },
       {
-        title: "The Problem",
-        emoji: "📚",
+        title: "Arrival Copilot",
+        emoji: "🤖",
         paragraphs: [
-          "Traditional performance reviews in contact centers were broken. Managers spent hours listening to call recordings and filling out subjective evaluation forms. Agents received delayed, inconsistent feedback. At scale, this couldn't work.",
-          "Dialpad needed an automated system that could score interactions based on configurable criteria. Give managers instant insights and give agents clear feedback on their performance.",
+          "Engineered the AI agent backend using Python FastAPI and LangGraph, with a JSON-RPC bridge to integrate seamlessly with EA's existing Scala monolith. Game producers can now query, generate, and iterate on level and quest content through a natural language interface.",
+          "The agent exposes GraphQL operations as MCP tools, enabling real-time querying for millions of records across the platform while maintaining strict latency requirements.",
         ],
       },
       {
-        title: "Technical Implementation",
-        emoji: "⚙️",
+        title: "Adding Multi-Tenancy to Apollo MCP Server written in Rust",
+        emoji: "🦀",
         paragraphs: [
-          "Built the frontend with Vue.js. Real-time dashboard updated via WebSocket connections. Managers can define custom evaluation criteria with weighted scoring, drill down into individual agent performance or view team-level trends.",
-          "The Django backend handles score calculation, aggregation, and automated report generation. Deployed on Google Cloud Platform with PostgreSQL and Memcached. The system handles high query volumes with sub-200ms response times and 99.9% uptime.",
+          "Architected multi-tenancy support for the Apollo GraphQL MCP Server written in Rust, consolidating deployments across multiple namespaces on AWS EKS (Kubernetes). This reduced compute spend by 75% by eliminating redundant per-namespace deployments.",
+          "Delivered the microservice end-to-end: containerized with Docker, packaged with Helm, and deployed via ArgoCD and GitLab CI/CD pipelines. The service sustained 10k+ concurrent requests under k6 stress-tests with no degradation.",
         ],
       },
     ],
-    timeline: [{ date: "Spring 2025" }],
+    timeline: [{ date: "Summer 2025" }],
     tools: [
-      "Vue.js 3",
-      "Django 4",
-      "Python 3.11",
-      "Google Cloud Platform",
-      "PostgreSQL",
-      "Memcached",
-      "WebSockets",
+      "Python 3.12",
+      "FastAPI",
+      "LangGraph",
+      "JSON-RPC",
+      "Scala",
+      "Rust",
+      "Apollo GraphQL",
+      "AWS EKS",
+      "Kubernetes",
+      "ArgoCD",
+      "Docker",
+      "Helm",
+      "GitLab CI/CD",
+      "k6",
     ],
     results: [
-      "Shipped to production serving 1000+ contact center agents",
-      "Reduced manual performance review time by 60%",
-      "Achieved 99.9% uptime with auto-scaling infrastructure",
+      "Saved 100+ hours of manual work per month for game producers",
+      "Reduced compute spend by 75% via multi-tenant Rust MCP Server on AWS EKS",
+      "Sustained 10k+ concurrent requests under k6 stress-tests",
+      "Shipped AI agent integrating FastAPI, LangGraph, and JSON-RPC with Scala monolith",
     ],
     takeaways: [
-      "Enterprise software requires careful consideration of scale and reliability",
-      "Close collaboration with product managers leads to better user experiences",
-      "Performance optimization is critical for real-time dashboards",
+      "Multi-tenancy is a force-multiplier for infrastructure cost efficiency",
+      "LangGraph enables reliable, stateful AI agent workflows at scale",
+      "Integrating new microservices with legacy monoliths requires careful API boundary design",
     ],
   },
   {
@@ -316,7 +346,7 @@ const projects: Project[] = [
       "Won nwHacks 2026 building a version control system for quant researchers. Track model runs, datasets, and performance metrics (IC, Rank IC, t-stats) with hash-based versioning. Built with Rust and Python TUI.",
     cta: "View Project",
     heroImage: "/argus.png",
-    gridClassName: "col-span-3 lg:col-span-3",
+    gridClassName: "col-span-1 lg:col-span-1",
     href: "https://github.com/teddymalhan/argus",
     github: "https://github.com/teddymalhan/argus",
     links: [
@@ -405,6 +435,99 @@ const projects: Project[] = [
       "Quantitative research requires specialized tooling beyond traditional version control",
     ],
   },
+  {
+    slug: "digital-scorecards",
+    name: "Digital Scorecards",
+    title: "Digital Scorecards at Dialpad",
+    tagline:
+      "Real-time performance tracking that cut manual review time by 60% for 1000+ agents",
+    period: "January 2025 - April 2025 (Internship)",
+    year: 2024,
+    technologies: ["Vue.js", "Django", "Python", "Google Cloud Platform"],
+    type: "internship",
+    description:
+      "Built a performance tracking system at Dialpad that serves 1000+ contact center agents. Full-stack Vue.js and Django app deployed on GCP with 99.9% uptime.",
+    cta: "Read More",
+    heroImage: "/digital_scorecards.webp",
+    gridClassName: "col-span-3 lg:col-span-2",
+    href: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/?utm_source=chatgpt.com#:~:text=Digital%20dispositions%20and-,digital%20scorecards,-bring%20accountability%20and",
+    github: "#",
+    demo: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/?utm_source=chatgpt.com#:~:text=Digital%20dispositions%20and-,digital%20scorecards,-bring%20accountability%20and",
+    links: [
+      {
+        label: "Read Blog Post",
+        href: "https://www.dialpad.com/blog/new-dialpad-features-and-updates-for-the-enterprise-contact-center/",
+        icon: "ExternalLink",
+      },
+    ],
+    features: [
+      { text: "Real-time agent performance tracking", dotColor: "#4CAF50" },
+      { text: "Customizable scoring metrics and criteria", dotColor: "#2196F3" },
+      {
+        text: "Manager dashboard with drill-down analytics",
+        dotColor: "#FF9800",
+      },
+      { text: "Integration with Dialpad's contact center", dotColor: "#9C27B0" },
+      { text: "Automated performance reports", dotColor: "#00BCD4" },
+    ],
+    terminalSteps: [
+      { text: "npm run build", type: "command" },
+      { text: "Compiling Vue.js components...", type: "output", delay: 40 },
+      { text: "Building Django backend...", type: "output", delay: 40 },
+      { text: "Running test suite...", type: "output", delay: 40 },
+      { text: "All 47 tests passed", type: "success", delay: 40 },
+      { text: "Deploying to GCP...", type: "output", delay: 40 },
+    ],
+    terminalProgressMessage: "Deploying to Google Cloud Platform...",
+    sections: [
+      {
+        title: "Overview",
+        emoji: "📋",
+        paragraphs: [
+          "Contact center managers at Dialpad needed a way to measure agent performance without spending hours manually reviewing calls. I built Digital Scorecards to automate this. Real-time performance tracking with customizable scoring criteria.",
+          "I designed and built the full-stack solution as a Software Engineering Intern. From architecting the scoring system to shipping to production. The feature now serves 1000+ agents and reduced manual review time by 60%.",
+        ],
+      },
+      {
+        title: "The Problem",
+        emoji: "📚",
+        paragraphs: [
+          "Traditional performance reviews in contact centers were broken. Managers spent hours listening to call recordings and filling out subjective evaluation forms. Agents received delayed, inconsistent feedback. At scale, this couldn't work.",
+          "Dialpad needed an automated system that could score interactions based on configurable criteria. Give managers instant insights and give agents clear feedback on their performance.",
+        ],
+      },
+      {
+        title: "Technical Implementation",
+        emoji: "⚙️",
+        paragraphs: [
+          "Built the frontend with Vue.js. Real-time dashboard updated via WebSocket connections. Managers can define custom evaluation criteria with weighted scoring, drill down into individual agent performance or view team-level trends.",
+          "The Django backend handles score calculation, aggregation, and automated report generation. Deployed on Google Cloud Platform with PostgreSQL and Memcached. The system handles high query volumes with sub-200ms response times and 99.9% uptime.",
+        ],
+      },
+    ],
+    timeline: [{ date: "Spring 2025" }],
+    tools: [
+      "Vue.js 3",
+      "Django 4",
+      "Python 3.11",
+      "Google Cloud Platform",
+      "PostgreSQL",
+      "Memcached",
+      "WebSockets",
+    ],
+    results: [
+      "Shipped to production serving 1000+ contact center agents",
+      "Reduced manual performance review time by 60%",
+      "Achieved 99.9% uptime with auto-scaling infrastructure",
+    ],
+    takeaways: [
+      "Enterprise software requires careful consideration of scale and reliability",
+      "Close collaboration with product managers leads to better user experiences",
+      "Performance optimization is critical for real-time dashboards",
+    ],
+  },
+  
+
   {
     slug: "kaeru",
     name: "Kaeru",
@@ -600,6 +723,7 @@ export function getBentoProjects(): BentoProject[] {
       award,
       type,
       heroImage,
+      heroImageFit,
       gridClassName,
     }) => ({
       slug,
@@ -613,6 +737,7 @@ export function getBentoProjects(): BentoProject[] {
       award,
       type,
       heroImage,
+      heroImageFit,
       gridClassName,
     })
   );

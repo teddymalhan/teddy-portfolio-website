@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { m, useReducedMotion } from "framer-motion";
 import type { ContentSection as ContentSectionType } from "@/lib/projects";
 
@@ -46,6 +47,25 @@ export function ContentSection({ section, index }: ContentSectionProps) {
           </ul>
         )}
       </div>
+
+      {section.image && (
+        <figure className="mt-6">
+          <div className="relative w-full rounded-lg overflow-hidden border border-border">
+            <Image
+              src={section.image.src}
+              alt={section.image.alt}
+              width={1200}
+              height={675}
+              className="w-full h-auto object-contain"
+            />
+          </div>
+          {section.image.caption && (
+            <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+              {section.image.caption}
+            </figcaption>
+          )}
+        </figure>
+      )}
     </m.section>
   );
 }
