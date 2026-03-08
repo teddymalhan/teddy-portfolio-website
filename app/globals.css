@@ -4,76 +4,76 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Light theme - Technical Craftsman aesthetic with warm amber tones */
-  --background: oklch(0.98 0.005 60); /* Warm white background */
-  --foreground: oklch(0.15 0.02 40); /* Deep charcoal text */
-  --card: oklch(0.97 0.008 50); /* Warm light card */
-  --card-foreground: oklch(0.15 0.02 40);
-  --popover: oklch(0.98 0.005 60);
-  --popover-foreground: oklch(0.15 0.02 40);
-  --primary: oklch(0.55 0.20 40); /* Warm amber primary */
-  --primary-foreground: oklch(0.98 0.005 60);
-  --secondary: oklch(0.92 0.015 45); /* Warm light gray */
-  --secondary-foreground: oklch(0.15 0.02 40);
-  --muted: oklch(0.94 0.01 50); /* Warm muted background */
-  --muted-foreground: oklch(0.45 0.03 40); /* Muted warm text */
-  --accent: oklch(0.60 0.22 25); /* Burnt orange accent */
-  --accent-foreground: oklch(0.98 0.005 60);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.98 0.005 60);
-  --border: oklch(0.87 0.015 45); /* Warm border */
-  --input: oklch(0.97 0.008 50);
-  --ring: oklch(0.55 0.20 40); /* Amber focus ring */
-  --chart-1: oklch(0.55 0.20 40);
-  --chart-2: oklch(0.60 0.18 30);
-  --chart-3: oklch(0.50 0.22 50);
-  --chart-4: oklch(0.45 0.20 35);
-  --chart-5: oklch(0.65 0.16 45);
+  /* Light theme - GitHub Light color scheme */
+  --background: #ffffff; /* canvas.default */
+  --foreground: #1F2328; /* fg.default */
+  --card: #ffffff; /* canvas.overlay */
+  --card-foreground: #1F2328; /* fg.default */
+  --popover: #ffffff; /* canvas.overlay */
+  --popover-foreground: #1F2328; /* fg.default */
+  --primary: #0969da; /* accent.fg */
+  --primary-foreground: #ffffff; /* fg.onEmphasis */
+  --secondary: #f6f8fa; /* canvas.inset */
+  --secondary-foreground: #1F2328; /* fg.default */
+  --muted: #f6f8fa; /* canvas.subtle */
+  --muted-foreground: #656d76; /* fg.muted */
+  --accent: #0969da; /* accent.emphasis */
+  --accent-foreground: #ffffff; /* fg.onEmphasis */
+  --destructive: #cf222e; /* danger.emphasis */
+  --destructive-foreground: #ffffff; /* fg.onEmphasis */
+  --border: #d0d7de; /* border.default */
+  --input: #ffffff; /* canvas.default */
+  --ring: #0969da; /* accent.fg */
+  --chart-1: #0969da; /* accent.fg (blue) */
+  --chart-2: #1a7f37; /* success.fg (green) */
+  --chart-3: #9a6700; /* attention.fg (yellow) */
+  --chart-4: #cf222e; /* danger.fg (red) */
+  --chart-5: #8250df; /* done.fg (purple) */
   --radius: 0.5rem;
-  --sidebar: oklch(0.97 0.008 50);
-  --sidebar-foreground: oklch(0.15 0.02 40);
-  --sidebar-primary: oklch(0.55 0.20 40);
-  --sidebar-primary-foreground: oklch(0.98 0.005 60);
-  --sidebar-accent: oklch(0.92 0.015 45);
-  --sidebar-accent-foreground: oklch(0.15 0.02 40);
-  --sidebar-border: oklch(0.87 0.015 45);
-  --sidebar-ring: oklch(0.55 0.20 40);
+  --sidebar: #f6f8fa; /* canvas.inset */
+  --sidebar-foreground: #1F2328; /* fg.default */
+  --sidebar-primary: #0969da; /* accent.fg */
+  --sidebar-primary-foreground: #ffffff; /* fg.onEmphasis */
+  --sidebar-accent: #f6f8fa; /* canvas.subtle */
+  --sidebar-accent-foreground: #1F2328; /* fg.default */
+  --sidebar-border: #d0d7de; /* border.default */
+  --sidebar-ring: #0969da; /* accent.fg */
 }
 
 .dark {
-  /* Dark theme - Technical Craftsman aesthetic with warm tones */
-  --background: oklch(0.10 0.015 40); /* Warm dark background */
-  --foreground: oklch(0.93 0.01 50); /* Warm light text */
-  --card: oklch(0.14 0.02 40); /* Warm dark card */
-  --card-foreground: oklch(0.93 0.01 50);
-  --popover: oklch(0.10 0.015 40);
-  --popover-foreground: oklch(0.93 0.01 50);
-  --primary: oklch(0.70 0.18 45); /* Bright amber for dark mode */
-  --primary-foreground: oklch(0.10 0.015 40);
-  --secondary: oklch(0.20 0.02 40); /* Warm dark secondary */
-  --secondary-foreground: oklch(0.93 0.01 50);
-  --muted: oklch(0.17 0.02 40); /* Warm muted dark */
-  --muted-foreground: oklch(0.65 0.015 45); /* Warm muted text */
-  --accent: oklch(0.75 0.20 30); /* Bright orange accent */
-  --accent-foreground: oklch(0.10 0.015 40);
-  --destructive: oklch(0.65 0.245 27.325);
-  --destructive-foreground: oklch(0.93 0.01 50);
-  --border: oklch(0.27 0.02 40); /* Warm dark border */
-  --input: oklch(0.14 0.02 40);
-  --ring: oklch(0.70 0.18 45); /* Bright amber focus ring */
-  --chart-1: oklch(0.70 0.18 45);
-  --chart-2: oklch(0.75 0.16 35);
-  --chart-3: oklch(0.65 0.20 50);
-  --chart-4: oklch(0.60 0.18 40);
-  --chart-5: oklch(0.80 0.14 45);
-  --sidebar: oklch(0.14 0.02 40);
-  --sidebar-foreground: oklch(0.93 0.01 50);
-  --sidebar-primary: oklch(0.70 0.18 45);
-  --sidebar-primary-foreground: oklch(0.10 0.015 40);
-  --sidebar-accent: oklch(0.20 0.02 40);
-  --sidebar-accent-foreground: oklch(0.93 0.01 50);
-  --sidebar-border: oklch(0.27 0.02 40);
-  --sidebar-ring: oklch(0.70 0.18 45);
+  /* Dark theme - GitHub Dark color scheme */
+  --background: #0d1117; /* canvas.default */
+  --foreground: #e6edf3; /* fg.default */
+  --card: #161b22; /* canvas.overlay */
+  --card-foreground: #e6edf3; /* fg.default */
+  --popover: #161b22; /* canvas.overlay */
+  --popover-foreground: #e6edf3; /* fg.default */
+  --primary: #2f81f7; /* accent.fg */
+  --primary-foreground: #ffffff; /* fg.onEmphasis */
+  --secondary: #21262d; /* border.muted */
+  --secondary-foreground: #c9d1d9; /* btn.text */
+  --muted: #161b22; /* canvas.subtle */
+  --muted-foreground: #848d97; /* fg.muted */
+  --accent: #1f6feb; /* accent.emphasis */
+  --accent-foreground: #ffffff; /* fg.onEmphasis */
+  --destructive: #da3633; /* danger.emphasis */
+  --destructive-foreground: #e6edf3; /* fg.default */
+  --border: #30363d; /* border.default */
+  --input: #161b22; /* canvas.overlay */
+  --ring: #2f81f7; /* accent.fg */
+  --chart-1: #2f81f7; /* accent.fg (blue) */
+  --chart-2: #3fb950; /* success.fg (green) */
+  --chart-3: #d29922; /* attention.fg (yellow) */
+  --chart-4: #f85149; /* danger.fg (red) */
+  --chart-5: #a371f7; /* done.fg (purple) */
+  --sidebar: #161b22; /* canvas.overlay */
+  --sidebar-foreground: #e6edf3; /* fg.default */
+  --sidebar-primary: #2f81f7; /* accent.fg */
+  --sidebar-primary-foreground: #ffffff; /* fg.onEmphasis */
+  --sidebar-accent: #21262d; /* border.muted */
+  --sidebar-accent-foreground: #e6edf3; /* fg.default */
+  --sidebar-border: #21262d; /* border.muted */
+  --sidebar-ring: #2f81f7; /* accent.fg */
 }
 
 @theme inline {
@@ -208,21 +208,17 @@ body::-webkit-scrollbar {
 
 /* Fill button effect - matches page theme */
 .fill {
+  --color: #1F2328;
+  --hover: #1F2328;
   background: none;
   border: none;
   transition: 0.25s;
   cursor: pointer;
-}
-
-/* Light mode: black icons, hover to black background with white icons */
-.fill {
-  --color: black;
-  --hover: black;
   color: var(--color);
 }
 
 .fill svg {
-  color: black;
+  color: #1F2328;
   transition: color 0.25s;
 }
 
@@ -237,24 +233,24 @@ body::-webkit-scrollbar {
   color: white;
 }
 
-/* Dark mode: white icons, hover to white background with black icons */
+/* Dark mode: light icons, hover to accent background */
 .dark .fill {
-  --color: white;
-  --hover: white;
+  --color: #e6edf3;
+  --hover: #e6edf3;
   color: var(--color);
 }
 
 .dark .fill svg {
-  color: white;
+  color: #e6edf3;
 }
 
 .dark .fill:hover,
 .dark .fill:focus {
   box-shadow: inset 0 0 0 2em var(--hover);
-  color: black;
+  color: #0d1117;
 }
 
 .dark .fill:hover svg,
 .dark .fill:focus svg {
-  color: black;
+  color: #0d1117;
 }

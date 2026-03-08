@@ -34,20 +34,20 @@ export function AnimatedBackground() {
 
       {/* Gradient meshes - warm amber tones */}
       <div className="absolute inset-0">
-        {/* Light mode gradients */}
+        {/* Light mode gradients - GitHub Light blue tones */}
         {resolvedTheme === "light" && (
           <>
             <div
               className="absolute top-0 left-0 w-[800px] h-[800px] rounded-full blur-[120px] opacity-20 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(84, 174, 255, 0.3) 0%, transparent 70%)',
                 animationDuration: '8s',
               }}
             />
             <div
               className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full blur-[100px] opacity-15 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(249, 115, 22, 0.35) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(9, 105, 218, 0.25) 0%, transparent 70%)',
                 animationDuration: '10s',
                 animationDelay: '2s',
               }}
@@ -55,7 +55,7 @@ export function AnimatedBackground() {
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[90px] opacity-10 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(130, 80, 223, 0.2) 0%, transparent 70%)',
                 animationDuration: '12s',
                 animationDelay: '4s',
               }}
@@ -63,20 +63,20 @@ export function AnimatedBackground() {
           </>
         )}
 
-        {/* Dark mode gradients */}
+        {/* Dark mode gradients - GitHub Dark blue tones */}
         {resolvedTheme === "dark" && (
           <>
             <div
               className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full blur-[130px] opacity-25 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(56, 139, 253, 0.3) 0%, transparent 70%)',
                 animationDuration: '9s',
               }}
             />
             <div
               className="absolute bottom-0 left-0 w-[650px] h-[650px] rounded-full blur-[110px] opacity-20 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(31, 111, 235, 0.25) 0%, transparent 70%)',
                 animationDuration: '11s',
                 animationDelay: '3s',
               }}
@@ -84,7 +84,7 @@ export function AnimatedBackground() {
             <div
               className="absolute top-1/3 left-1/4 w-[550px] h-[550px] rounded-full blur-[95px] opacity-15 animate-pulse"
               style={{
-                background: 'radial-gradient(circle, rgba(234, 179, 8, 0.25) 0%, transparent 70%)',
+                background: 'radial-gradient(circle, rgba(163, 113, 247, 0.2) 0%, transparent 70%)',
                 animationDuration: '13s',
                 animationDelay: '5s',
               }}
