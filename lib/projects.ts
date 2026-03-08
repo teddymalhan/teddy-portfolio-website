@@ -346,7 +346,7 @@ const projects: Project[] = [
       "Won nwHacks 2026 building a version control system for quant researchers. Track model runs, datasets, and performance metrics (IC, Rank IC, t-stats) with hash-based versioning. Built with Rust and Python TUI.",
     cta: "View Project",
     heroImage: "/argus.png",
-    gridClassName: "col-span-1 lg:col-span-1",
+    gridClassName: "col-span-3 lg:col-span-1",
     href: "https://github.com/teddymalhan/argus",
     github: "https://github.com/teddymalhan/argus",
     links: [
